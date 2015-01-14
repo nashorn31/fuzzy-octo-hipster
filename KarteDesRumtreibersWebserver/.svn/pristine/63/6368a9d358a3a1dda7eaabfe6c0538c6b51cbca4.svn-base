@@ -1,0 +1,6 @@
+package databaseconnection;
+
+public enum PersistenceNameEnum {
+
+    PERSISTENCENAMENHV, PERSISTENCENAMEHV
+}

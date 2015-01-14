@@ -1,0 +1,114 @@
+package databaseconnectionTest;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
+
+import databaseconnection.InitEntityManager;
+import databaseconnection.PersistenceName;
+import databaseconnection.PersistenceNameEnum;
+
+public class InitTestConnection {
+
+    private static EntityManagerFactory nHVTestEntityManagerFactory;
+    private static EntityManagerFactory HVTestEntityManagerFactory;
+
+    private static IDataSet             dataSet;
+    private static IDatabaseConnection  connection;
+
+    private static boolean              filled = false;
+
+    public static EntityManager getNHVTestEntityManager() {
+        initAll();
+        return nHVTestEntityManagerFactory.createEntityManager();
+    }
+
+    public static EntityManager getHVTestEntityManager() {
+        initAll();
+        return HVTestEntityManagerFactory.createEntityManager();
+    }
+
+    public static void initAll() {
+        if (nHVTestEntityManagerFactory == null) {
+            nHVTestEntityManagerFactory = initEntityManagerFactory(PersistenceName.getPersistenceName(PersistenceNameEnum.PERSISTENCENAMENHV) + "Test");
+            InitEntityManager.setNHVEntityManagerFactory(nHVTestEntityManagerFactory);
+
+        }
+        if (HVTestEntityManagerFactory == null) {
+            HVTestEntityManagerFactory = initEntityManagerFactory(PersistenceName.getPersistenceName(PersistenceNameEnum.PERSISTENCENAMEHV) + "Test");
+            InitEntityManager.setHVEntityManagerFactory(HVTestEntityManagerFactory);
+        }
+    }
+
+    private static EntityManagerFactory initEntityManagerFactory(String persistenceName) {
+
+        Properties prop = new Properties();
+        prop.setProperty("javax.persistence.jdbc.url",
+                "jdbc:h2:mem:test:;DB_CLOSE_DELAY=-1;INIT=\\;runscript from '~/workspace/ASP_INC_GUI/src/test/resources/sql/schemaSQL.sql'");
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceName, prop);
+
+        if (!filled) {
+            fillDB(emf);
+        }
+
+        return emf;
+    }
+
+    private static void fillDB(EntityManagerFactory emf) {
+        try {
+            InitTestConnection.dataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/sql/testDatasetSQL.xml"));
+
+            HibernateEntityManagerFactory hemf = (HibernateEntityManagerFactory) emf;
+            SessionFactoryImpl sfi = (SessionFactoryImpl) hemf.getSessionFactory();
+            DriverManagerConnectionProviderImpl dscpi = (DriverManagerConnectionProviderImpl) sfi.getConnectionProvider();
+
+            InitTestConnection.connection = new DatabaseConnection(dscpi.getConnection());
+            InitTestConnection.connection.getConfig().setProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES, true);
+            InitTestConnection.connection.getConfig().setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
+            DatabaseOperation.CLEAN_INSERT.execute(InitTestConnection.connection, InitTestConnection.dataSet);
+            InitTestConnection.connection.getConnection().commit();
+
+            filled = true;
+        } catch (DatabaseUnitException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static void setDBvaluesToStart() {
+
+        initAll();
+
+        try {
+            DatabaseOperation.CLEAN_INSERT.execute(InitTestConnection.connection, InitTestConnection.dataSet);
+            InitTestConnection.connection.getConnection().commit();
+        } catch (DatabaseUnitException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}

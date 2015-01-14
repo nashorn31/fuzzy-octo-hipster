@@ -1,0 +1,74 @@
+package hibernateEntitySets;
+
+import hibernateEntitySets.interfaces.AutoComplete;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * EntitySet for the PMS_Members here is the mapping from PMS_Member_ID to the
+ * real name of the mandant
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "pms", name = "Members")
+public class PMS_Members implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    public PMS_Members() {
+    }
+
+    @Id
+    @Column(name = "me_ID")
+    private int    me_ID;
+
+    @Column(name = "me_login_name")
+    private String me_login_name;
+
+    @Column(name = "me_name")
+    private String me_name;
+
+    public int getMe_ID() {
+        return me_ID;
+    }
+
+    public void setMe_ID(int me_ID) {
+        this.me_ID = me_ID;
+    }
+
+    public String getMe_login_name() {
+        return me_login_name;
+    }
+
+    public void setMe_login_name(String me_login_name) {
+        this.me_login_name = me_login_name;
+    }
+
+    public String getMe_name() {
+        return me_name;
+    }
+
+    public void setMe_name(String me_name) {
+        this.me_name = me_name;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "me_name";
+    }
+
+    @Override
+    public String autocompleteValue() {
+
+        return me_name;
+    }
+
+}

@@ -1,0 +1,28 @@
+package gui;
+
+import iqa.cos.jaas.UserPrincipal;
+
+import javax.security.auth.login.LoginException;
+
+public class UserManagement {
+
+    private UserManagement() {
+    }
+
+    /**
+     * Returns the currently logged user.
+     * 
+     * @return
+     */
+    public static UserPrincipal getLoggedUser() {
+        UserPrincipal result = null;
+
+        try {
+            result = UserPrincipal.getCurrent();
+        } catch (LoginException e) {
+            throw new RuntimeException("Unable to get logged user.", e);
+        }
+
+        return result;
+    }
+}

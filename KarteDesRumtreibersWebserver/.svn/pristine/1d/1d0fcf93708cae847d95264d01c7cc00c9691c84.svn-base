@@ -1,0 +1,91 @@
+package asp.inc.xml;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * allows to store the key and the value for an xml document in a String (cast
+ * the value to a String)
+ * 
+ * @author ZIMM051
+ * 
+ */
+public class XMLTuple {
+
+    private String key;
+    private String value;
+
+    public XMLTuple(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public XMLTuple(String key, Integer value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, Short value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, Long value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, Float value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, Double value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, Character value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, byte value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, boolean value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, BigDecimal value) {
+        this.key = key;
+        this.value = String.valueOf(value);
+    }
+
+    public XMLTuple(String key, Date value) {
+        this.key = key;
+        if (value != null) {
+            this.value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(value);
+        }
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getValue() {
+        checkValue();
+        return value;
+    }
+
+    private void checkValue() {
+        if (this.value == null) {
+            this.value = "NULL";
+        }
+    }
+
+}

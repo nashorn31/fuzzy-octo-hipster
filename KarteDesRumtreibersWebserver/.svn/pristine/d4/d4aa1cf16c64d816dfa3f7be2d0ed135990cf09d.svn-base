@@ -1,0 +1,21 @@
+package databaseconnection;
+
+public class PersistenceName {
+
+    public static String getPersistenceName(PersistenceNameEnum persistenceNameEnum) {
+
+        String persistenceName = "";
+
+        switch (persistenceNameEnum) {
+
+        case PERSISTENCENAMENHV:
+            persistenceName = "NHV";
+            break;
+        case PERSISTENCENAMEHV:
+            persistenceName = "HV";
+            break;
+        }
+        return persistenceName;
+    }
+
+}

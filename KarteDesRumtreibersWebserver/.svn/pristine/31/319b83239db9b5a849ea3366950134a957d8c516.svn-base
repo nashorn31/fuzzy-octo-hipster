@@ -1,0 +1,29 @@
+package asp.inc.databaseconnection;
+
+/**
+ * persistence name from enum
+ * @author ZIMM051
+ *
+ */
+public class PersistenceName {
+
+    private PersistenceName() {
+    }
+
+    public static String getPersistenceName(PersistenceNameEnum persistenceNameEnum) {
+
+        String persistenceName = "";
+
+        switch (persistenceNameEnum) {
+
+        case PERSISTENCENAMENHV:
+            persistenceName = "NHV";
+            break;
+        case PERSISTENCENAMEHV:
+            persistenceName = "HV";
+            break;
+        }
+        return persistenceName;
+    }
+
+}

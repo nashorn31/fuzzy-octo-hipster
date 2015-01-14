@@ -1,0 +1,113 @@
+package searchdb;
+
+import hibernateentitysets.PMSMembers;
+import hibernateentitysets.TMandant;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+/**
+ * auto complete for Mandant/MandantID and get the other value
+ * @author ZIMM051
+ *
+ */
+public class MandantDatabaseLookup {
+
+    private static final int   numberResultsAutocomplete = 5;
+    private EntityManager      entityManagerNHV;
+    private AutoCompleteValues autocomplete;
+
+    public MandantDatabaseLookup(EntityManager entityManagerNHV) {
+        this.entityManagerNHV = entityManagerNHV;
+
+        // create a auto complete object
+        this.autocomplete = new AutoCompleteValues(entityManagerNHV);
+
+    }
+
+    /**
+     * get proposals for the mandantID
+     * 
+     * @param mandantID
+     *            start of a mandantID for which proposals are needed
+     * @return list of potential mandantIDs
+     */
+    public List<String> completeMandantID(String mandantID) {
+
+        // get a TypedQuery for the SQL search
+        TypedQuery<TMandant> searchQuery = this.autocomplete.getSearchQuery(mandantID, "mandantID", TMandant.class, "");
+
+        // set max results for the search
+        searchQuery.setMaxResults(MandantDatabaseLookup.numberResultsAutocomplete);
+
+        // return list of potential mandantIDs
+        return this.autocomplete.getListForSearchQuery(searchQuery);
+
+    }
+
+    /**
+     * get proposals for the mandantName
+     * 
+     * @param mandantName
+     *            start of a mandantName for which proposals are needed
+     * @return list of potential mandantNames
+     */
+    public List<String> completeMandantName(String mandantName) {
+
+        // get a dQuery for the SQL search
+        Query pmsMembers = entityManagerNHV.createNativeQuery("select * from pms.dbo.members " + "where me_login_name in "
+                + "(select distinct((convert(varchar(255),pms_config_partner))) " + "from Magellan.dbo.TMANDANT) and me_name like '" + mandantName
+                + "%' and me_activity_status = 1 order by me_name asc", PMSMembers.class);
+
+        // set max results for the search
+        pmsMembers.setMaxResults(MandantDatabaseLookup.numberResultsAutocomplete);
+
+        // return list of potential mandantNames
+        return this.autocomplete.getListForSearchQuery(pmsMembers);
+
+    }
+
+    /**
+     * get the mandantID for a mandantName
+     * 
+     * @param mandantLoginName
+     * @return
+     */
+    public String getMandantIDByLoginName(String mandantLoginName) {
+
+        Query pmsMembers = entityManagerNHV.createNativeQuery("select * from Magellan.dbo.TMANDANT " + "where (convert(varchar(255),pms_config_partner)) in "
+                + "(select distinct(me_login_name) " + "from pms.dbo.members where me_name = '" + mandantLoginName + "' and me_activity_status = 1)",
+                TMandant.class);
+
+        List<TMandant> results = pmsMembers.getResultList();
+
+        if (!results.isEmpty()) {
+            return String.valueOf(results.get(0).getMandantID());
+        }
+        return "";
+
+    }
+
+    /**
+     * get the mandantName for a mandantID
+     * 
+     * @param mandantID
+     * @return
+     */
+    public String getMandantLoginNameByID(String mandantID) {
+
+        Query pmsMembers = entityManagerNHV.createNativeQuery("select * from pms.dbo.members " + "where me_login_name in "
+                + "(select distinct((convert(varchar(255),pms_config_partner))) " + "from Magellan.dbo.TMANDANT WHERE mandant_ID = '" + mandantID
+                + "' and me_activity_status = 1)", PMSMembers.class);
+
+        List<PMSMembers> results = pmsMembers.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0).getMeName();
+        }
+        return "Keinen Mandantenname für die MandantID gefunden.";
+
+    }
+}

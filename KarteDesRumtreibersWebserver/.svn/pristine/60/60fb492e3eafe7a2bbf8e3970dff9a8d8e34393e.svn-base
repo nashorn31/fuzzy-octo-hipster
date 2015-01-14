@@ -1,0 +1,88 @@
+package asp.inc.xmltest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.junit.Test;
+
+import asp.inc.xml.XMLTuple;
+
+public class XMLTupleTest {
+
+    @Test
+    public void TestXMLTupleConstructorString() {
+        XMLTuple tuple = new XMLTuple("keytest", "wert");
+        assertThat(tuple.getValue(), equalTo("wert"));
+
+    }
+
+    @Test
+    public void TestXMLTupleConstructorInteger() {
+        XMLTuple tuple = new XMLTuple("keytest", new Integer(123456));
+        assertThat(tuple.getValue(), equalTo("123456"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorShort() {
+        XMLTuple tuple = new XMLTuple("keytest", new Short((short) 2));
+        assertThat(tuple.getValue(), equalTo("2"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorLong() {
+        XMLTuple tuple = new XMLTuple("keytest", new Long(536243564256456L));
+        assertThat(tuple.getValue(), equalTo("536243564256456"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorFloat() {
+        XMLTuple tuple = new XMLTuple("keytest", new Float(14214.645));
+        assertThat(tuple.getValue(), equalTo("14214.645"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorDouble() {
+        XMLTuple tuple = new XMLTuple("keytest", new Double(14214.6456));
+        assertThat(tuple.getValue(), equalTo("14214.6456"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorCharacter() {
+        XMLTuple tuple = new XMLTuple("keytest", new Character('A'));
+        assertThat(tuple.getValue(), equalTo("A"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorbyte() {
+        XMLTuple tuple = new XMLTuple("keytest", new Byte("1"));
+        assertThat(tuple.getValue(), equalTo("1"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorboolean() {
+        XMLTuple tuple = new XMLTuple("keytest", true);
+        assertThat(tuple.getValue(), equalTo("true"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorBigDecimal() {
+        XMLTuple tuple = new XMLTuple("keytest", new BigDecimal(23745683287546L));
+        assertThat(tuple.getValue(), equalTo("23745683287546"));
+    }
+
+    @Test
+    public void TestXMLTupleConstructorDate() {
+        XMLTuple tuple = new XMLTuple("keytest", new Date(1376542352642L));
+        assertThat(tuple.getValue(), equalTo("2013-08-15 06:52:32.642"));
+    }
+
+    @Test
+    public void TestNullValue() {
+        String string = null;
+        XMLTuple tuple = new XMLTuple("keytest", string);
+        assertThat(tuple.getValue(), equalTo("NULL"));
+    }
+}

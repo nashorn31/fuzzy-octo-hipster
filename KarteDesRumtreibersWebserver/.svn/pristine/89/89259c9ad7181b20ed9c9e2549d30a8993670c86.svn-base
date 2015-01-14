@@ -1,0 +1,12 @@
+package asp.inc.gui;
+
+/**
+ * possible status the main view could be
+ * @author ZIMM051
+ *
+ */
+public enum Status {
+
+    NOMANDANT, NORECIPIENT, SEARCHNUMBER, EMPTY, NORESETSELECTED, SEARCHFIRST
+
+}

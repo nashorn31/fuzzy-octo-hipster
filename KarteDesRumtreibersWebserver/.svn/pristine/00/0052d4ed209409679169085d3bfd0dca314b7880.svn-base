@@ -1,0 +1,230 @@
+package informations;
+
+import hibernateEntitySets.TDebitor_Account;
+import hibernateEntitySets.TOrder;
+import hibernateEntitySets.TRecipient_Account;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Recipient implements Comparable<Recipient>, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private String            recipientID;
+    private String            mandantID;
+    private boolean           incasso;
+    private boolean           debitorIncasso;
+    private boolean           selected;
+    private String            dunningLevel;
+
+    private List<Debitor>     debitors;
+
+    /**
+     * Default constructor
+     */
+    public Recipient() {
+        selected = false;
+    }
+
+    /**
+     * 
+     * saves attributes from TRecipient in the object variables
+     * 
+     * @param tRecipient
+     */
+    public Recipient(TRecipient_Account tRecipient) {
+        debitorIncasso = false;
+        setAttributesFromTRecipient_Account(tRecipient);
+        setDebitorsFromTRecipient_Account(tRecipient);
+    }
+
+    public String getRecipientID() {
+        return recipientID;
+    }
+
+    public void setRecipientID(String recipientID) {
+        this.recipientID = recipientID;
+    }
+
+    public boolean isIncasso() {
+        return incasso;
+    }
+
+    public void setIncasso(boolean incasso) {
+        this.incasso = incasso;
+    }
+
+    public String getDunningLevel() {
+        return dunningLevel;
+    }
+
+    public void setDunningLevel(String dunningLevel) {
+        this.dunningLevel = dunningLevel;
+    }
+
+    public String getMandantID() {
+        return mandantID;
+    }
+
+    public void setMandantID(String mandantID) {
+        this.mandantID = mandantID;
+    }
+
+    public List<Debitor> getDebitors() {
+        return debitors;
+    }
+
+    public void setDebitors(List<Debitor> debitors) {
+        this.debitors = debitors;
+    }
+
+    public boolean isDebitorIncasso() {
+        return debitorIncasso;
+    }
+
+    public void setDebitorIncasso(boolean debitorIncasso) {
+        this.debitorIncasso = debitorIncasso;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getIncassoString() {
+        if (incasso) {
+            return "Ja";
+        } else {
+            return "Nein";
+        }
+    }
+
+    public String getdebitorIncassoString() {
+        if (debitorIncasso) {
+            return "Ja";
+        } else {
+            return "Nein";
+        }
+    }
+
+    /**
+     * get attributes from TRecipient and save them in the object variables
+     * 
+     * @param trecipient
+     *            the TRecipient_Account
+     */
+    public void setAttributesFromTRecipient_Account(TRecipient_Account trecipient) {
+
+        recipientID = String.valueOf(trecipient.getRecipient_Account_ID());
+        mandantID = String.valueOf(trecipient.getMandant_ID());
+        incasso = trecipient.getAggregatedData().isIncasso();
+        dunningLevel = String.valueOf(trecipient.getAggregatedData().getCurrent_dunning_level());
+    }
+
+    /**
+     * get the debitors from a TRecipient and save them in the debitors list
+     * 
+     * @param tRecipient
+     *            the TRecipient_Account
+     */
+    public void setDebitorsFromTRecipient_Account(TRecipient_Account tRecipient) {
+
+        // create list for debitors
+        debitors = new ArrayList<Debitor>();
+
+        /*
+         * for all Orders from the TRecipient (table between TRecipient and
+         * TDebitor)
+         */
+        for (TOrder order : tRecipient.gettOrder()) {
+
+            // get Debitor
+            TDebitor_Account tdebitor = order.getDebitorAccount();
+
+            // create debitor for view
+            Debitor debitor = new Debitor(tdebitor);
+
+            if (mandantID.equals(String.valueOf(tdebitor.getMandant_ID()))) {
+
+                if (!debitors.contains(debitor)) {
+                    debitors.add(debitor);
+                }
+
+                // set the boolean true if one debitor has a flag
+                if (debitor.isIncasso()) {
+                    debitorIncasso = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns a simple string representation of the object
+     * 
+     * @return recipientID + mandantID + incasso
+     */
+    public String toSimpleString() {
+        return "<br/>RMF-Customer: " + recipientID + " Mandant: " + mandantID + " Incasso: " + getIncassoString();
+    }
+
+    /**
+     * Compare only the ID of the object
+     */
+    @Override
+    public int compareTo(Recipient recipient) {
+
+        if (InformationHelper.isInt(recipientID) && InformationHelper.isInt(recipient.getRecipientID())) {
+            int recipientIDIntThisObject = Integer.parseInt(recipientID);
+            int recipientIDIntOtherObject = Integer.parseInt(recipient.getRecipientID());
+
+            return recipientIDIntThisObject - recipientIDIntOtherObject;
+        } else {
+            return recipientID.compareTo(recipient.getRecipientID());
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((mandantID == null) ? 0 : mandantID.hashCode());
+        result = prime * result + ((recipientID == null) ? 0 : recipientID.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Recipient)) {
+            return false;
+        }
+        Recipient other = (Recipient) obj;
+        if (mandantID == null) {
+            if (other.mandantID != null) {
+                return false;
+            }
+        } else if (!mandantID.equals(other.mandantID)) {
+            return false;
+        }
+        if (recipientID == null) {
+            if (other.recipientID != null) {
+                return false;
+            }
+        } else if (!recipientID.equals(other.recipientID)) {
+            return false;
+        }
+        return true;
+    }
+
+}

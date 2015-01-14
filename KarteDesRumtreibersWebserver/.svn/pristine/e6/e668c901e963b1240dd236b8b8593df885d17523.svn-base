@@ -1,0 +1,127 @@
+package resetflag;
+
+import hibernateentitysets.TAggregatedData;
+import informations.Debitor;
+import informations.Recipient;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import changelog.ChangeLog;
+
+/**
+ * reset the incassoflag for the recipients and debitors
+ * @author ZIMM051
+ *
+ */
+public class ResetFlag {
+
+    private EntityManager entityManagerHV;
+
+    public ResetFlag(EntityManager entityManagerHV) {
+        this.entityManagerHV = entityManagerHV;
+
+    }
+
+    /**
+     * reset the incassoFlag for selected the recipients and debitors
+     */
+    public void resetFlag(List<Recipient> selectedRecipientsList, List<Debitor> selectedDebitorsList) {
+
+        //get a list with all aggregatedDataIDs
+        List<String> aggregatedDataIDList = createAggregatedDataIDList(selectedRecipientsList, selectedDebitorsList);
+
+        if (!aggregatedDataIDList.isEmpty()) {
+
+            List<TAggregatedData> aggregatedDataList = createAggregatedDataList(aggregatedDataIDList);
+
+            //changes datasets
+            changeAndLogDataSets(aggregatedDataList);
+
+        }
+
+    }
+
+    /**
+     * create a list with all aggregatedDataID where the incassoFlag should be reseted
+     * @return list with all aggregatedDataID
+     */
+    public List<String> createAggregatedDataIDList(List<Recipient> recipientsList, List<Debitor> debitorsList) {
+
+        List<String> aggregatedDataIDList = new ArrayList<String>();
+
+        // add all recipients to the ArrayList
+        for (Recipient recipient : recipientsList) {
+            if (recipient.isIncasso()) {
+                aggregatedDataIDList.add(recipient.getRecipientID());
+            }
+        }
+
+        // add all debitors to the ArrayList
+        for (Debitor debitor : debitorsList) {
+            if (debitor.isIncasso()) {
+                aggregatedDataIDList.add(debitor.getDebitorID());
+            }
+        }
+        return aggregatedDataIDList;
+    }
+
+    /**
+     * get all aggregatedData datasets which should be modified 
+     * @param aggregatedDataIDList list of the IDs of the aggregatedData
+     * @return aggregatedDataSets aggregatedData datasets with ID
+     */
+    public List<TAggregatedData> createAggregatedDataList(List<String> aggregatedDataIDList) {
+
+        // create where clause (String)
+        StringBuffer confirmTesxtBuffer = new StringBuffer("WHERE 1=2");
+        for (String aggregatedDataID : aggregatedDataIDList) {
+            confirmTesxtBuffer.append(" OR aggregatedDataID = '").append(aggregatedDataID).append("'");
+        }
+
+        // Create SQL Query
+        return entityManagerHV.createQuery("FROM TAggregatedData " + confirmTesxtBuffer.toString(), TAggregatedData.class).getResultList();
+    }
+
+    /**
+     * make the changes at the data set and log it
+     * 
+     * @param aggregatedData
+     *            data set to modify
+     *            
+     * @return list of all datalogs
+     */
+    public void changeAndLogDataSets(List<TAggregatedData> aggregatedDataList) {
+
+        // make the same changes for every dataset and create a log
+        for (TAggregatedData aggregatedData : aggregatedDataList) {
+
+            //class to createLog
+            ChangeLog changeLog = new ChangeLog(entityManagerHV);
+
+            // create the basic for the log
+            changeLog.setAggregatedDataLogBasic(aggregatedData);
+
+            changeLog.setOldValue(aggregatedData);
+
+            entityManagerHV.getTransaction().begin();
+            // make the changes
+            aggregatedData.setIncasso(false);
+            aggregatedData.setModificationDate(new Date());
+
+            entityManagerHV.getTransaction().commit();
+
+            //Log the changes
+            entityManagerHV.getTransaction().begin();
+            changeLog.log();
+            entityManagerHV.getTransaction().commit();
+
+            // set the new values
+            changeLog.setNewValue(aggregatedData);
+        }
+    }
+
+}

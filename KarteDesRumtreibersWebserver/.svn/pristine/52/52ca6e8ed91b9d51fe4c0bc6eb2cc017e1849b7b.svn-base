@@ -1,0 +1,6 @@
+package asp.inc.databaseconnection;
+
+public enum PersistenceNameEnum {
+
+    PERSISTENCENAMENHV, PERSISTENCENAMEHV
+}

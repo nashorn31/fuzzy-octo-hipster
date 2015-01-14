@@ -1,0 +1,109 @@
+package asp.inc.resetflagtest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import asp.inc.gui.Status;
+import asp.inc.gui.StatusTexts;
+import asp.inc.informations.Debitor;
+import asp.inc.informations.Recipient;
+import asp.inc.informationstest.DebitorTest;
+import asp.inc.informationstest.RecipientTest;
+import asp.inc.searchdb.SearchResults;
+
+public class StatusTextsTest {
+
+    private StatusTexts   status;
+    private SearchResults searchResults;
+
+    @Before
+    public void init() {
+        status = new StatusTexts();
+
+        searchResults = new SearchResults();
+
+        // create 3 Recipients
+        ArrayList<Recipient> recipients = new ArrayList<Recipient>();
+        RecipientTest recipientTest = new RecipientTest();
+        for (int i = 0; i < 3; i++)
+            recipients.add(recipientTest.getAnRecipient());
+        searchResults.setRecipients(recipients);
+
+        // create 8 Debitors
+        ArrayList<Debitor> debitors = new ArrayList<Debitor>();
+        DebitorTest debitorTest = new DebitorTest();
+        for (int i = 0; i < 8; i++)
+            debitors.add(debitorTest.getAnDebitor());
+        searchResults.setDebitors(debitors);
+    }
+
+    @Test
+    public void getStatusTest() {
+
+        assertThat(status.getStatus(Status.EMPTY), equalTo(""));
+
+        assertThat(status.getStatus(Status.NOMANDANT), equalTo("Bitte geben sie eine MandantenID oder Mandanten ein."));
+
+        assertThat(status.getStatus(Status.NORECIPIENT), equalTo("Bitte geben sie entweder eine Debitorennummer oder eine RMF-CustomerID ein."));
+
+        assertThat(status.getStatus(Status.SEARCHNUMBER), equalTo("Bitte zuerst suchen."));
+
+    }
+
+    @Test
+    public void getStatusTestWithSearchResultsDirect() {
+
+        assertThat(status.getStatus(Status.SEARCHNUMBER, searchResults), equalTo("Es wurden 3 RMF-Customer mit insgesamt 8 Debitoren gefunden."));
+
+    }
+
+    @Test
+    public void getStatusTestFromSearchResults() {
+
+        status.setSearchResults(searchResults);
+
+        assertThat(status.getStatus(Status.SEARCHNUMBER), equalTo("Es wurden 3 RMF-Customer mit insgesamt 8 Debitoren gefunden."));
+    }
+
+    @Test
+    public void createConfirmTextTestNoSelected() {
+
+        assertThat(status.createConfirmText(searchResults), equalTo("Wählen sie entweder einen RMF-Customer und/oder einen Debitor aus."));
+
+    }
+
+    @Test
+    public void createConfirmTextTestRecipientAndDebitorSelected() {
+        searchResults.getRecipients().get(0).setSelected(true);
+        searchResults.getDebitors().get(0).setSelected(true);
+
+        assertThat(
+                status.createConfirmText(searchResults),
+                equalTo("Möchten Sie wirklich folgende Einträge zurücksetzten: <br/>RMF-Customers: <br/>RMF-Customer: 10 Mandant: 1 Inkasso: Nein<br/><br/>Debitoren:<br/>Debitorennummer: 10 Mandant: 1 Inkasso: Nein"));
+
+    }
+
+    @Test
+    public void createConfirmTextTestRecipientSelected() {
+
+        searchResults.getRecipients().get(0).setSelected(true);
+        assertThat(status.createConfirmText(searchResults),
+                equalTo("Möchten Sie wirklich folgende Einträge zurücksetzten: <br/>RMF-Customers: <br/>RMF-Customer: 10 Mandant: 1 Inkasso: Nein"));
+
+    }
+
+    @Test
+    public void createConfirmTextTestDebitorSelected() {
+
+        searchResults.getDebitors().get(0).setSelected(true);
+        assertThat(status.createConfirmText(searchResults),
+                equalTo("Möchten Sie wirklich folgende Einträge zurücksetzten:<br/><br/>Debitoren:<br/>Debitorennummer: 10 Mandant: 1 Inkasso: Nein"));
+
+    }
+
+}

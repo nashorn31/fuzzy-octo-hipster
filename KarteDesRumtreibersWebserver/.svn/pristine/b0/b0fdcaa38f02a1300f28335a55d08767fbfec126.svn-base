@@ -1,0 +1,25 @@
+package asp.inc.hibernateentitysets.interfaces;
+
+/**
+ * Interface for the entitySets
+ * 
+ * @author zimm051
+ * 
+ */
+public interface AutoComplete {
+
+    /**
+     * method which return the column name which is used for the autocomplete
+     * 
+     * @return name of the column
+     */
+    public String autocompleteColumn();
+
+    /**
+     * method which return the column value which is used for the autocomplete
+     * 
+     * @return value of the column
+     */
+    public String autocompleteValue();
+
+}

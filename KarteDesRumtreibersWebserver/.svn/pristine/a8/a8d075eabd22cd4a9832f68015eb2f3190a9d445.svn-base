@@ -1,0 +1,33 @@
+package changelog;
+
+import hibernateEntitySets.interfaces.XMLParseAble;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import xml.XMLManager;
+
+public class XMLForChangeLog {
+
+    /**
+     * create an xml document which represent a data set who implements the
+     * XMLParseAble interface and parse it to a String
+     * 
+     * @param pareAbleObject
+     * @return
+     */
+    public String createLoggingXMLString(XMLParseAble pareAbleObject) {
+
+        XMLManager xmlManager = new XMLManager();
+
+        Document doc = xmlManager.getDocument();
+
+        Element rootElement = doc.createElement("object_value");
+        doc.appendChild(rootElement);
+
+        doc = xmlManager.addObjectToXML(pareAbleObject, doc, rootElement);
+
+        return xmlManager.XMLToString(doc);
+
+    }
+}

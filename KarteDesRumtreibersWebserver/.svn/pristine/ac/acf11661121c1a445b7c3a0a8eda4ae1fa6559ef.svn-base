@@ -1,0 +1,96 @@
+package guiTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import gui.MainPageBean;
+
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import searchDB.SearchResults;
+import databaseconnectionTest.InitTestConnection;
+
+public class MainPageBeanTest {
+
+    private MainPageBean  mpb;
+    private SearchResults searchResults;
+
+    @BeforeClass
+    public static void setEntityManager() {
+        InitTestConnection.initAll();
+    }
+
+    @Before
+    public void initABean() {
+        mpb = new MainPageBean();
+        mpb.search();
+        mpb.setMandantid("2");
+        mpb.setRecipientID("112");
+        mpb.search();
+        searchResults = mpb.getSearchResults();
+        mpb = new MainPageBean();
+    }
+
+    @Test
+    public void intitMainPageBeanTest() {
+        mpb.intitMainPageBean();
+
+        assertThat(mpb.getConfirmText(), equalTo("Bitte erst suchen!"));
+    }
+
+    @Test
+    public void completeMandantidTest() {
+        List<String> mandantIds = mpb.completeMandantid("1");
+        assertThat(mandantIds.get(0), equalTo("11"));
+    }
+
+    @Test
+    public void completeDebitorNumberTestMandantIsNotSet() {
+        mpb.completeDebitorNumber("");
+        assertThat(mpb.getStatus(), equalTo("Bitte geben sie eine MandantenID oder Mandanten ein."));
+    }
+
+    @Test
+    public void completeDebitorNumberTestMandantIsSet() {
+        mpb.setMandantid("2");
+
+        assertThat(mpb.completeDebitorNumber("1").get(0), equalTo("11"));
+    }
+
+    @Test
+    public void completeRecipientIDTestMandantIsNotSet() {
+        mpb.completeRecipientID("");
+        assertThat(mpb.getStatus(), equalTo("Bitte geben sie eine MandantenID oder Mandanten ein."));
+    }
+
+    @Test
+    public void completeRecipientIDTestMandantIsSet() {
+        mpb.setMandantid("2");
+
+        assertThat(mpb.completeRecipientID("1").get(0), equalTo("112"));
+    }
+
+    @Test
+    public void assumeValueToNameTestMandantIsNotSet() {
+        mpb.assumeValueToName();
+        assertThat(mpb.getStatus(), equalTo("Bitte geben sie eine MandantenID oder Mandanten ein."));
+    }
+
+    @Test
+    public void assumeValueToIDTestMandantIsNotSet() {
+        mpb.assumeValueToID();
+        assertThat(mpb.getStatus(), equalTo("Bitte geben sie eine MandantenID oder Mandanten ein."));
+    }
+
+    @Test
+    public void switchDebitorTest() {
+
+        mpb.setSearchResults(searchResults);
+        mpb.setSelectedRecipient(searchResults.getRecipients().get(0));
+        searchResults.getRecipients().get(0).setSelected(true);
+        mpb.switchDebitor();
+    }
+}

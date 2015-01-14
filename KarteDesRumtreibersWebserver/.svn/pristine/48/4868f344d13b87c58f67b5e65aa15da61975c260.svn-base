@@ -1,0 +1,106 @@
+package hibernateEntitySets;
+
+import hibernateEntitySets.interfaces.AutoComplete;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(catalog = "Magellan", name = "TRecipient_Account")
+public class TRecipient_Account implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    public TRecipient_Account() {
+    }
+
+    public TRecipient_Account(int ID, int mandant, List<TOrder> tOrder, TAggregated_Data aggregatedData) {
+    }
+
+    @Id
+    @Column(name = "recipient_Account_ID")
+    private int              recipient_Account_ID;
+
+    @Column(name = "mandant_ID")
+    private int              mandant_ID;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_Account_ID")
+    private List<TOrder>     tOrder;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_Account_ID")
+    private TAggregated_Data aggregatedData;
+
+    public int getRecipient_Account_ID() {
+        return recipient_Account_ID;
+    }
+
+    public void setRecipient_Account_ID(int recipient_Account_ID) {
+        this.recipient_Account_ID = recipient_Account_ID;
+    }
+
+    public int getMandant_ID() {
+        return mandant_ID;
+    }
+
+    public void setMandant_ID(int mandant_ID) {
+        this.mandant_ID = mandant_ID;
+    }
+
+    public List<TOrder> gettOrder() {
+        return tOrder;
+    }
+
+    public void settOrder(List<TOrder> tOrder) {
+        this.tOrder = tOrder;
+    }
+
+    public TAggregated_Data getAggregatedData() {
+        return aggregatedData;
+    }
+
+    public void setAggregatedData(TAggregated_Data aggregatedData) {
+        this.aggregatedData = aggregatedData;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "recipient_Account_ID";
+    }
+
+    @Override
+    public String autocompleteValue() {
+
+        return String.valueOf(recipient_Account_ID);
+    }
+
+    public boolean equals(Object otherObject) {
+        // standard compare
+        if (otherObject == null) {
+            return false;
+        } else if (!(otherObject instanceof TRecipient_Account)) {
+            return false;
+        }
+        // cast to TRecipient_Account
+        TRecipient_Account otherRecipient = (TRecipient_Account) otherObject;
+
+        // compare the ID
+        if (recipient_Account_ID == otherRecipient.getRecipient_Account_ID()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}

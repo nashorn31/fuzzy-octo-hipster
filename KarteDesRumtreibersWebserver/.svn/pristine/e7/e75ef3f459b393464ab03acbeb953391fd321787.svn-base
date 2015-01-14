@@ -1,0 +1,84 @@
+package asp.inc.gui;
+
+import asp.inc.informations.Debitor;
+import asp.inc.informations.Recipient;
+import asp.inc.searchdb.SearchResults;
+
+/**
+ * Create the statusTexts for the GUI
+ * @author ZIMM051
+ *
+ */
+public class StatusTexts {
+
+    private SearchResults searchResults;
+
+    /**
+     * Create the confirm text
+     * 
+     * @return confirm text
+     */
+    public String createConfirmText(SearchResults searchResults) {
+
+        if (searchResults.getSelectedRecipients().size() == 0 && searchResults.getSelectedDebitors().size() == 0) {
+            return getStatus(Status.NORESETSELECTED);
+        }
+
+        StringBuilder confirmTesxtBuffer = new StringBuilder("Möchten Sie wirklich folgende Einträge zurücksetzten:");
+
+        //check if the recipients are null
+        if (searchResults.getSelectedRecipients().size() != 0) {
+            confirmTesxtBuffer.append(" <br/>RMF-Customers: ");
+
+            // add all selected recipients to the text
+            for (Recipient recipient : searchResults.getSelectedRecipients()) {
+                confirmTesxtBuffer.append(recipient.toSimpleString());
+
+            }
+        }
+
+        //check if the debitors are null
+        if (searchResults.getSelectedDebitors().size() != 0) {
+            confirmTesxtBuffer.append("<br/><br/>Debitoren:");
+            // add all selected debitors to the text
+            for (Debitor debitor : searchResults.getSelectedDebitors()) {
+                confirmTesxtBuffer.append(debitor.toSimpleString());
+            }
+        }
+
+        return confirmTesxtBuffer.toString();
+    }
+
+    public String getStatus(Status status) {
+        switch (status) {
+        case EMPTY:
+            return "";
+        case NOMANDANT:
+            return "Bitte geben sie eine MandantenID oder Mandanten ein.";
+        case NORECIPIENT:
+            return "Bitte geben sie entweder eine Debitorennummer oder eine RMF-CustomerID ein.";
+        case SEARCHNUMBER:
+            if (searchResults == null) {
+                return "Bitte zuerst suchen.";
+            } else {
+                return searchResults.getStatus();
+            }
+        case NORESETSELECTED:
+            return "Wählen sie entweder einen RMF-Customer und/oder einen Debitor aus.";
+        case SEARCHFIRST:
+            return "Bitte zuerst suchen.";
+        default:
+            return "";
+        }
+
+    }
+
+    public String getStatus(Status status, SearchResults searchResults) {
+        this.searchResults = searchResults;
+        return getStatus(status);
+    }
+
+    public void setSearchResults(SearchResults searchResults) {
+        this.searchResults = searchResults;
+    }
+}

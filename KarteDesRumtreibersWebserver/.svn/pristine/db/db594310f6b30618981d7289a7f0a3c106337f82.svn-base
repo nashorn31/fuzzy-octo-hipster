@@ -1,0 +1,21 @@
+package informationsTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import org.junit.Test;
+
+import informations.InformationHelper;
+
+public class InformationHelperTest {
+
+    @Test
+    public void isNumericIsInt() {
+        assertThat(InformationHelper.isInt("123124"), equalTo(true));
+    }
+    
+    @Test
+    public void isNumericIsNoInt() {
+        assertThat(InformationHelper.isInt("wdw124"), equalTo(false));
+    }
+}

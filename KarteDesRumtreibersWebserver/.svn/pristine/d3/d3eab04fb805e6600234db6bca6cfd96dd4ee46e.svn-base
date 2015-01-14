@@ -1,0 +1,43 @@
+package databaseconnection;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class PropertiesLoad {
+
+    private static Properties generalProperties;
+
+    private static String[]   persistenceKeys = { "javax.persistence.jdbc.url", "javax.persistence.jdbc.user", "javax.persistence.jdbc.password" };
+
+    public static Properties getPersistenceProperties(PersistenceNameEnum persistenceNameEnum) {
+
+        loadGeneralProperties(System.getProperty("catalina.base") + "/conf/applications/inc/environment.properties");
+
+        return getValuesFromGeneralProperties(PersistenceName.getPersistenceName(persistenceNameEnum));
+
+    }
+
+    private static Properties getValuesFromGeneralProperties(String persistenceName) {
+        Properties specificProperties = new Properties();
+        for (String key : persistenceKeys) {
+            specificProperties.setProperty(key, generalProperties.getProperty(persistenceName + "." + key, generalProperties.getProperty(key)));
+
+        }
+        return specificProperties;
+    }
+
+    public static void loadGeneralProperties(String path) {
+
+        if (generalProperties == null) {
+            generalProperties = new Properties();
+            try {
+
+                generalProperties.load(new FileInputStream(new File(path)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

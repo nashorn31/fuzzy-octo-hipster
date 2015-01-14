@@ -1,0 +1,224 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>asp</groupId>
+	<artifactId>ASP_INC_GUI</artifactId>
+	<packaging>war</packaging>
+	<version>1.00.000-SNAPSHOT</version>
+	<name>ASP_INC_GUI</name>
+	<description>ASP_INC_GUI</description>
+	<parent>
+		<artifactId>aspparentpom</artifactId>
+		<groupId>asp</groupId>
+		<version>3.22.000</version>
+	</parent>
+
+	<properties>
+		<org.hibernate.version>4.3.6.Final</org.hibernate.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+
+		<repository>
+			<id>midas</id>
+			<name>Midas Maven Repository</name>
+			<url>http://gtlifswvm0803.arvato-infoscore.net:8090/nexus/content/repositories/midas</url>
+		</repository>
+		<repository>
+			<id>midas-snapshots</id>
+			<name>Midas-Snapshots Maven Repository</name>
+			<url>http://gtlifswvm0803.arvato-infoscore.net:8090/nexus/content/repositories/midas-snapshots</url>
+		</repository>
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+
+	</repositories>
+
+	<scm>
+		<connection>scm:svn:https://degtluv4212.server.arvato-systems.de/svn-bmedia/asp/trunk/ASP_INC_GUI</connection>
+		<url>https://degtluv4212.server.arvato-systems.de/svn-bmedia/asp/trunk/ASP_INC_GUI</url>
+	</scm>
+
+	<dependencies>
+
+		<!-- Primeface -->
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>glass-x</artifactId>
+			<version>1.0.10</version>
+		</dependency>
+
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${org.hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${org.hibernate.version}</version>
+		</dependency>
+
+		<!-- JPA 2.1 -->
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+
+		<!-- DB-Connector -->
+		<dependency>
+			<groupId>com.microsoft.jdbc</groupId>
+			<artifactId>sqljdbc4</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+		<!-- Librarys for JSF -->
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<version>2.1.29</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+			<version>2.1.29</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.el</groupId>
+			<artifactId>el-ri</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- PMS -->
+		<dependency>
+			<groupId>iris.pms</groupId>
+			<artifactId>iRIS_PMS_JAAS_Interfaces</artifactId>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- iRIS -->
+		<dependency>
+			<groupId>iris.por</groupId>
+			<artifactId>iRIS_POR_Common_Facelets</artifactId>
+			<version>2.11.000</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>sqljdbc4</artifactId>
+					<groupId>sqljdbc</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>iRIS_POR_Common</artifactId>
+					<groupId>iris.por</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Test -->
+		<!-- JUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- H2 (inmemory db) -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.180</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- dbUnit -->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.4.8</version>
+			<type>jar</type>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- javax provided by tomcat but needed for tests -->
+		<dependency>
+			<groupId>javax.resource</groupId>
+			<artifactId>connector-api</artifactId>
+			<version>1.5</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- DBUnit -->
+		<dependency>
+			<groupId>dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+</project>

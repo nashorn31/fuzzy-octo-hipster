@@ -1,0 +1,5 @@
+NHV.javax.persistence.jdbc.url=jdbc:sqlserver://gtlifswvm0866\\DBMTASPD01;
+HV.javax.persistence.jdbc.url=anders
+Logging.javax.persistence.jdbc.url=jdbc:sqlserver://gtlifswvm0866\\DBMTASPD01;
+javax.persistence.jdbc.user=zimm051
+javax.persistence.jdbc.password=qwer123

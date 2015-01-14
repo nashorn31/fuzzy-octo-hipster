@@ -1,0 +1,88 @@
+package hibernateentitysets;
+
+import hibernateentitysets.interfaces.AutoComplete;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+/**
+ * EntitySet for the table TRecipient_Account
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "Magellan", name = "TRecipient_Account")
+public class TRecipientAccount implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "recipient_Account_ID")
+    private int               recipientAccountID;
+
+    @Column(name = "mandant_ID")
+    private int               mandantID;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_Account_ID")
+    private List<TOrder>      tOrder;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_Account_ID")
+    private TAggregatedData   aggregatedData;
+
+    public int getRecipientAccountID() {
+        return recipientAccountID;
+    }
+
+    public void setRecipientAccountID(int recipientAccountID) {
+        this.recipientAccountID = recipientAccountID;
+    }
+
+    public int getMandantID() {
+        return mandantID;
+    }
+
+    public void setMandantID(int mandantID) {
+        this.mandantID = mandantID;
+
+    }
+
+    public List<TOrder> gettOrder() {
+        return tOrder;
+    }
+
+    public void settOrder(List<TOrder> tOrder) {
+        this.tOrder = tOrder;
+    }
+
+    public TAggregatedData getAggregatedData() {
+        return aggregatedData;
+    }
+
+    public void setAggregatedData(TAggregatedData aggregatedData) {
+        this.aggregatedData = aggregatedData;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "recipientAccountID";
+    }
+
+    @Override
+    public String autocompleteValue() {
+
+        return String.valueOf(recipientAccountID);
+    }
+}

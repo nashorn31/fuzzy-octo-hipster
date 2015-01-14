@@ -1,0 +1,30 @@
+package asp.inc.databaseconnection;
+
+import java.io.IOException;
+
+/**
+ * The Properties file could not be loaded or is defect
+ * @author ZIMM051
+ *
+ */
+public class PropertiesLoadException extends IOException {
+
+    private static final long serialVersionUID = 1L;
+
+    public PropertiesLoadException() {
+        super();
+    }
+
+    public PropertiesLoadException(String message) {
+        super(message);
+    }
+
+    public PropertiesLoadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public PropertiesLoadException(Throwable cause) {
+        super(cause);
+    }
+
+}

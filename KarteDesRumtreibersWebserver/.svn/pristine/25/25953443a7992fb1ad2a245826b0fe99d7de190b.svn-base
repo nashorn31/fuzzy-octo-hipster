@@ -1,0 +1,31 @@
+package asp.inc.searchdbtest;
+
+import org.junit.Test;
+
+import asp.inc.informationstest.RecipientTest;
+import asp.inc.searchdb.SearchResults;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+public class SearchResultsTest {
+
+    public SearchResults createSearchResults() {
+        SearchResults searchResults = new SearchResults();
+        searchResults.addRecipients(new RecipientTest().getAnRecipient());
+
+        return searchResults;
+    }
+
+    @Test
+    public void sortSearchResultsTest() {
+        SearchResults searchResults = createSearchResults();
+        searchResults.addRecipients(new RecipientTest().getAnRecipient());
+
+        searchResults.unionRecipients();
+        
+        //same object
+        boolean equalObject = searchResults.getRecipients().get(0).getDebitors().get(0) == searchResults.getRecipients().get(1).getDebitors().get(0);
+        assertThat(equalObject, equalTo(true));
+       
+    }
+}

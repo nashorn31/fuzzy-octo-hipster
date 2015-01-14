@@ -1,0 +1,62 @@
+package searchDBTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.util.ArrayList;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import searchDB.MandantDatabaseLookup;
+import databaseconnectionTest.InitTestConnection;
+
+public class MandantDatabaseLookupTest {
+
+    private static MandantDatabaseLookup dblookup;
+
+    @BeforeClass
+    public static void initNeededObjects() {
+        InitTestConnection.initAll();
+        MandantDatabaseLookupTest.dblookup = new MandantDatabaseLookup();
+    }
+
+    @Test
+    public void testAutocompleteMandantIDNormal() {
+        ArrayList<String> mandantlist = dblookup.completeMandantID("1");
+        assertThat(mandantlist.size(), equalTo(5));
+    }
+
+    @Test
+    public void testAutocompleteMandantIDNoPMSMemberForOneMandantID() {
+        ArrayList<String> mandantlist = dblookup.completeMandantID("16");
+        assertThat(mandantlist.size(), equalTo(2));
+    }
+
+    @Test
+    public void testAutocompleteMandantIDNoMatches() {
+        ArrayList<String> mandantlist = dblookup.completeMandantID("1666");
+        assertThat(mandantlist.get(0), equalTo("Bitte einen gültigen Wert eintragen."));
+    }
+
+    // other methods can not be tested because there is a DB specific select which does not work for h2 or hsqldb
+    //    @Test
+    //    public void testAutocompletePMSMemberNormal() {
+    //        ArrayList<String> pmsMandantList = dblookup.completeMandantName("a");
+    //        assertThat(pmsMandantList.size(), equalTo(5));
+    //    }
+    //
+    //    @Test
+    //    public void testAutocompletePMSMemberNoMandantIDForOnePMSMember() {
+    //        ArrayList<String> pmsMandantList = dblookup.completeMandantName("ac");
+    //        assertThat(pmsMandantList.size(), equalTo(1));
+    //    }
+    //
+    //    @Test
+    //    public void testAutocompletePMSMemberNoMatches() {
+    //        ArrayList<String> pmsMandantList = dblookup.completeMandantName("abcdef");
+    //        assertThat(pmsMandantList.get(0), equalTo("Bitte einen g�ltigen Wert eintragen."));
+    //    }
+    //    
+
+}

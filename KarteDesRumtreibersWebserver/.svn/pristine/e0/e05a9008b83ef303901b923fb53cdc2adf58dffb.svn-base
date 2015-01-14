@@ -1,0 +1,33 @@
+package databaseconnectionTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.util.Properties;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import databaseconnection.PersistenceNameEnum;
+import databaseconnection.PropertiesLoad;
+
+public class PropertiesLoadTest {
+
+    @BeforeClass
+    public static void loadProperties() {
+        PropertiesLoad.loadGeneralProperties("src/test/resources/loadPropertiesTestProp/environment.properties");
+    }
+
+    @Test
+    public void testLoadGeneralProperties() {
+
+        Properties prop = PropertiesLoad.getPersistenceProperties(PersistenceNameEnum.PERSISTENCENAMENHV);
+        assertThat(prop.getProperty("javax.persistence.jdbc.user"), equalTo("zimm051"));
+        assertThat(prop.getProperty("javax.persistence.jdbc.url"), equalTo("jdbc:sqlserver://gtlifswvm0866\\DBMTASPD01;"));
+        
+        prop = PropertiesLoad.getPersistenceProperties(PersistenceNameEnum.PERSISTENCENAMEHV);
+        assertThat(prop.getProperty("javax.persistence.jdbc.user"), equalTo("zimm051"));
+        assertThat(prop.getProperty("javax.persistence.jdbc.url"), equalTo("anders"));
+    }
+
+}

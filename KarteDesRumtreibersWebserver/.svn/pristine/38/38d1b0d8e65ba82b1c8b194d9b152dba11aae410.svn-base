@@ -1,0 +1,93 @@
+package asp.inc.informationstest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import org.junit.Test;
+
+import asp.inc.informations.Debitor;
+
+public class DebitorTest {
+
+    @Test
+    public void compareToTestWithInt() {
+        Debitor debitor1 = getAnDebitor();
+        Debitor debitor2 = getAnDebitor();
+
+        assertThat("compare is equal 0", debitor1.compareTo(debitor2), equalTo(0));
+
+        debitor2.setDebitorID("9");
+        int compare1 = debitor1.compareTo(debitor2);
+        assertThat("compare is over 0 (smaler)", compare1 > 0, equalTo(true));
+
+        debitor2.setDebitorID("100");
+        int compare2 = debitor1.compareTo(debitor2);
+        assertThat("compare is under 0 (bigger)", compare2 < 0, equalTo(true));
+    }
+
+    @Test
+    public void compareToTestWithString() {
+
+        Debitor debitor1 = getAnDebitor();
+        Debitor debitor2 = getAnDebitor();
+
+        debitor1.setDebitorID("b");
+        debitor2.setDebitorID("b");
+
+        assertThat("compare is equal 0", debitor1.compareTo(debitor2), equalTo(0));
+
+        debitor2.setDebitorID("a");
+        int compare1 = debitor1.compareTo(debitor2);
+        assertThat("compare is over 0 (before)", compare1 > 0, equalTo(true));
+
+        debitor2.setDebitorID("c");
+        int compare2 = debitor1.compareTo(debitor2);
+        assertThat("compare is under 0 (after)", compare2 < 0, equalTo(true));
+    }
+
+    @Test
+    public void equalsTestNull() {
+        assertThat(getAnDebitor().equals(null), equalTo(false));
+    }
+
+    @Test
+    public void equalsTestOtherClass() {
+        assertThat(getAnDebitor().equals(new String()), equalTo(false));
+    }
+
+    @Test
+    public void equalsTestEqual() {
+        assertThat(getAnDebitor().equals(getAnDebitor()), equalTo(true));
+    }
+
+    @Test
+    public void equalsTestOtherRecipientID() {
+        Debitor debitor = getAnDebitor();
+        debitor.setDebitorID("123123");
+        assertThat(getAnDebitor().equals(debitor), equalTo(false));
+    }
+
+    @Test
+    public void equalsTestOtherMandantID() {
+        Debitor debitor = getAnDebitor();
+        debitor.setMandantID("123123");
+        assertThat(getAnDebitor().equals(debitor), equalTo(false));
+    }
+
+    @Test
+    public void toStringTest() {
+        assertThat(getAnDebitor().toSimpleString(), equalTo("<br/>Debitornumber: 10 Mandant: 1 Incasso: Nein"));
+    }
+
+    public Debitor getAnDebitor() {
+
+        Debitor debitor = new Debitor();
+        debitor.setDebitorID("10");
+        debitor.setDunningLevel("0");
+        debitor.setIncasso(false);
+        debitor.setMandantID("1");
+        debitor.setSelected(false);
+        return debitor;
+    }
+
+}

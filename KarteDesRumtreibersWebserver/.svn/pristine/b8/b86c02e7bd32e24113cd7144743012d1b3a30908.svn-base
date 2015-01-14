@@ -1,0 +1,80 @@
+.ui-datagrid-no-border .ui-datagrid-content {
+   border: 0px none;
+} 
+
+.ui-panelgrid-no-border .ui-panelgrid-content {
+   border: 0px none;   
+} 
+
+.ui-panelgrid-center .ui-panelgrid-content {
+   border: none;
+   vertical-align: middle;
+} 
+
+.ui-widget {
+	font-size: 0.7em;
+}
+
+
+table.menu2 {
+	background-image: url("../img/m2_bg_b.gif");
+}
+
+table.menu3 {
+	background-color: #dddddd;
+}
+
+table.main {
+	background-color: #FFFFFF;
+}
+
+td.main_logo {
+	background-image: url("../logo.gif");
+}
+
+.input-col1 {
+	margin: 0px;
+	width: 17%;
+	height: auto;
+}
+
+.input-col2 {
+	margin: 0px;
+	width: 2%;
+	height: auto;
+}
+
+.input-col3 {
+	margin: 0px;
+	width: 43%;
+	height: auto;
+}
+
+.input-col4 {
+	margin: 0px;
+	width: 38%;
+	height: auto;
+}
+
+.colLeft {
+	width: 750px
+}
+
+
+.label {
+	font-weight: bold;
+}
+
+.col35{
+	width:45%;
+	border: 0 none !important;
+}
+
+.col65{
+	width:65%;
+	border: 0 none !important;
+}
+
+.panelColumns td {
+    vertical-align: top; 
+}

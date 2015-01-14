@@ -1,0 +1,58 @@
+package databaseconnection;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+/**
+ * load properties and modify it for the EntityManagerFactory
+ * @author ZIMM051
+ *
+ */
+public class PropertiesLoad {
+
+    private Properties     generalProperties;
+
+    private final String[] persistenceKeys = { "javax.persistence.jdbc.url", "javax.persistence.jdbc.user", "javax.persistence.jdbc.password" };
+
+    public Properties getPersistenceProperties(PersistenceNameEnum persistenceNameEnum) {
+
+        return getValuesFromGeneralProperties(PersistenceName.getPersistenceName(persistenceNameEnum));
+
+    }
+
+    private Properties getValuesFromGeneralProperties(String persistenceName) {
+        Properties specificProperties = new Properties();
+        for (String key : persistenceKeys) {
+            specificProperties.setProperty(key, generalProperties.getProperty(persistenceName + "." + key, generalProperties.getProperty(key)));
+
+        }
+        return specificProperties;
+    }
+
+    public PropertiesLoad(String path) throws PropertiesLoadException {
+
+        generalProperties = new Properties();
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(new File(path));
+            generalProperties.load(fileInputStream);
+
+        } catch (IOException e) {
+            throw new PropertiesLoadException("Properties file could not be loaded", e);
+        } finally {
+            try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                throw new PropertiesLoadException("Properties file could not be loaded", e);
+            }
+        }
+
+    }
+
+    public void setGeneralProperties(Properties generalProperties) {
+        this.generalProperties = generalProperties;
+    }
+
+}

@@ -1,0 +1,20 @@
+package gui;
+
+import java.io.Serializable;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
+/**
+ * 
+ * @author ZIMM051
+ *
+ *Session is needed so the server does not throw an exception
+ */
+@ManagedBean(name = "userSession")
+@SessionScoped
+public class UserSession implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+}

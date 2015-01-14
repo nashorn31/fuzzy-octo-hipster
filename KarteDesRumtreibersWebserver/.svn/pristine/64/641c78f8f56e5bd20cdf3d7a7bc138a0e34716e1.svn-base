@@ -1,0 +1,79 @@
+package asp.inc.searchdbtest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import asp.inc.databaseconnectiontest.InitTestConnection;
+import asp.inc.informations.Debitor;
+import asp.inc.informations.Recipient;
+import asp.inc.searchdb.SearchForRecipient;
+import asp.inc.searchdb.SearchResults;
+
+public class SearchForRecipientTest {
+
+    private SearchForRecipient searchRecipient;
+
+    @Before
+    public void initNeededObjects() {
+        InitTestConnection.setDBvaluesToStart();
+        this.searchRecipient = new SearchForRecipient(InitTestConnection.getNHVTestEntityManager(), InitTestConnection.getHVTestEntityManager());
+    }
+
+    @Test
+    public void testAutocompletRecipientNormal() {
+        List<String> recipientlist = searchRecipient.completeRecipientID("1", "1");
+        assertThat(recipientlist.size(), equalTo(5));
+        assertThat(recipientlist.get(0), equalTo("13"));
+    }
+
+    @Test
+    public void testAutocompletRecipientWithOtherMandant() {
+        List<String> recipientlist = searchRecipient.completeRecipientID("1", "2");
+        assertThat(recipientlist.size(), equalTo(1));
+        assertThat(recipientlist.get(0), equalTo("112"));
+    }
+
+    @Test
+    public void testAutocompletRecipientNoMatch() {
+        List<String> recipientlist = searchRecipient.completeRecipientID("1123", "2");
+        assertThat(recipientlist.size(), equalTo(1));
+        assertThat(recipientlist.get(0), equalTo("Bitte einen gültigen Wert eintragen."));
+    }
+
+    @Test
+    public void testSearchDataSimple() {
+
+        SearchResults rs = searchRecipient.searchData("2", "112");
+
+        Recipient recipient = rs.getRecipients().get(0);
+        Debitor debitor = rs.getDebitors().get(0);
+
+        assertThat(rs.getStatus(), equalTo("Es wurden 1 RMF-Customer mit insgesamt 1 Debitoren gefunden."));
+
+        assertThat(rs.getRecipients().size(), equalTo(1));
+        assertThat(rs.getDebitors().size(), equalTo(1));
+
+        assertThat("Same object", recipient.getDebitors().get(0), equalTo(debitor));
+        assertThat("Compare expected values: Recipient: DebitorHasIncassosString", recipient.getdebitorIncassoString(), equalTo("Ja"));
+        assertThat("Compare expected values: Recipient: DunningLevel", recipient.getDunningLevel(), equalTo("0"));
+        assertThat("Compare expected values: Recipient: IncassoString", recipient.getIncassoString(), equalTo("Ja"));
+        assertThat("Compare expected values: Recipient: MandantID", recipient.getMandantID(), equalTo("2"));
+        assertThat("Compare expected values: Recipient: RecipientID", recipient.getRecipientID(), equalTo("112"));
+        assertThat("Compare expected values: Recipient: DebitorIncasso", recipient.isDebitorIncasso(), equalTo(true));
+        assertThat("Compare expected values: Recipient: Incasso", recipient.isIncasso(), equalTo(true));
+        assertThat("Compare expected values: Recipient: Selected", recipient.isSelected(), equalTo(false));
+
+        assertThat("Compare expected values: Debitor: DebitorID", debitor.getDebitorID(), equalTo("11"));
+        assertThat("Compare expected values: Debitor: DunningLevel", debitor.getDunningLevel(), equalTo("2"));
+        assertThat("Compare expected values: Debitor: IncassoString", debitor.getIncassoString(), equalTo("Ja"));
+        assertThat("Compare expected values: Debitor: MandantID", debitor.getMandantID(), equalTo("2"));
+        assertThat("Compare expected values: Debitor: Incasso", debitor.isIncasso(), equalTo(true));
+        assertThat("Compare expected values: Debitor: Selected", debitor.isSelected(), equalTo(false));
+
+    }
+}

@@ -1,0 +1,70 @@
+package searchDBTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import searchdb.SearchForDebitor;
+import searchdb.SearchResults;
+import databaseconnectionTest.InitTestConnection;
+
+public class SearchForDebitorTest {
+
+    private SearchForDebitor searchForDebitor;
+
+    @BeforeClass
+    public static void initEntityManager() {
+        InitTestConnection.setDBvaluesToStart();
+    }
+
+    @Before
+    public void initTestClass() {
+        this.searchForDebitor = new SearchForDebitor(InitTestConnection.getHVTestEntityManager());
+
+    }
+
+    @Test
+    public void searchDataTestOneRecipient() {
+
+        SearchResults searchResults = this.searchForDebitor.searchData("2", "11");
+
+        assertThat(searchResults.getDebitors().size(), equalTo(1));
+        assertThat(searchResults.getRecipients().size(), equalTo(1));
+
+        assertThat(searchResults.getDebitors().get(0).getDebitorID(), equalTo("11"));
+        assertThat(searchResults.getRecipients().get(0).getRecipientID(), equalTo("112"));
+
+    }
+
+    @Test
+    public void searchDataTestMoreOrders() {
+
+        SearchResults searchResults = this.searchForDebitor.searchData("1", "17");
+
+        assertThat(searchResults.getDebitors().size(), equalTo(1));
+        assertThat(searchResults.getRecipients().size(), equalTo(1));
+
+        assertThat(searchResults.getDebitors().get(0).getDebitorID(), equalTo("17"));
+        assertThat(searchResults.getRecipients().get(0).getRecipientID(), equalTo("14"));
+    }
+
+    @Test
+    public void searchDataTestMoreRecipients() {
+
+        SearchResults searchResults = this.searchForDebitor.searchData("1", "110");
+
+        assertThat(searchResults.getDebitors().size(), equalTo(3));
+        assertThat(searchResults.getRecipients().size(), equalTo(2));
+
+        assertThat(searchResults.getDebitors().get(0).getDebitorID(), equalTo("110"));
+        assertThat(searchResults.getDebitors().get(1).getDebitorID(), equalTo("113"));
+        assertThat(searchResults.getDebitors().get(2).getDebitorID(), equalTo("114"));
+        assertThat(searchResults.getRecipients().get(0).getRecipientID(), equalTo("15"));
+        assertThat(searchResults.getRecipients().get(1).getRecipientID(), equalTo("16"));
+
+    }
+
+}

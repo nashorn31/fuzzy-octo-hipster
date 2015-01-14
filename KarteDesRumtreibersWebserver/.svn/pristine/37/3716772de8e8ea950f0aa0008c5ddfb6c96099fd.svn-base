@@ -1,0 +1,93 @@
+package xml;
+
+import hibernateEntitySets.interfaces.XMLParseAble;
+
+import java.io.StringWriter;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+public class XMLManager {
+
+    /**
+     * add the the Object to the Document at a specific Node
+     * 
+     * @param pareAbleObject
+     *            object to add
+     * @param doc
+     *            the object
+     * @param rootElement
+     *            the Node where the object will be added
+     * @return the modified object
+     */
+    public Document addObjectToXML(XMLParseAble pareAbleObject, Document doc, Node rootElement) {
+
+        for (XMLTuple tuple : pareAbleObject.getAllValues()) {
+            Element tupleNode = doc.createElement(tuple.getKey());
+            tupleNode.appendChild(doc.createTextNode(tuple.getValue()));
+            rootElement.appendChild(tupleNode);
+        }
+
+        return doc;
+    }
+
+    /**
+     * creates an Document
+     * 
+     * @return a new Document
+     */
+    public Document getDocument() {
+
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            // root element
+            Document doc = docBuilder.newDocument();
+            return doc;
+        } catch (ParserConfigurationException pce) {
+            return null;
+        }
+    }
+
+    /**
+     * parse an xml Document into a String
+     * 
+     * @param doc
+     *            document to parse
+     * @return
+     */
+    public String XMLToString(Document doc) {
+        try {
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer;
+
+            transformer = tf.newTransformer();
+
+            // no headline e.g. version or encoding
+            // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+            // "yes");
+
+            transformer.transform(domSource, result);
+
+            return writer.toString();
+
+        } catch (TransformerException e) {
+            return null;
+        }
+
+    }
+
+}

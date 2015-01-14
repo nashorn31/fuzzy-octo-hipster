@@ -1,0 +1,101 @@
+package informationsTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import informations.Debitor;
+import informations.Recipient;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+public class RecipientTest {
+
+    @Test
+    public void compareToTestWithInt() {
+        Recipient recipient1 = getAnRecipient();
+
+        Recipient recipient2 = getAnRecipient();
+
+        assertThat("compare is equal 0", recipient1.compareTo(recipient2), equalTo(0));
+
+        recipient2.setRecipientID("9");
+        int compare1 = recipient1.compareTo(recipient2);
+        assertThat("compare is over 0 (smaler)", compare1 > 0, equalTo(true));
+
+        recipient2.setRecipientID("100");
+        int compare2 = recipient1.compareTo(recipient2);
+        assertThat("compare is under 0 (bigger)", compare2 < 0, equalTo(true));
+    }
+
+    @Test
+    public void compareToTestWithString() {
+        Recipient recipient1 = getAnRecipient();
+        Recipient recipient2 = getAnRecipient();
+
+        recipient1.setRecipientID("b");
+        recipient2.setRecipientID("b");
+
+        assertThat("compare is equal 0", recipient1.compareTo(recipient2), equalTo(0));
+
+        recipient2.setRecipientID("a");
+        int compare1 = recipient1.compareTo(recipient2);
+        assertThat("compare is over 0 (before)", compare1 > 0, equalTo(true));
+
+        recipient2.setRecipientID("c");
+        int compare2 = recipient1.compareTo(recipient2);
+        assertThat("compare is under 0 (after)", compare2 < 0, equalTo(true));
+    }
+
+    @Test
+    public void equalsTestNull() {
+        assertThat(getAnRecipient().equals(null), equalTo(false));
+    }
+
+    @Test
+    public void equalsTestOtherClass() {
+        assertThat(getAnRecipient().equals(new String()), equalTo(false));
+    }
+
+    @Test
+    public void equalsTestEqual() {
+        assertThat(getAnRecipient().equals(getAnRecipient()), equalTo(true));
+    }
+
+    @Test
+    public void equalsTestOtherRecipientID() {
+        Recipient recipient = getAnRecipient();
+        recipient.setRecipientID("123123");
+        assertThat(getAnRecipient().equals(recipient), equalTo(false));
+    }
+
+    @Test
+    public void equalsTestOtherMandantID() {
+        Recipient recipient = getAnRecipient();
+        recipient.setMandantID("12312");
+        assertThat(getAnRecipient().equals(recipient), equalTo(false));
+    }
+    
+    @Test
+    public void toStringTest(){
+        assertThat(getAnRecipient().toSimpleString(), equalTo("<br/>RMF-Customer: 10 Mandant: 1 Incasso: Nein"));
+           }
+
+    public Recipient getAnRecipient() {
+        Recipient recipient = new Recipient();
+        recipient.setDebitorIncasso(true);
+        recipient.setDunningLevel("0");
+        recipient.setIncasso(false);
+        recipient.setMandantID("1");
+        recipient.setRecipientID("10");
+        recipient.setSelected(false);
+        ArrayList<Debitor> debitors = new ArrayList<Debitor>();
+        DebitorTest debitorTest = new DebitorTest();
+        for (int i = 10; i < 12; i++) {
+            debitors.add(debitorTest.getAnDebitor());
+            debitors.get(debitors.size() - 1).setDebitorID(String.valueOf(i));
+        }
+        recipient.setDebitors(debitors);
+        return recipient;
+    }
+}

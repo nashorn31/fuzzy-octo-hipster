@@ -1,0 +1,167 @@
+package hibernateEntitySets;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * EntitySet for the data_changes, this is the table for the logging
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "data_log", name = "data_changes")
+public class DataLog_DataChanges {
+
+    @Id
+    @Column(name = "dc_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer    dc_id;
+
+    @Column(name = "dc_node_id")
+    private Integer    dc_node_id;
+
+    @Column(name = "dc_record_id")
+    private Integer    dc_record_id;
+
+    @Column(name = "dc_dv_type")
+    private short  dc_dv_type;
+
+    @Column(name = "dc_old_value")
+    private String dc_old_value;
+
+    @Column(name = "dc_new_value")
+    private String dc_new_value;
+
+    @Column(name = "dc_reason")
+    private String dc_reason;
+
+    @Column(name = "dc_application_name")
+    private String dc_application_name;
+
+    @Column(name = "dc_label")
+    private String dc_label;
+
+    @Column(name = "dc_us_id_inserted")
+    private Integer    dc_us_id_inserted;
+
+    @Column(name = "dc_date_inserted")
+    private Date   dc_date_inserted;
+
+    @Column(name = "dc_foreign_id")
+    private Integer    dc_foreign_id;
+
+    @Column(name = "dc_cu_id")
+    private Integer    dc_cu_id;
+
+    public Integer getDc_id() {
+        return dc_id;
+    }
+
+    public void setDc_id(Integer dc_id) {
+        this.dc_id = dc_id;
+    }
+
+    public Integer getDc_node_id() {
+        return dc_node_id;
+    }
+
+    public void setDc_node_id(Integer dc_node_id) {
+        this.dc_node_id = dc_node_id;
+    }
+
+    public Integer getDc_record_id() {
+        return dc_record_id;
+    }
+
+    public void setDc_record_id(Integer dc_record_id) {
+        this.dc_record_id = dc_record_id;
+    }
+
+    public short getDc_dv_type() {
+        return dc_dv_type;
+    }
+
+    public void setDc_dv_type(short dc_dv_type) {
+        this.dc_dv_type = dc_dv_type;
+    }
+
+    public String getDc_old_value() {
+        return dc_old_value;
+    }
+
+    public void setDc_old_value(String dc_old_value) {
+        this.dc_old_value = dc_old_value;
+    }
+
+    public String getDc_new_value() {
+        return dc_new_value;
+    }
+
+    public void setDc_new_value(String dc_new_value) {
+        this.dc_new_value = dc_new_value;
+    }
+
+    public String getDc_reason() {
+        return dc_reason;
+    }
+
+    public void setDc_reason(String dc_reason) {
+        this.dc_reason = dc_reason;
+    }
+
+    public String getDc_application_name() {
+        return dc_application_name;
+    }
+
+    public void setDc_application_name(String dc_application_name) {
+        this.dc_application_name = dc_application_name;
+    }
+
+    public String getDc_label() {
+        return dc_label;
+    }
+
+    public void setDc_label(String dc_label) {
+        this.dc_label = dc_label;
+    }
+
+    public Integer getDc_us_id_inserted() {
+        return dc_us_id_inserted;
+    }
+
+    public void setDc_us_id_inserted(Integer dc_us_id_inserted) {
+        this.dc_us_id_inserted = dc_us_id_inserted;
+    }
+
+    public Date getDc_date_inserted() {
+        return dc_date_inserted;
+    }
+
+    public void setDc_date_inserted(Date dc_date_inserted) {
+        this.dc_date_inserted = dc_date_inserted;
+    }
+
+    public Integer getDc_foreign_id() {
+        return dc_foreign_id;
+    }
+
+    public void setDc_foreign_id(Integer dc_foreign_id) {
+        this.dc_foreign_id = dc_foreign_id;
+    }
+
+    public Integer getDc_cu_id() {
+        return dc_cu_id;
+    }
+
+    public void setDc_cu_id(Integer dc_cu_id) {
+        this.dc_cu_id = dc_cu_id;
+    }
+
+}

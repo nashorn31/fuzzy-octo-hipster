@@ -1,0 +1,108 @@
+package gui;
+
+import searchDB.SearchResults;
+
+/**
+ * Check the different values for the MaskBean
+ * 
+ * @author zimm051
+ * 
+ */
+public class CheckValues {
+
+    private CheckValues() {
+    }
+
+    /**
+     * checks the MandantID
+     * 
+     * @param mandantID
+     *            the mandantID to check
+     * @return true if the mandantId is a valid value
+     */
+    public static boolean checkMandantID(String mandantID) {
+        return check(mandantID);
+    }
+
+    /**
+     * checks the DebitorNumber
+     * 
+     * @param debitorNumber
+     *            the debitorNumber to check
+     * @return true if the debitorNumber is a valid value
+     */
+    public static boolean checkDebitor(String debitorNumber) {
+        return check(debitorNumber);
+    }
+
+    /**
+     * checks the RecipientID
+     * 
+     * @param recipientID
+     *            the recipientID to check
+     * @return true if the recipientID is a valid value
+     */
+    public static boolean checkRecipient(String recipientID) {
+        return check(recipientID);
+    }
+
+    /**
+     * check all values which are needed to start the search
+     * 
+     * @param mandantID
+     *            the mandantID to check
+     * @param debitornumber
+     *            the debitorNumber to check
+     * @param recipientID
+     *            the recipientID to check
+     * @return true if all values are right
+     */
+    public static boolean checkSearch(String mandantID, String debitornumber, String recipientID) {
+
+        /*
+         * calls the methods to check the values (the mandantID and the
+         * debitorNumber OR the recipientID have to be valid)
+         */
+        boolean correct = checkMandantID(mandantID) && (checkDebitor(debitornumber) || checkRecipient(recipientID));
+        return correct;
+    }
+
+    /**
+     * check if the search results have valid values to start the reset
+     * 
+     * @param searchResults
+     *            search results to validate
+     * @return true if they are valid
+     */
+    public static boolean checkForReset(SearchResults searchResults) {
+        if (searchResults == null) {
+            return false;
+        } else if (searchResults.getSelectedDebitors() == null) {
+            return false;
+        } else if (searchResults.getSelectedRecipients() == null) {
+            return false;
+        } else if ((searchResults.getSelectedDebitors().isEmpty() && searchResults.getSelectedRecipients().isEmpty())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * check which is used by all other checks
+     * 
+     * @param toCheck
+     *            the value to check
+     * @return false if the value is null or an empty string else true
+     */
+    private static boolean check(String toCheck) {
+
+        if (toCheck == null || toCheck.equals("") || toCheck.equals("Bitte einen gültigen Wert eintragen.")) {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+}

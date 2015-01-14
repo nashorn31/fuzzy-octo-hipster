@@ -1,0 +1,70 @@
+package hibernateentitysets;
+
+import hibernateentitysets.interfaces.AutoComplete;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+/**
+ * EntitySet for the table TMandant
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "Magellan", name = "TMandant")
+public class TMandant implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "mandant_ID")
+    private int               mandantID;
+
+    @Column(name = "pms_config_partner")
+    private int               pmsConfigPartner;
+
+    @Transient
+    private PMSMembers        pmsMember;
+
+    public int getMandantID() {
+        return mandantID;
+    }
+
+    public void setMandantID(int mandantID) {
+        this.mandantID = mandantID;
+    }
+
+    public PMSMembers getPmsMember() {
+        return pmsMember;
+    }
+
+    public void setPmsMember(PMSMembers pmsMember) {
+        this.pmsMember = pmsMember;
+    }
+
+    public int getPmsConfigPartner() {
+        return pmsConfigPartner;
+    }
+
+    public void setPmsConfigPartner(int pmsConfigPartner) {
+        this.pmsConfigPartner = pmsConfigPartner;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "mandantID";
+    }
+
+    @Override
+    public String autocompleteValue() {
+
+        return String.valueOf(mandantID);
+    }
+}

@@ -1,0 +1,73 @@
+package searchDB;
+
+import hibernateEntitySets.TRecipient_Account;
+import informations.Recipient;
+
+import java.util.ArrayList;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+/**
+ * Search and auto complete for Recipient
+ * 
+ * @author zimm051
+ * 
+ */
+public class SearchForRecipient {
+
+    private int           numberResultsAutocomplete = 5;
+    private EntityManager entityManagerHV;
+
+    public SearchForRecipient(EntityManager entityManagerHV) {
+        this.entityManagerHV = entityManagerHV;
+    }
+
+    /**
+     * get proposals for the mandantID
+     * 
+     * @param recipientID
+     *            start of a recipientID for which proposals are needed
+     * @param mandantID
+     *            mandant of the recipients
+     * @return list of potential recipientIDs
+     */
+    public ArrayList<String> completeRecipientID(String recipientID, String mandantID) {
+
+        // create a auto complete object
+        AutoCompleteValues autocomplete = new AutoCompleteValues(this.entityManagerHV);
+
+        // get a TypedQuery for the SQL search
+        TypedQuery<TRecipient_Account> searchQuery = autocomplete.getSearchQuery(recipientID, "recipient_Account_ID", TRecipient_Account.class,
+                "AND mandant_ID = " + mandantID);
+
+        // set max results for the search
+        searchQuery.setMaxResults(numberResultsAutocomplete);
+
+        // return list of potential mandantIDs
+        return autocomplete.getListForSearchQuery(searchQuery);
+
+    }
+
+    public SearchResults searchData(String mandantID, String recipientID) {
+
+        // results list to fill
+        SearchResults searchResults = new SearchResults();
+
+        // Create SQL Query
+        TypedQuery<TRecipient_Account> searchQuery = this.entityManagerHV.createQuery("FROM TRecipient_Account WHERE recipient_Account_ID ='" + recipientID
+                + "' AND Mandant_ID = '" + mandantID + "'", TRecipient_Account.class);
+
+        // get result
+        TRecipient_Account tRecipient = searchQuery.getSingleResult();
+
+        /*
+         * convert the entity set into a recipient to display and ad it to the
+         * search results
+         */
+        searchResults.addRecipients(new Recipient(tRecipient));
+
+        return searchResults;
+    }
+
+}

@@ -1,0 +1,173 @@
+package searchDB;
+
+import informations.Debitor;
+import informations.Recipient;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class SearchResults {
+
+    private ArrayList<Recipient> recipients;
+
+    private ArrayList<Debitor>   debitors;
+
+    public SearchResults() {
+        recipients = new ArrayList<Recipient>();
+        debitors = new ArrayList<Debitor>();
+    }
+
+    public ArrayList<Recipient> getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(ArrayList<Recipient> recipients) {
+        this.recipients = recipients;
+        if (recipients != null) {
+            // reset all debitor list
+            debitors.clear();
+
+            // rebuild debitor list
+            createAllDebitorList(recipients);
+        }
+    }
+
+    /**
+     * get all selected selected recipients
+     * 
+     * @return selected recipients
+     */
+    public List<Recipient> getSelectedRecipients() {
+        // create new ArrayList
+        ArrayList<Recipient> selectedRecipients = new ArrayList<Recipient>();
+
+        // add all selected recipients to list
+        for (Recipient recipient : recipients) {
+            if (recipient.isSelected()) {
+                selectedRecipients.add(recipient);
+            }
+        }
+        return selectedRecipients;
+    }
+
+    /**
+     * add a recipient direct to the recipient ArrayList of the class
+     * 
+     * @param recipient
+     */
+    public void addRecipients(Recipient recipient) {
+
+        // create a new ArrayList if the ArrayList is null
+        if (recipients == null) {
+            recipients = new ArrayList<Recipient>();
+        }
+
+        // add recipient to list
+        recipients.add(recipient);
+
+        // add all debitors from the recipient to the debitor list
+        createAllDebitorList(recipient);
+    }
+
+    public ArrayList<Debitor> getDebitors() {
+        return debitors;
+    }
+
+    public void setDebitors(ArrayList<Debitor> debitors) {
+        this.debitors = debitors;
+    }
+
+    /**
+     * get all selected selected debitors
+     * 
+     * @return selected debitors
+     */
+    public List<Debitor> getSelectedDebitors() {
+        // create new ArrayList
+        ArrayList<Debitor> selectedDebitors = new ArrayList<Debitor>();
+
+        // add all selected debitors to list
+        for (Debitor debitor : debitors) {
+            if (debitor.isSelected()) {
+                selectedDebitors.add(debitor);
+            }
+        }
+        return selectedDebitors;
+    }
+
+    /**
+     * status of the search results
+     * 
+     * @return number recipients and debitors
+     */
+    public String getStatus() {
+        return "Es wurden " + recipients.size() + " RMF-Customer mit insgesamt " + debitors.size() + " Debitoren gefunden.";
+    }
+
+    /**
+     * union the debitors of the recipients, replace an debitor with the same
+     * attributes with the same object
+     */
+    public void unionRecipients() {
+        // for all recipients
+        for (int i = 0; i < recipients.size(); i++) {
+
+            // all debitors from the current recipient
+            for (Debitor debitor : recipients.get(i).getDebitors()) {
+                // for all recipient which were not already compared
+                for (int j = i + 1; j < recipients.size(); j++) {
+
+                    // if the recipient not contains the debitor
+                    if ((recipients.get(j).getDebitors().contains(debitor))) {
+                        // add the debitor to the debitor list
+                        recipients.get(j).getDebitors().remove(debitor);
+                        recipients.get(j).getDebitors().add(debitor);
+                    }
+                }
+            }
+        }
+        sortSearchResults();
+
+    }
+
+    public void sortSearchResults() {
+        Collections.sort(recipients);
+        for (Recipient recipient : recipients) {
+            Collections.sort(recipient.getDebitors());
+        }
+
+    }
+
+    /**
+     * create the debitor list for a recipient list
+     * 
+     * @param recipients
+     */
+    private void createAllDebitorList(List<Recipient> recipients) {
+
+        // calls the method for every recipient
+        for (Recipient recipient : recipients) {
+            createAllDebitorList(recipient);
+        }
+    }
+
+    /**
+     * create the debitor list for a recipient
+     * 
+     * @param recipients
+     */
+    private void createAllDebitorList(Recipient recipient) {
+
+        if (recipient.getDebitors() != null) {
+            for (Debitor debitor : recipient.getDebitors()) {
+
+                // add the debitor to list if the list does not already contains
+                // him
+                if (!debitors.contains(debitor)) {
+                    debitors.add(debitor);
+                }
+            }
+        }
+    }
+}

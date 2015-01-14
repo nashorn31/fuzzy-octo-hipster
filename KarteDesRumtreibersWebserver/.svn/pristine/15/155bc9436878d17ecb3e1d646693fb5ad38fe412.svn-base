@@ -1,0 +1,23 @@
+package databaseconnection;
+
+public class CanNotInitEntityManagerException extends Exception {
+
+    private static final long serialVersionUID = 1L;
+
+    public CanNotInitEntityManagerException() {
+        super("Can not initialize the EntityManager because no properties file was found");
+    }
+
+    public CanNotInitEntityManagerException(String message) {
+        super(message);
+    }
+
+    public CanNotInitEntityManagerException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CanNotInitEntityManagerException(Throwable cause) {
+        super(cause);
+    }
+
+}

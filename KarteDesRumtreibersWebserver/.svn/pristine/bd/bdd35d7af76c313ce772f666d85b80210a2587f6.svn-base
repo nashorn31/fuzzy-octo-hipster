@@ -1,0 +1,167 @@
+package asp.inc.hibernateentitysets;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * EntitySet for the data_changes, this is the table for the logging
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "data_log", name = "data_changes")
+public class DataLogDataChanges {
+
+    @Id
+    @Column(name = "dc_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer dcID;
+
+    @Column(name = "dc_node_id")
+    private Integer dcNodeID;
+
+    @Column(name = "dc_record_id")
+    private Integer dcRecordID;
+
+    @Column(name = "dc_dv_type")
+    private short   dcDvType;
+
+    @Column(name = "dc_old_value")
+    private String  dcOldValue;
+
+    @Column(name = "dc_new_value")
+    private String  dcNewValue;
+
+    @Column(name = "dc_reason")
+    private String  dcReason;
+
+    @Column(name = "dc_application_name")
+    private String  dcApplicationName;
+
+    @Column(name = "dc_label")
+    private String  dcLabel;
+
+    @Column(name = "dc_us_id_inserted")
+    private Integer dcUsIDInserted;
+
+    @Column(name = "dc_date_inserted")
+    private Date    dcDateInserted;
+
+    @Column(name = "dc_foreign_id")
+    private Integer dcForeignID;
+
+    @Column(name = "dc_cu_id")
+    private Integer dcCuID;
+
+    public Integer getDcID() {
+        return dcID;
+    }
+
+    public void setDcID(Integer dcID) {
+        this.dcID = dcID;
+    }
+
+    public Integer getDcNodeID() {
+        return dcNodeID;
+    }
+
+    public void setDcNodeID(Integer dcNodeID) {
+        this.dcNodeID = dcNodeID;
+    }
+
+    public Integer getDcRecordID() {
+        return dcRecordID;
+    }
+
+    public void setDcRecordID(Integer dcRecordID) {
+        this.dcRecordID = dcRecordID;
+    }
+
+    public short getDcDvType() {
+        return dcDvType;
+    }
+
+    public void setDcDvType(short dcDvType) {
+        this.dcDvType = dcDvType;
+    }
+
+    public String getDcOldValue() {
+        return dcOldValue;
+    }
+
+    public void setDcOldValue(String dcOldValue) {
+        this.dcOldValue = dcOldValue;
+    }
+
+    public String getDcNewValue() {
+        return dcNewValue;
+    }
+
+    public void setDcNewValue(String dcNewValue) {
+        this.dcNewValue = dcNewValue;
+    }
+
+    public String getDcReason() {
+        return dcReason;
+    }
+
+    public void setDcReason(String dcReason) {
+        this.dcReason = dcReason;
+    }
+
+    public String getDcApplicationName() {
+        return dcApplicationName;
+    }
+
+    public void setDcApplicationName(String dcApplicationName) {
+        this.dcApplicationName = dcApplicationName;
+    }
+
+    public String getDcLabel() {
+        return dcLabel;
+    }
+
+    public void setDcLabel(String dcLabel) {
+        this.dcLabel = dcLabel;
+    }
+
+    public Integer getDcUsIDInserted() {
+        return dcUsIDInserted;
+    }
+
+    public void setDcUsIDInserted(Integer dcUsIDInserted) {
+        this.dcUsIDInserted = dcUsIDInserted;
+    }
+
+    public Date getDcDateInserted() {
+        return dcDateInserted;
+    }
+
+    public void setDcDateInserted(Date dcDateInserted) {
+        this.dcDateInserted = dcDateInserted;
+    }
+
+    public Integer getDcForeignID() {
+        return dcForeignID;
+    }
+
+    public void setDcForeignID(Integer dcForeignID) {
+        this.dcForeignID = dcForeignID;
+    }
+
+    public Integer getDcCuID() {
+        return dcCuID;
+    }
+
+    public void setDcCuID(Integer dcCuID) {
+        this.dcCuID = dcCuID;
+    }
+
+}

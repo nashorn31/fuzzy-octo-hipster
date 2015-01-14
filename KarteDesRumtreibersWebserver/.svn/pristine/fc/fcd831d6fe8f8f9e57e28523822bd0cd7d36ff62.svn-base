@@ -1,0 +1,82 @@
+package searchDB;
+
+import hibernateEntitySets.TDebitor_Account;
+import hibernateEntitySets.TOrder;
+import informations.Recipient;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+/**
+ * Search and auto complete for Recipient
+ * 
+ * @author zimm051
+ * 
+ */
+public class SearchForDebitor {
+
+    private final int     numberResultsAutocomplete = 5;
+    private EntityManager entityManagerHV;
+
+    public SearchForDebitor(EntityManager entityManagerHV) {
+        this.entityManagerHV = entityManagerHV;
+    }
+
+    /**
+     * get proposals for the debitornumber
+     * 
+     * @param debitornumber
+     *            start of a debitornumber for which proposals are needed
+     * @param mandantID
+     *            mandant of the recipients
+     * @return list of potential debitors
+     */
+    public List<String> completeDebitorNumber(String debitornumber, String mandantID) {
+
+        // create a auto complete object
+        AutoCompleteValues autocomplete = new AutoCompleteValues(this.entityManagerHV);
+
+        // get a TypedQuery for the SQL search
+        TypedQuery<TDebitor_Account> searchQuery = autocomplete.getSearchQuery(debitornumber, "debitor_Account_ID", TDebitor_Account.class, "AND mandant_ID = "
+                + mandantID);
+
+        // set max results for the search
+        searchQuery.setMaxResults(numberResultsAutocomplete);
+
+        // return list of potential mandantIDs
+        return autocomplete.getListForSearchQuery(searchQuery);
+
+    }
+
+    public SearchResults searchData(String mandantID, String debitornumber) {
+
+        // results list to fill
+        SearchResults searchResults = new SearchResults();
+
+        // Create SQL Query
+        TypedQuery<TDebitor_Account> searchQuery = this.entityManagerHV.createQuery("FROM TDebitor_Account WHERE debitor_Account_ID ='" + debitornumber
+                + "' AND Mandant_ID = '" + mandantID + "'", TDebitor_Account.class);
+
+        // get result
+        TDebitor_Account tdebitor = searchQuery.getSingleResult();
+
+        for (TOrder order : tdebitor.getOrder()) {
+
+            // create Recipient
+            Recipient recipient = new Recipient(order.getRecipientAccount());
+
+            // add only when it is a new Recipient
+            if (!searchResults.getRecipients().contains(recipient) && recipient.getMandantID().equals(mandantID)) {
+                searchResults.addRecipients(recipient);
+            }
+        }
+
+        if (!(searchResults.getRecipients() == null)) {
+            // union the same Data with different ObjectIDs
+            searchResults.unionRecipients();
+        }
+        return searchResults;
+    }
+}

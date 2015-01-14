@@ -1,0 +1,30 @@
+package asp.inc.databaseconnection;
+
+import java.io.IOException;
+
+/**
+ * Exception when the EntityManagerFactory could not be initialized
+ * @author ZIMM051
+ *
+ */
+public class CanNotInitEntityManagerFactoryException extends IOException {
+
+    private static final long serialVersionUID = 1L;
+
+    public CanNotInitEntityManagerFactoryException() {
+        super();
+    }
+
+    public CanNotInitEntityManagerFactoryException(String message) {
+        super(message);
+    }
+
+    public CanNotInitEntityManagerFactoryException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CanNotInitEntityManagerFactoryException(Throwable cause) {
+        super(cause);
+    }
+
+}

@@ -1,0 +1,411 @@
+package hibernateentitysets;
+
+import hibernateentitysets.interfaces.XMLParseAble;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import xml.XMLTuple;
+
+/**
+ * EntitySet for the table TAggregated_Data the IncassoFlag is in this table
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "Magellan", name = "TAggregated_Data")
+public class TAggregatedData implements Serializable, XMLParseAble {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "aggregated_Data_ID")
+    private Integer           aggregatedDataID;
+
+    @Column(name = "safe_order_payment_info_id")
+    private Integer           safeOrderPaymentInfoID;
+
+    @Column(name = "unsafe_order_payment_info_id")
+    private Integer           unsafeOrderPaymentInfoID;
+
+    @Column(name = "current_saldo")
+    private BigDecimal        currentSaldo;
+
+    @Column(name = "max_saldo_ever")
+    private BigDecimal        maxSaldoEver;
+
+    @Column(name = "current_dunning_level")
+    private Short             currentDunningLevel;
+
+    @Column(name = "max_dunning_level_ever")
+    private Short             maxDunningLevelEver;
+
+    @Column(name = "sales_volume")
+    private BigDecimal        salesVolume;
+
+    @Column(name = "total_return_debit_note_count")
+    private Short             totalReturnDebitNoteCount;
+
+    @Column(name = "date_of_last_return_debit_note")
+    private Date              dateOfLastReturnDebitNote;
+
+    @Column(name = "max_transactional_saldo_diff")
+    private BigDecimal        maxTransactionalSaldoDiff;
+
+    @Column(name = "has_used_installement_payment")
+    private boolean           hasUsedInstallementPayment;
+
+    @Column(name = "incasso")
+    private boolean           incasso;
+
+    @Column(name = "chargeback_count")
+    private Short             chargebackCount;
+
+    @Column(name = "delivery_customer_saldo")
+    private BigDecimal        deliveryCustomerSaldo;
+
+    @Column(name = "date_of_last_chargeback")
+    private Date              dateOfLastChargeback;
+
+    @Column(name = "date_of_last_dunning")
+    private Date              dateOfLastDunning;
+
+    @Column(name = "creation_date")
+    private Date              creationDate;
+
+    @Column(name = "modification_date")
+    private Date              modificationDate;
+
+    @Column(name = "total_return_value")
+    private BigDecimal        totalReturnValue;
+
+    @Column(name = "total_order_value")
+    private BigDecimal        totalOrderValue;
+
+    @Column(name = "total_return_count")
+    private Long              totalReturnCount;
+
+    @Column(name = "total_order_count")
+    private Long              totalOrderCount;
+
+    @Column(name = "current_installment_dunning_level")
+    private Integer           currentInstallmentDunningLevel;
+
+    @Column(name = "max_installment_dunning_level_ever")
+    private Integer           maxInstallmentDunningLevelEver;
+
+    @Column(name = "current_installment_count")
+    private Integer           currentInstallmentCount;
+
+    @Column(name = "total_installment_count")
+    private Integer           totalInstallmentCount;
+
+    @Column(name = "successful_installment_count")
+    private Integer           successfulInstallmentCount;
+
+    @Column(name = "installment_payment_default_count")
+    private Integer           installmentPaymentDefaultCount;
+
+    @Column(name = "max_monthly_installment")
+    private BigDecimal        maxMonthlyInstallment;
+
+    @Column(name = "min_monthly_installment_payment_default")
+    private BigDecimal        minMonthlyInstallmentPaymentDefault;
+
+    public Integer getAggregatedDataID() {
+        return aggregatedDataID;
+    }
+
+    public void setAggregatedDataID(Integer aggregatedDataID) {
+        this.aggregatedDataID = aggregatedDataID;
+    }
+
+    public Integer getSafeOrderPaymentInfoID() {
+        return safeOrderPaymentInfoID;
+    }
+
+    public void setSafeOrderPaymentInfoID(Integer safeOrderPaymentInfoID) {
+        this.safeOrderPaymentInfoID = safeOrderPaymentInfoID;
+    }
+
+    public Integer getUnsafeOrderPaymentInfoID() {
+        return unsafeOrderPaymentInfoID;
+    }
+
+    public void setUnsafeOrderPaymentInfoID(Integer unsafeOrderPaymentInfoID) {
+        this.unsafeOrderPaymentInfoID = unsafeOrderPaymentInfoID;
+    }
+
+    public BigDecimal getCurrentSaldo() {
+        return currentSaldo;
+    }
+
+    public void setCurrentSaldo(BigDecimal currentSaldo) {
+        this.currentSaldo = currentSaldo;
+    }
+
+    public BigDecimal getMaxSaldoEver() {
+        return maxSaldoEver;
+    }
+
+    public void setMaxSaldoEver(BigDecimal maxSaldoEver) {
+        this.maxSaldoEver = maxSaldoEver;
+    }
+
+    public Short getCurrentDunningLevel() {
+        return currentDunningLevel;
+    }
+
+    public void setCurrentDunningLevel(Short currentDunningLevel) {
+        this.currentDunningLevel = currentDunningLevel;
+    }
+
+    public Short getMaxDunningLevelEver() {
+        return maxDunningLevelEver;
+    }
+
+    public void setMaxDunningLevelEver(Short maxDunningLevelEver) {
+        this.maxDunningLevelEver = maxDunningLevelEver;
+    }
+
+    public BigDecimal getSalesVolume() {
+        return salesVolume;
+    }
+
+    public void setSalesVolume(BigDecimal salesVolume) {
+        this.salesVolume = salesVolume;
+    }
+
+    public Short getTotalReturnDebitNoteCount() {
+        return totalReturnDebitNoteCount;
+    }
+
+    public void setTotalReturnDebitNoteCount(Short totalReturnDebitNoteCount) {
+        this.totalReturnDebitNoteCount = totalReturnDebitNoteCount;
+    }
+
+    public Date getDateOfLastReturnDebitNote() {
+        return dateOfLastReturnDebitNote;
+    }
+
+    public void setDateOfLastReturnDebitNote(Date dateOfLastReturnDebitNote) {
+        this.dateOfLastReturnDebitNote = dateOfLastReturnDebitNote;
+    }
+
+    public BigDecimal getMaxTransactionalSaldoDiff() {
+        return maxTransactionalSaldoDiff;
+    }
+
+    public void setMaxTransactionalSaldoDiff(BigDecimal maxTransactionalSaldoDiff) {
+        this.maxTransactionalSaldoDiff = maxTransactionalSaldoDiff;
+    }
+
+    public boolean isHasUsedInstallementPayment() {
+        return hasUsedInstallementPayment;
+    }
+
+    public void setHasUsedInstallementPayment(boolean hasUsedInstallementPayment) {
+        this.hasUsedInstallementPayment = hasUsedInstallementPayment;
+    }
+
+    public boolean isIncasso() {
+        return incasso;
+    }
+
+    public void setIncasso(boolean incasso) {
+        this.incasso = incasso;
+    }
+
+    public Short getChargebackCount() {
+        return chargebackCount;
+    }
+
+    public void setChargebackCount(Short chargebackCount) {
+        this.chargebackCount = chargebackCount;
+    }
+
+    public BigDecimal getDeliveryCustomerSaldo() {
+        return deliveryCustomerSaldo;
+    }
+
+    public void setDeliveryCustomerSaldo(BigDecimal deliveryCustomerSaldo) {
+        this.deliveryCustomerSaldo = deliveryCustomerSaldo;
+    }
+
+    public Date getDateOfLastChargeback() {
+        return dateOfLastChargeback;
+    }
+
+    public void setDateOfLastChargeback(Date dateOfLastChargeback) {
+        this.dateOfLastChargeback = dateOfLastChargeback;
+    }
+
+    public Date getDateOfLastDunning() {
+        return dateOfLastDunning;
+    }
+
+    public void setDateOfLastDunning(Date dateOfLastDunning) {
+        this.dateOfLastDunning = dateOfLastDunning;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    public BigDecimal getTotalReturnValue() {
+        return totalReturnValue;
+    }
+
+    public void setTotalReturnValue(BigDecimal totalReturnValue) {
+        this.totalReturnValue = totalReturnValue;
+    }
+
+    public BigDecimal getTotalOrderValue() {
+        return totalOrderValue;
+    }
+
+    public void setTotalOrderValue(BigDecimal totalOrderValue) {
+        this.totalOrderValue = totalOrderValue;
+    }
+
+    public Long getTotalReturnCount() {
+        return totalReturnCount;
+    }
+
+    public void setTotalReturnCount(Long totalReturnCount) {
+        this.totalReturnCount = totalReturnCount;
+    }
+
+    public Long getTotalOrderCount() {
+        return totalOrderCount;
+    }
+
+    public void setTotalOrderCount(Long totalOrderCount) {
+        this.totalOrderCount = totalOrderCount;
+    }
+
+    public Integer getCurrentInstallmentDunningLevel() {
+        return currentInstallmentDunningLevel;
+    }
+
+    public void setCurrentInstallmentDunningLevel(Integer currentInstallmentDunningLevel) {
+        this.currentInstallmentDunningLevel = currentInstallmentDunningLevel;
+    }
+
+    public Integer getMaxInstallmentDunningLevelEver() {
+        return maxInstallmentDunningLevelEver;
+    }
+
+    public void setMaxInstallmentDunningLevelEver(Integer maxInstallmentDunningLevelEver) {
+        this.maxInstallmentDunningLevelEver = maxInstallmentDunningLevelEver;
+    }
+
+    public Integer getCurrentInstallmentCount() {
+        return currentInstallmentCount;
+    }
+
+    public void setCurrentInstallmentCount(Integer currentInstallmentCount) {
+        this.currentInstallmentCount = currentInstallmentCount;
+    }
+
+    public Integer getTotalInstallmentCount() {
+        return totalInstallmentCount;
+    }
+
+    public void setTotalInstallmentCount(Integer totalInstallmentCount) {
+        this.totalInstallmentCount = totalInstallmentCount;
+    }
+
+    public Integer getSuccessfulInstallmentCount() {
+        return successfulInstallmentCount;
+    }
+
+    public void setSuccessfulInstallmentCount(Integer successfulInstallmentCount) {
+        this.successfulInstallmentCount = successfulInstallmentCount;
+    }
+
+    public Integer getInstallmentPaymentDefaultCount() {
+        return installmentPaymentDefaultCount;
+    }
+
+    public void setInstallmentPaymentDefaultCount(Integer installmentPaymentDefaultCount) {
+        this.installmentPaymentDefaultCount = installmentPaymentDefaultCount;
+    }
+
+    public BigDecimal getMaxMonthlyInstallment() {
+        return maxMonthlyInstallment;
+    }
+
+    public void setMaxMonthlyInstallment(BigDecimal maxMonthlyInstallment) {
+        this.maxMonthlyInstallment = maxMonthlyInstallment;
+    }
+
+    public BigDecimal getMinMonthlyInstallmentPaymentDefault() {
+        return minMonthlyInstallmentPaymentDefault;
+    }
+
+    public void setMinMonthlyInstallmentPaymentDefault(BigDecimal minMonthlyInstallmentPaymentDefault) {
+        this.minMonthlyInstallmentPaymentDefault = minMonthlyInstallmentPaymentDefault;
+    }
+
+    @Override
+    public List<XMLTuple> getAllValues() {
+        List<XMLTuple> allTuples = new ArrayList<XMLTuple>();
+
+        allTuples.add(new XMLTuple("aggregated_data_id", aggregatedDataID));
+        allTuples.add(new XMLTuple("safe_order_payment_info_id", safeOrderPaymentInfoID));
+        allTuples.add(new XMLTuple("unsafe_order_payment_info_id", unsafeOrderPaymentInfoID));
+        allTuples.add(new XMLTuple("current_saldo", currentSaldo));
+        allTuples.add(new XMLTuple("max_saldo_ever", maxSaldoEver));
+        allTuples.add(new XMLTuple("current_dunning_level", currentDunningLevel));
+        allTuples.add(new XMLTuple("max_dunning_level_ever", maxDunningLevelEver));
+        allTuples.add(new XMLTuple("sales_volume", salesVolume));
+        allTuples.add(new XMLTuple("total_return_debit_note_count", totalReturnDebitNoteCount));
+        allTuples.add(new XMLTuple("date_of_last_return_debit_note", dateOfLastReturnDebitNote));
+        allTuples.add(new XMLTuple("max_transactional_saldo_diff", maxTransactionalSaldoDiff));
+        allTuples.add(new XMLTuple("has_used_installement_payment", hasUsedInstallementPayment));
+        allTuples.add(new XMLTuple("incasso", incasso));
+        allTuples.add(new XMLTuple("chargeback_count", chargebackCount));
+        allTuples.add(new XMLTuple("delivery_customer_saldo", deliveryCustomerSaldo));
+        allTuples.add(new XMLTuple("date_of_last_chargeback", dateOfLastChargeback));
+        allTuples.add(new XMLTuple("date_of_last_dunning", dateOfLastDunning));
+        allTuples.add(new XMLTuple("creation_date", creationDate));
+        allTuples.add(new XMLTuple("modification_date", modificationDate));
+        allTuples.add(new XMLTuple("total_return_value", totalReturnValue));
+        allTuples.add(new XMLTuple("total_order_value", totalOrderValue));
+        allTuples.add(new XMLTuple("total_return_count", totalReturnCount));
+        allTuples.add(new XMLTuple("total_order_count", totalOrderCount));
+        allTuples.add(new XMLTuple("current_installment_dunning_level", currentInstallmentDunningLevel));
+        allTuples.add(new XMLTuple("max_installment_dunning_level_ever", maxInstallmentDunningLevelEver));
+        allTuples.add(new XMLTuple("current_installment_count", currentInstallmentCount));
+        allTuples.add(new XMLTuple("total_installment_count", totalInstallmentCount));
+        allTuples.add(new XMLTuple("successful_installment_count", successfulInstallmentCount));
+        allTuples.add(new XMLTuple("installment_payment_default_count", installmentPaymentDefaultCount));
+        allTuples.add(new XMLTuple("max_monthly_installment", maxMonthlyInstallment));
+        allTuples.add(new XMLTuple("min_monthly_installment_payment_default", minMonthlyInstallmentPaymentDefault));
+
+        return allTuples;
+    }
+
+}

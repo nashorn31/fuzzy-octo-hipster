@@ -1,0 +1,48 @@
+package asp.inc.listeners;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import asp.inc.databaseconnection.CanNotInitEntityManagerFactoryException;
+import asp.inc.databaseconnection.InitEntityManager;
+
+/**
+ * 
+ * @author ZIMM051
+ * 
+ */
+public class StartListener implements ServletContextListener {
+
+    private static final Logger LOG = LogManager.getLogger(StartListener.class);
+
+    /**
+     * executed when the Server shuts down
+     */
+    @Override
+    public void contextDestroyed(ServletContextEvent arg0) {
+        // close the EntityManager for DB access
+        InitEntityManager.closeEntityManager();
+
+    }
+
+    /**
+     * executed when the Server starts
+     */
+    @Override
+    public void contextInitialized(ServletContextEvent arg0) {
+
+        // initialize the EntityManager for DB access
+        try {
+            InitEntityManager.initalEntityManagerFactorys();
+            LOG.info("EntityManager is initialized");
+        } catch (CanNotInitEntityManagerFactoryException e) {
+            LOG.error("Entitymanager connot be initialized", e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+}

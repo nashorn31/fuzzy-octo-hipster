@@ -1,0 +1,36 @@
+package asp.inc.databaseconnectiontest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.io.IOException;
+import java.util.Properties;
+
+import org.junit.Test;
+
+import asp.inc.databaseconnection.PersistenceNameEnum;
+import asp.inc.databaseconnection.PropertiesLoad;
+
+public class PropertiesLoadTest {
+
+    @Test
+    public void testLoadGeneralProperties() {
+
+        try {
+            PropertiesLoad propertiesLoad = new PropertiesLoad(System.getProperties().getProperty("user.dir")
+                    + "\\src\\test\\resources\\loadPropertiesTestProp\\environment.properties");
+
+            Properties prop = propertiesLoad.getPersistenceProperties(PersistenceNameEnum.PERSISTENCENAMENHV);
+            assertThat(prop.getProperty("javax.persistence.jdbc.user"), equalTo("zimm051"));
+            assertThat(prop.getProperty("javax.persistence.jdbc.url"), equalTo("jdbc:sqlserver://gtlifswvm0866\\DBMTASPD01;"));
+
+            prop = propertiesLoad.getPersistenceProperties(PersistenceNameEnum.PERSISTENCENAMEHV);
+            assertThat(prop.getProperty("javax.persistence.jdbc.user"), equalTo("zimm051"));
+            assertThat(prop.getProperty("javax.persistence.jdbc.url"), equalTo("anders"));
+        } catch (IOException e) {
+            assertThat("Properties können nicht geladen werden", true, equalTo(false));
+        }
+
+    }
+
+}

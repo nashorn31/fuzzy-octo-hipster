@@ -1,0 +1,76 @@
+package changelogTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
+import hibernateEntitySets.DataLog_DataChanges;
+import hibernateEntitySets.TAggregated_Data;
+
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import changelog.ChangeLog;
+import databaseconnection.InitEntityManager;
+import databaseconnectionTest.InitTestConnection;
+
+public class ChangeLogTest {
+
+    private TAggregated_Data aggregatedData;
+
+    @Before
+    public void createAggregatedData() {
+        this.aggregatedData = InitTestConnection.getNHVTestEntityManager()
+                .createQuery("FROM TAggregated_Data WHERE aggregated_Data_ID=16", TAggregated_Data.class).getResultList().get(0);
+        InitTestConnection.initAll();
+    }
+
+    @Test
+    public void getDataLogBasicTest() {
+
+        ChangeLog changeLog = new ChangeLog();
+        changeLog.setAggregatedDataLogBasic(aggregatedData);
+
+        DataLog_DataChanges datalog = changeLog.getDataLog();
+
+        assertThat(datalog.getDc_application_name(), equalTo("INC"));
+        assertThat(datalog.getDc_dv_type(), equalTo((short) 2));
+        assertThat(datalog.getDc_foreign_id(), equalTo(0));
+        assertThat(datalog.getDc_label(), equalTo(null));
+        assertThat(datalog.getDc_node_id(), equalTo(20600));
+        assertThat(datalog.getDc_reason(), equalTo(null));
+        assertThat(datalog.getDc_record_id(), equalTo(16));
+        assertEquals(datalog.getDc_date_inserted().after(new Date(System.currentTimeMillis() + 100)), false);
+    }
+
+    @Test
+    public void createXMLStringTest() {
+
+        assertThat(
+                new ChangeLog().createXMLString(aggregatedData),
+                equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><object_value><aggregated_data_id>16</aggregated_data_id><safe_order_payment_info_id>397</safe_order_payment_info_id><unsafe_order_payment_info_id>398</unsafe_order_payment_info_id><current_saldo>0.00</current_saldo><max_saldo_ever>0.00</max_saldo_ever><current_dunning_level>0</current_dunning_level><max_dunning_level_ever>0</max_dunning_level_ever><sales_volume>0.00</sales_volume><total_return_debit_note_count>0</total_return_debit_note_count><date_of_last_return_debit_note>NULL</date_of_last_return_debit_note><max_transactional_saldo_diff>0.00</max_transactional_saldo_diff><has_used_installement_payment>false</has_used_installement_payment><incasso>false</incasso><chargeback_count>0</chargeback_count><delivery_customer_saldo>0.00</delivery_customer_saldo><date_of_last_chargeback>NULL</date_of_last_chargeback><date_of_last_dunning>NULL</date_of_last_dunning><creation_date>2011-08-08 15:56:54.603</creation_date><modification_date>2011-08-08 15:56:54.603</modification_date><total_return_value>0.00</total_return_value><total_order_value>0.00</total_order_value><total_return_count>null</total_return_count><total_order_count>null</total_order_count><current_installment_dunning_level>null</current_installment_dunning_level><max_installment_dunning_level_ever>null</max_installment_dunning_level_ever><current_installment_count>null</current_installment_count><total_installment_count>null</total_installment_count><successful_installment_count>null</successful_installment_count><installment_payment_default_count>null</installment_payment_default_count><max_monthly_installment>null</max_monthly_installment><min_monthly_installment_payment_default>null</min_monthly_installment_payment_default></object_value>"));
+    }
+
+    @Test
+    public void testLog() {
+
+        ChangeLog changeLog = new ChangeLog();
+
+        changeLog.setAggregatedDataLogBasic(aggregatedData);
+        changeLog.setOldValue(aggregatedData);
+        changeLog.setNewValue(aggregatedData);
+
+        InitEntityManager.getHVEntityManager().getTransaction().begin();
+        changeLog.log();
+        InitEntityManager.getHVEntityManager().getTransaction().commit();
+
+        InitEntityManager.getHVEntityManager().clear();
+
+        List<DataLog_DataChanges> datalogFromDB = InitEntityManager.getHVEntityManager().createQuery("FROM DataLog_DataChanges", DataLog_DataChanges.class)
+                .getResultList();
+
+        assertThat(datalogFromDB.get(0).getDc_record_id(), equalTo(16));
+    }
+}

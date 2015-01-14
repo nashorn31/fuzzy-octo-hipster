@@ -1,0 +1,81 @@
+package hibernateEntitySets;
+
+import hibernateEntitySets.interfaces.AutoComplete;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(catalog = "Magellan", name = "TDebitor_Account")
+public class TDebitor_Account implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "debitor_Account_ID")
+    private int               debitor_Account_ID;
+
+    @Column(name = "mandant_ID")
+    private int               mandant_ID;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debitor_Account_ID")
+    private List<TOrder>      order;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debitor_Account_ID")
+    private TAggregated_Data  aggregatedData;
+
+    public int getDebitor_Account_ID() {
+        return debitor_Account_ID;
+    }
+
+    public void setDebitor_Account_ID(int debitor_Account_ID) {
+        this.debitor_Account_ID = debitor_Account_ID;
+    }
+
+    public int getMandant_ID() {
+        return mandant_ID;
+    }
+
+    public void setMandant_ID(int mandant_ID) {
+        this.mandant_ID = mandant_ID;
+    }
+
+    public List<TOrder> getOrder() {
+        return order;
+    }
+
+    public void setOrder(List<TOrder> order) {
+        this.order = order;
+    }
+
+    public TAggregated_Data getAggregatedData() {
+        return aggregatedData;
+    }
+
+    public void setAggregatedData(TAggregated_Data aggregatedData) {
+        this.aggregatedData = aggregatedData;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "debitor_Account_ID";
+    }
+
+    @Override
+    public String autocompleteValue() {
+        return String.valueOf(debitor_Account_ID);
+    }
+
+}

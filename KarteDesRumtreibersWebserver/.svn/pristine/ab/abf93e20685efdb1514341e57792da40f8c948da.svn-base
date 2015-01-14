@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="/pages/layout.xhtml">
+
+	<ui:define name="content" style="width:60em">
+
+		<script type="text/javascript" src="js/primefaces-fix-4.0.js"></script>
+
+		<h:form id="form">
+
+			<!--Headlines -->
+			<h1 class="ui-widget ui-widget-header ui-corner-all" id="headline3">Suche</h1>
+
+			<h:panelGroup id="searchArea">
+				<!-- Inputfield area serarch values  -->
+				<h:panelGrid columns="4">
+
+					<!-- MandantID -->
+					<p:outputLabel value="MandantenID: " />
+					<!-- autocomplete for MandantID -->
+					<p:autoComplete id="mandantID" forceSelection="true"
+						value="#{mainPageBean.mandantid}"
+						completeMethod="#{mainPageBean.completeMandantid}">
+
+						<!-- update mandant when mandantID is selected -->
+						<p:ajax event="itemSelect"
+							listener="#{mainPageBean.assumeValueToID}"
+							update=":form:searchArea,statusLabel,RecipientTable,DebitorTable,confirmDialog" />
+					</p:autoComplete>
+
+					<!-- Mandant  -->
+					<p:outputLabel value="Mandantenname: " />
+					<p:autoComplete id="mandant" forceSelection="true"
+						value="#{mainPageBean.mandantName}"
+						completeMethod="#{mainPageBean.completeMandantName}">
+						<p:ajax event="itemSelect"
+							listener="#{mainPageBean.assumeValueToName}"
+							update=":form:searchArea,statusLabel,RecipientTable,DebitorTable,confirmDialog" />
+					</p:autoComplete>
+
+					<!-- Debitor -->
+					<p:outputLabel value="Debitorennummer:" />
+
+					<p:autoComplete id="debitor" forceSelection="true"
+						value="#{mainPageBean.debitorNumber}"
+						completeMethod="#{mainPageBean.completeDebitorNumber}"
+						title="Bitte nur Debitor ODER RMF Customer ID eingeben.">
+
+						<p:ajax event="keydown"
+							listener="#{mainPageBean.resetRecipientID}"
+							update="mandantID,statusLabel,recipient,confirmDialog" />
+					</p:autoComplete>
+
+					<!-- Recipient -->
+					<p:outputLabel value="RMF Customer ID" />
+
+					<p:autoComplete id="recipient" forceSelection="true"
+						value="#{mainPageBean.recipientID}"
+						completeMethod="#{mainPageBean.completeRecipientID}"
+						title="Bitte nur Debitor ODER RMF Customer ID eingeben.">
+
+						<p:ajax event="keydown"
+							listener="#{mainPageBean.resetDebitorNumber}"
+							update="mandantID,statusLabel,debitor,confirmDialog" />
+					</p:autoComplete>
+
+					<!-- searchbutton -->
+					<p:commandButton value="Suche"
+						update="RecipientTable,DebitorTable,statusLabel,:form:confirmDialog"
+						action="#{mainPageBean.search}"
+						onstart="PF('statusDialog').show()"
+						onsuccess="PF('statusDialog').hide()" />
+
+				</h:panelGrid>
+			</h:panelGroup>
+
+			<!-- StatusLable -->
+			<p />
+			<p:outputLabel id="statusLabel" value="#{mainPageBean.status}" />
+			<p />
+
+			<!-- DataTable -->
+
+			<p:dataTable id="RecipientTable" var="Recipient"
+				value="#{mainPageBean.recipients}"
+				selection="#{mainPageBean.selectedRecipient}"
+				rowKey="#{Recipient.recipientID}" selectionMode="single">
+				<p:ajax event="rowSelect" listener="#{mainPageBean.switchDebitor}"
+					update=":form:DebitorTable" />
+				<f:facet name="header">Liste aller RMF Customer</f:facet>
+
+				<p:column width="18">
+					<f:facet name="header">
+
+						<p:selectBooleanCheckbox
+							value="#{mainPageBean.selectAllRecipient}">
+							<p:ajax event="change"
+								update="RecipientTable,:form:confirmDialog"
+								listener="#{mainPageBean.selectAllRecipients}" />
+						</p:selectBooleanCheckbox>
+
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{Recipient.selected}">
+						<p:ajax event="change"
+							listener="#{mainPageBean.updateConfirmText}"
+							update=":form:confirmDialog" />
+					</p:selectBooleanCheckbox>
+
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="RMF CustomerID" />
+					</f:facet>
+					<h:outputText value="#{Recipient.recipientID}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="MandantID" />
+					</f:facet>
+					<h:outputText value="#{Recipient.mandantID}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Inkassoflag" />
+					</f:facet>
+					<h:outputText value="#{Recipient.incassoString}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Mahnstufe" />
+					</f:facet>
+					<h:outputText value="#{Recipient.dunningLevel}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Ein Debitor hat Inkassoflag" />
+					</f:facet>
+					<h:outputText value="#{Recipient.debitorIncassoString}" />
+				</p:column>
+			</p:dataTable>
+			<p />
+			<p:dataTable id="DebitorTable" var="Debitor"
+				value="#{mainPageBean.debitorSelectedRecipient}"
+				rowKey="#{Debitor.debitorID}">
+
+				<f:facet name="header">Liste aller Debitoren</f:facet>
+				<p:column width="18">
+					<p:selectBooleanCheckbox value="#{Debitor.selected}">
+						<p:ajax event="change"
+							listener="#{mainPageBean.updateConfirmText}"
+							update=":form:confirmDialog" />
+					</p:selectBooleanCheckbox>
+					<f:facet name="header">
+						<p:selectBooleanCheckbox value="#{mainPageBean.selectAllDebitor}">
+							<p:ajax event="change" update="DebitorTable,:form:confirmDialog"
+								listener="#{mainPageBean.selectAllDebitors}" />
+						</p:selectBooleanCheckbox>
+					</f:facet>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Debitorennummer" />
+					</f:facet>
+					<h:outputText value="#{Debitor.debitorID}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="MandantID" />
+					</f:facet>
+					<h:outputText value="#{Debitor.mandantID}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Inkassoflag" />
+					</f:facet>
+					<h:outputText value="#{Debitor.incassoString}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Mahnstufe" />
+					</f:facet>
+					<h:outputText value="#{Debitor.dunningLevel}" />
+				</p:column>
+			</p:dataTable>
+			<p />
+
+			<!-- reset Button -->
+			<p:commandButton id="resetButton" value="Inkassoflag zurücksetzen"
+				actionListener="#{mainPageBean.resetIncassoFlag}"
+				update="RecipientTable,DebitorTable,confirmDialog"
+				onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()">
+				<p:confirm header="Confirmation" icon="ui-icon-alert" />
+			</p:commandButton>
+
+			<!-- confirm dialog -->
+			<p:confirmDialog id="confirmDialog" global="true"
+				closeOnEscape="true">
+				<f:facet name="message">
+					<h:outputText value="#{mainPageBean.confirmText}" escape="false" />
+				</f:facet>
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage url="img/ajax-loader.gif" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

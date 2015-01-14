@@ -1,0 +1,82 @@
+package asp.inc.hibernateentitysets;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+/**
+ * Table between Account and Debitor
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "Magellan", name = "TOrder")
+public class TOrder implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "ORDER_ID")
+    private long              orderID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debitor_Account_ID")
+    private TDebitorAccount   debitorAccount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_account_ID")
+    private TRecipientAccount recipientAccount;
+
+    @Column(name = "debitor_account_id")
+    private int               debitorAccountID;
+
+    @Column(name = "recipient_account_id")
+    private int               recipientAccountID;
+
+    public long getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(long orderID) {
+        this.orderID = orderID;
+    }
+
+    public TRecipientAccount getRecipientAccount() {
+        return recipientAccount;
+    }
+
+    public void setRecipientAccount(TRecipientAccount recipientAccount) {
+        this.recipientAccount = recipientAccount;
+    }
+
+    public TDebitorAccount getDebitorAccount() {
+        return debitorAccount;
+    }
+
+    public void setDebitorAccount(TDebitorAccount debitorAccount) {
+        this.debitorAccount = debitorAccount;
+    }
+
+    public int getDebitorAccountID() {
+        return debitorAccountID;
+    }
+
+    public void setDebitorAccountID(int debitorAccountID) {
+        this.debitorAccountID = debitorAccountID;
+    }
+
+    public int getRecipientAccountID() {
+        return recipientAccountID;
+    }
+
+    public void setRecipientAccountID(int recipientAccountID) {
+        this.recipientAccountID = recipientAccountID;
+    }
+}

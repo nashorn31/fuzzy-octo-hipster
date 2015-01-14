@@ -1,0 +1,414 @@
+package hibernateEntitySets;
+
+import hibernateEntitySets.interfaces.XMLParseAble;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import xml.XMLTuple;
+
+/**
+ * EntitySet for the TAggregated_Data the IncassoFlag is in this table
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "Magellan", name = "TAggregated_Data")
+public class TAggregated_Data implements Serializable, XMLParseAble {
+
+    private static final long serialVersionUID = 1L;
+
+    public TAggregated_Data() {
+    }
+
+    @Id
+    @Column(name = "aggregated_Data_ID")
+    private Integer    aggregated_Data_ID;
+
+    @Column(name = "safe_order_payment_info_id")
+    private Integer    safe_order_payment_info_id;
+
+    @Column(name = "unsafe_order_payment_info_id")
+    private Integer    unsafe_order_payment_info_id;
+
+    @Column(name = "current_saldo")
+    private BigDecimal current_saldo;
+
+    @Column(name = "max_saldo_ever")
+    private BigDecimal max_saldo_ever;
+
+    @Column(name = "current_dunning_level")
+    private Short      current_dunning_level;
+
+    @Column(name = "max_dunning_level_ever")
+    private Short      max_dunning_level_ever;
+
+    @Column(name = "sales_volume")
+    private BigDecimal sales_volume;
+
+    @Column(name = "total_return_debit_note_count")
+    private Short      total_return_debit_note_count;
+
+    @Column(name = "date_of_last_return_debit_note")
+    private Date       date_of_last_return_debit_note;
+
+    @Column(name = "max_transactional_saldo_diff")
+    private BigDecimal max_transactional_saldo_diff;
+
+    @Column(name = "has_used_installement_payment")
+    private boolean    has_used_installement_payment;
+
+    @Column(name = "incasso")
+    private boolean    incasso;
+
+    @Column(name = "chargeback_count")
+    private Short      chargeback_count;
+
+    @Column(name = "delivery_customer_saldo")
+    private BigDecimal delivery_customer_saldo;
+
+    @Column(name = "date_of_last_chargeback")
+    private Date       date_of_last_chargeback;
+
+    @Column(name = "date_of_last_dunning")
+    private Date       date_of_last_dunning;
+
+    @Column(name = "creation_date")
+    private Date       creation_date;
+
+    @Column(name = "modification_date")
+    private Date       modification_date;
+
+    @Column(name = "total_return_value")
+    private BigDecimal total_return_value;
+
+    @Column(name = "total_order_value")
+    private BigDecimal total_order_value;
+
+    @Column(name = "total_return_count")
+    private Long       total_return_count;
+
+    @Column(name = "total_order_count")
+    private Long       total_order_count;
+
+    @Column(name = "current_installment_dunning_level")
+    private Integer    current_installment_dunning_level;
+
+    @Column(name = "max_installment_dunning_level_ever")
+    private Integer    max_installment_dunning_level_ever;
+
+    @Column(name = "current_installment_count")
+    private Integer    current_installment_count;
+
+    @Column(name = "total_installment_count")
+    private Integer    total_installment_count;
+
+    @Column(name = "successful_installment_count")
+    private Integer    successful_installment_count;
+
+    @Column(name = "installment_payment_default_count")
+    private Integer    installment_payment_default_count;
+
+    @Column(name = "max_monthly_installment")
+    private BigDecimal max_monthly_installment;
+
+    @Column(name = "min_monthly_installment_payment_default")
+    private BigDecimal min_monthly_installment_payment_default;
+
+    public Integer getAggregated_Data_ID() {
+        return aggregated_Data_ID;
+    }
+
+    public void setAggregated_Data_ID(Integer aggregated_Data_ID) {
+        this.aggregated_Data_ID = aggregated_Data_ID;
+    }
+
+    public Integer getSafe_order_payment_info_id() {
+        return safe_order_payment_info_id;
+    }
+
+    public void setSafe_order_payment_info_id(Integer safe_order_payment_info_id) {
+        this.safe_order_payment_info_id = safe_order_payment_info_id;
+    }
+
+    public Integer getUnsafe_order_payment_info_id() {
+        return unsafe_order_payment_info_id;
+    }
+
+    public void setUnsafe_order_payment_info_id(Integer unsafe_order_payment_info_id) {
+        this.unsafe_order_payment_info_id = unsafe_order_payment_info_id;
+    }
+
+    public BigDecimal getCurrent_saldo() {
+        return current_saldo;
+    }
+
+    public void setCurrent_saldo(BigDecimal current_saldo) {
+        this.current_saldo = current_saldo;
+    }
+
+    public BigDecimal getMax_saldo_ever() {
+        return max_saldo_ever;
+    }
+
+    public void setMax_saldo_ever(BigDecimal max_saldo_ever) {
+        this.max_saldo_ever = max_saldo_ever;
+    }
+
+    public Short getCurrent_dunning_level() {
+        return current_dunning_level;
+    }
+
+    public void setCurrent_dunning_level(Short current_dunning_level) {
+        this.current_dunning_level = current_dunning_level;
+    }
+
+    public Short getMax_dunning_level_ever() {
+        return max_dunning_level_ever;
+    }
+
+    public void setMax_dunning_level_ever(Short max_dunning_level_ever) {
+        this.max_dunning_level_ever = max_dunning_level_ever;
+    }
+
+    public BigDecimal getSales_volume() {
+        return sales_volume;
+    }
+
+    public void setSales_volume(BigDecimal sales_volume) {
+        this.sales_volume = sales_volume;
+    }
+
+    public Short getTotal_return_debit_note_count() {
+        return total_return_debit_note_count;
+    }
+
+    public void setTotal_return_debit_note_count(Short total_return_debit_note_count) {
+        this.total_return_debit_note_count = total_return_debit_note_count;
+    }
+
+    public Date getDate_of_last_return_debit_note() {
+        return date_of_last_return_debit_note;
+    }
+
+    public void setDate_of_last_return_debit_note(Date date_of_last_return_debit_note) {
+        this.date_of_last_return_debit_note = date_of_last_return_debit_note;
+    }
+
+    public BigDecimal getMax_transactional_saldo_diff() {
+        return max_transactional_saldo_diff;
+    }
+
+    public void setMax_transactional_saldo_diff(BigDecimal max_transactional_saldo_diff) {
+        this.max_transactional_saldo_diff = max_transactional_saldo_diff;
+    }
+
+    public boolean isHas_used_installement_payment() {
+        return has_used_installement_payment;
+    }
+
+    public void setHas_used_installement_payment(boolean has_used_installement_payment) {
+        this.has_used_installement_payment = has_used_installement_payment;
+    }
+
+    public boolean isIncasso() {
+        return incasso;
+    }
+
+    public void setIncasso(boolean incasso) {
+        this.incasso = incasso;
+    }
+
+    public Short getChargeback_count() {
+        return chargeback_count;
+    }
+
+    public void setChargeback_count(Short chargeback_count) {
+        this.chargeback_count = chargeback_count;
+    }
+
+    public BigDecimal getDelivery_customer_saldo() {
+        return delivery_customer_saldo;
+    }
+
+    public void setDelivery_customer_saldo(BigDecimal delivery_customer_saldo) {
+        this.delivery_customer_saldo = delivery_customer_saldo;
+    }
+
+    public Date getDate_of_last_chargeback() {
+        return date_of_last_chargeback;
+    }
+
+    public void setDate_of_last_chargeback(Date date_of_last_chargeback) {
+        this.date_of_last_chargeback = date_of_last_chargeback;
+    }
+
+    public Date getDate_of_last_dunning() {
+        return date_of_last_dunning;
+    }
+
+    public void setDate_of_last_dunning(Date date_of_last_dunning) {
+        this.date_of_last_dunning = date_of_last_dunning;
+    }
+
+    public Date getCreation_date() {
+        return creation_date;
+    }
+
+    public void setCreation_date(Date creation_date) {
+        this.creation_date = creation_date;
+    }
+
+    public Date getModification_date() {
+        return modification_date;
+    }
+
+    public void setModification_date(Date modification_date) {
+        this.modification_date = modification_date;
+    }
+
+    public BigDecimal getTotal_return_value() {
+        return total_return_value;
+    }
+
+    public void setTotal_return_value(BigDecimal total_return_value) {
+        this.total_return_value = total_return_value;
+    }
+
+    public BigDecimal getTotal_order_value() {
+        return total_order_value;
+    }
+
+    public void setTotal_order_value(BigDecimal total_order_value) {
+        this.total_order_value = total_order_value;
+    }
+
+    public Long getTotal_return_count() {
+        return total_return_count;
+    }
+
+    public void setTotal_return_count(Long total_return_count) {
+        this.total_return_count = total_return_count;
+    }
+
+    public Long getTotal_order_count() {
+        return total_order_count;
+    }
+
+    public void setTotal_order_count(Long total_order_count) {
+        this.total_order_count = total_order_count;
+    }
+
+    public Integer getCurrent_installment_dunning_level() {
+        return current_installment_dunning_level;
+    }
+
+    public void setCurrent_installment_dunning_level(Integer current_installment_dunning_level) {
+        this.current_installment_dunning_level = current_installment_dunning_level;
+    }
+
+    public Integer getMax_installment_dunning_level_ever() {
+        return max_installment_dunning_level_ever;
+    }
+
+    public void setMax_installment_dunning_level_ever(Integer max_installment_dunning_level_ever) {
+        this.max_installment_dunning_level_ever = max_installment_dunning_level_ever;
+    }
+
+    public Integer getCurrent_installment_count() {
+        return current_installment_count;
+    }
+
+    public void setCurrent_installment_count(Integer current_installment_count) {
+        this.current_installment_count = current_installment_count;
+    }
+
+    public Integer getTotal_installment_count() {
+        return total_installment_count;
+    }
+
+    public void setTotal_installment_count(Integer total_installment_count) {
+        this.total_installment_count = total_installment_count;
+    }
+
+    public Integer getSuccessful_installment_count() {
+        return successful_installment_count;
+    }
+
+    public void setSuccessful_installment_count(Integer successful_installment_count) {
+        this.successful_installment_count = successful_installment_count;
+    }
+
+    public Integer getInstallment_payment_default_count() {
+        return installment_payment_default_count;
+    }
+
+    public void setInstallment_payment_default_count(Integer installment_payment_default_count) {
+        this.installment_payment_default_count = installment_payment_default_count;
+    }
+
+    public BigDecimal getMax_monthly_installment() {
+        return max_monthly_installment;
+    }
+
+    public void setMax_monthly_installment(BigDecimal max_monthly_installment) {
+        this.max_monthly_installment = max_monthly_installment;
+    }
+
+    public BigDecimal getMin_monthly_installment_payment_default() {
+        return min_monthly_installment_payment_default;
+    }
+
+    public void setMin_monthly_installment_payment_default(BigDecimal min_monthly_installment_payment_default) {
+        this.min_monthly_installment_payment_default = min_monthly_installment_payment_default;
+    }
+
+    @Override
+    public List<XMLTuple> getAllValues() {
+        List<XMLTuple> allTuples = new ArrayList<XMLTuple>();
+
+        allTuples.add(new XMLTuple("aggregated_data_id", aggregated_Data_ID));
+        allTuples.add(new XMLTuple("safe_order_payment_info_id", safe_order_payment_info_id));
+        allTuples.add(new XMLTuple("unsafe_order_payment_info_id", unsafe_order_payment_info_id));
+        allTuples.add(new XMLTuple("current_saldo", current_saldo));
+        allTuples.add(new XMLTuple("max_saldo_ever", max_saldo_ever));
+        allTuples.add(new XMLTuple("current_dunning_level", current_dunning_level));
+        allTuples.add(new XMLTuple("max_dunning_level_ever", max_dunning_level_ever));
+        allTuples.add(new XMLTuple("sales_volume", sales_volume));
+        allTuples.add(new XMLTuple("total_return_debit_note_count", total_return_debit_note_count));
+        allTuples.add(new XMLTuple("date_of_last_return_debit_note", date_of_last_return_debit_note));
+        allTuples.add(new XMLTuple("max_transactional_saldo_diff", max_transactional_saldo_diff));
+        allTuples.add(new XMLTuple("has_used_installement_payment", has_used_installement_payment));
+        allTuples.add(new XMLTuple("incasso", incasso));
+        allTuples.add(new XMLTuple("chargeback_count", chargeback_count));
+        allTuples.add(new XMLTuple("delivery_customer_saldo", delivery_customer_saldo));
+        allTuples.add(new XMLTuple("date_of_last_chargeback", date_of_last_chargeback));
+        allTuples.add(new XMLTuple("date_of_last_dunning", date_of_last_dunning));
+        allTuples.add(new XMLTuple("creation_date", creation_date));
+        allTuples.add(new XMLTuple("modification_date", modification_date));
+        allTuples.add(new XMLTuple("total_return_value", total_return_value));
+        allTuples.add(new XMLTuple("total_order_value", total_order_value));
+        allTuples.add(new XMLTuple("total_return_count", total_return_count));
+        allTuples.add(new XMLTuple("total_order_count", total_order_count));
+        allTuples.add(new XMLTuple("current_installment_dunning_level", current_installment_dunning_level));
+        allTuples.add(new XMLTuple("max_installment_dunning_level_ever", max_installment_dunning_level_ever));
+        allTuples.add(new XMLTuple("current_installment_count", current_installment_count));
+        allTuples.add(new XMLTuple("total_installment_count", total_installment_count));
+        allTuples.add(new XMLTuple("successful_installment_count", successful_installment_count));
+        allTuples.add(new XMLTuple("installment_payment_default_count", installment_payment_default_count));
+        allTuples.add(new XMLTuple("max_monthly_installment", max_monthly_installment));
+        allTuples.add(new XMLTuple("min_monthly_installment_payment_default", min_monthly_installment_payment_default));
+
+        return allTuples;
+    }
+
+}

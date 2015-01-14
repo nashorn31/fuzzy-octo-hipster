@@ -1,0 +1,77 @@
+package guiTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.util.ArrayList;
+
+import informations.Debitor;
+import informations.Recipient;
+import gui.CheckValues;
+
+import org.junit.Test;
+
+import searchDB.SearchResults;
+
+public class CheckValuesTest {
+
+    @Test
+    public void checkDebitorTest() {
+        assertThat(CheckValues.checkDebitor(null), equalTo(false));
+        assertThat(CheckValues.checkDebitor(""), equalTo(false));
+        assertThat(CheckValues.checkDebitor("Bitte einen gültigen Wert eintragen."), equalTo(false));
+
+        assertThat(CheckValues.checkDebitor("12345"), equalTo(true));
+    }
+
+    @Test
+    public void checkMandantIDTest() {
+        assertThat(CheckValues.checkMandantID(null), equalTo(false));
+        assertThat(CheckValues.checkMandantID(""), equalTo(false));
+        assertThat(CheckValues.checkMandantID("Bitte einen gültigen Wert eintragen."), equalTo(false));
+
+        assertThat(CheckValues.checkMandantID("12345"), equalTo(true));
+    }
+
+    @Test
+    public void checkRecipientTest() {
+        assertThat(CheckValues.checkRecipient(null), equalTo(false));
+        assertThat(CheckValues.checkRecipient(""), equalTo(false));
+        assertThat(CheckValues.checkRecipient("Bitte einen gültigen Wert eintragen."), equalTo(false));
+
+        assertThat(CheckValues.checkRecipient("12345"), equalTo(true));
+    }
+
+    @Test
+    public void checkSearchTest() {
+        assertThat(CheckValues.checkSearch("", "", ""), equalTo(false));
+        assertThat(CheckValues.checkSearch("1", "", ""), equalTo(false));
+        assertThat(CheckValues.checkSearch("", "1", ""), equalTo(false));
+        assertThat(CheckValues.checkSearch("", "", "1"), equalTo(false));
+        assertThat(CheckValues.checkSearch("1", "1", ""), equalTo(true));
+        assertThat(CheckValues.checkSearch("1", "", "1"), equalTo(true));
+        assertThat(CheckValues.checkSearch("", "1", "1"), equalTo(false));
+        assertThat(CheckValues.checkSearch("1", "1", "1"), equalTo(true));
+    }
+
+    @Test
+    public void checkForResetTest() {
+
+        assertThat("search results ==null", CheckValues.checkForReset(null), equalTo(false));
+
+        SearchResults searchResults = new SearchResults();
+        assertThat("no entry in debitor or recipient", CheckValues.checkForReset(searchResults), equalTo(false));
+
+        searchResults = new SearchResults();
+        searchResults.setRecipients(null);
+        assertThat("recipient ==null", CheckValues.checkForReset(searchResults), equalTo(false));
+
+        searchResults = new SearchResults();
+        searchResults.setDebitors(null);
+        assertThat("debitor ==null", CheckValues.checkForReset(searchResults), equalTo(false));
+
+        searchResults = new SearchResults();
+        searchResults.addRecipients(new Recipient());
+        assertThat(CheckValues.checkForReset(searchResults), equalTo(true));
+    }
+}

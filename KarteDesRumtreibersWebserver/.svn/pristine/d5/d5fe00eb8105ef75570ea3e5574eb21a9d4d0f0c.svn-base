@@ -1,0 +1,122 @@
+package resetFlag;
+
+import hibernateEntitySets.DataLog_DataChanges;
+import hibernateEntitySets.TAggregated_Data;
+import informations.Debitor;
+import informations.Recipient;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityTransaction;
+
+import changelog.ChangeLog;
+import databaseconnection.InitEntityManager;
+
+public class ResetFlag {
+
+    /**
+     * reset the incassoFlag for selected the recipients and debitors
+     */
+    public void resetFlag(List<Recipient> selectedRecipientsList, List<Debitor> selectedDebitorsList) {
+
+        //get a list with all aggregatedDataIDs
+        ArrayList<String> aggregatedDataIDList = createAggregatedDataIDList(selectedRecipientsList, selectedDebitorsList);
+
+        if (aggregatedDataIDList.size() != 0) {
+
+            // create and begin transaction
+            EntityTransaction tx = InitEntityManager.getHVEntityManager().getTransaction();
+            tx.begin();
+
+            List<TAggregated_Data> aggregatedDataList = createAggregatedDataList(aggregatedDataIDList);
+
+            //changes datasets
+            changeDatsetsAndCreateLogDataSets(aggregatedDataList).log();
+
+            tx.commit();
+
+            //refresh EntityMangers so the actual values are displayed
+            InitEntityManager.refreshEntityManagers();
+
+        }
+
+    }
+
+    /**
+     * create a list with all aggregatedDataID where the incassoFlag should be reseted
+     * @return list with all aggregatedDataID
+     */
+    public ArrayList<String> createAggregatedDataIDList(List<Recipient> recipientsList, List<Debitor> debitorsList) {
+
+        ArrayList<String> aggregatedDataIDList = new ArrayList<String>();
+
+        // add all recipients to the ArrayList
+        for (Recipient recipient : recipientsList) {
+            if (recipient.isIncasso()) {
+                aggregatedDataIDList.add(recipient.getRecipientID());
+            }
+        }
+
+        // add all debitors to the ArrayList
+        for (Debitor debitor : debitorsList) {
+            if (debitor.isIncasso()) {
+                aggregatedDataIDList.add(debitor.getDebitorID());
+            }
+        }
+        return aggregatedDataIDList;
+    }
+
+    /**
+     * get all aggregatedData datasets which should be modified 
+     * @param aggregatedDataIDList list of the IDs of the aggregatedData
+     * @return aggregatedDataSets aggregatedData datasets with ID
+     */
+    public List<TAggregated_Data> createAggregatedDataList(ArrayList<String> aggregatedDataIDList) {
+
+        // create where clause (String)
+        String whereClauses = "WHERE 1=2";
+        for (String aggregatedDataID : aggregatedDataIDList) {
+            whereClauses = whereClauses + " OR aggregated_Data_ID = '" + aggregatedDataID + "'";
+        }
+
+        // Create SQL Query
+        return InitEntityManager.getHVEntityManager().createQuery("FROM TAggregated_Data " + whereClauses, TAggregated_Data.class).getResultList();
+    }
+
+    /**
+     * make the changes at the data set and log it
+     * 
+     * @param aggregatedData
+     *            data set to modify
+     *            
+     * @return list of all datalogs
+     */
+    public ChangeLog changeDatsetsAndCreateLogDataSets(List<TAggregated_Data> aggregatedDataList) {
+
+        //class to createLog
+        ChangeLog changeLog = new ChangeLog();
+
+        // make the same changes for every dataset and create a log
+        for (TAggregated_Data aggregatedData : aggregatedDataList) {
+
+            // create the basic for the log
+            DataLog_DataChanges datalog = changeLog.getDataLogBasic(aggregatedData);
+
+            // set the old value
+            datalog.setDc_old_value(changeLog.createXMLString(aggregatedData));
+
+            // make the changes
+            aggregatedData.setIncasso(false);
+            aggregatedData.setModification_date(new Date());
+
+            // set the new values
+            datalog.setDc_new_value(changeLog.createXMLString(aggregatedData));
+            changeLog.addDataLog_DataChanges(datalog);
+        }
+
+        return changeLog;
+    }
+
+}

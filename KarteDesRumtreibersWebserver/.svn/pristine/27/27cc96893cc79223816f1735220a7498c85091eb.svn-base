@@ -1,0 +1,135 @@
+package databaseconnection;
+
+import java.io.IOException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+/**
+ * Manage and create the EntityManager for the DB connection
+ * 
+ * @author zimm051
+ * 
+ */
+public class InitEntityManager {
+
+    private static EntityManager  NHVEntityManager;
+    private static EntityManager  HVEntityManager;
+
+    private static PropertiesLoad propertiesLoad;
+
+    /**
+     * Get the EntityManager for the NHV-DB
+     * 
+     * @return
+     */
+    public static EntityManager getNHVEntityManager() throws CanNotInitEntityManagerException {
+
+        /*
+         * If the EntityManager is still null or closed (should not happen
+         * because the EntityManager is initialised during the tomcat start)
+         */
+        if (NHVEntityManager == null || !NHVEntityManager.isOpen()) {
+
+            /*
+             * initialize the specific EntityManager by loading the persistence
+             * unit with his name
+             */
+            NHVEntityManager = InitEntityManager.initEntityManager(PersistenceNameEnum.PERSISTENCENAMENHV);
+
+        }
+
+        return NHVEntityManager;
+    }
+
+    /**
+     * Get the EntityManager for the HV-DB
+     * 
+     * @return 
+     */
+    public static EntityManager getHVEntityManager() throws CanNotInitEntityManagerException {
+        /*
+         * If the EntityManager is still null or closed (should not happen
+         * because the EntityManager is initialised during the tomcat start)
+         */
+        if (HVEntityManager == null || !HVEntityManager.isOpen()) {
+
+            /*
+             * initialize the specific EntityManager by loading the persistence
+             * unit with his name
+             */
+            HVEntityManager = InitEntityManager.initEntityManager(PersistenceNameEnum.PERSISTENCENAMEHV);
+
+        }
+        return HVEntityManager;
+    }
+
+    /**
+     * initialize the two EntityManagers
+     */
+    public static void initalEntityManagers() throws CanNotInitEntityManagerException {
+
+        // initialize for the research
+        NHVEntityManager = initEntityManager(PersistenceNameEnum.PERSISTENCENAMENHV);
+
+        // initialize for the update
+        HVEntityManager = initEntityManager(PersistenceNameEnum.PERSISTENCENAMEHV);
+
+    }
+
+    /**
+     * close the two EntityManagers
+     */
+    public static void closeEntityManager() {
+        // close for the research
+        NHVEntityManager.close();
+        // close for the update
+        HVEntityManager.close();
+
+    }
+
+    /**
+     * initialize an EntityManager
+     * 
+     * @param persistenceName
+     *            the name of the persistence-unit which the EntityManager use
+     * @return the EntityManager
+     */
+    private static EntityManager initEntityManager(PersistenceNameEnum persistenceName) throws CanNotInitEntityManagerException {
+
+        try {
+            if (propertiesLoad == null) {
+                propertiesLoad = new PropertiesLoad(System.getProperty("catalina.base") + "/conf/applications/inc/environment.properties");
+            }
+
+            // Create the EntityManagerFactory
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory(PersistenceName.getPersistenceName(persistenceName),
+                    propertiesLoad.getPersistenceProperties(persistenceName));
+
+            // return the EntityManager
+            return emf.createEntityManager();
+        } catch (IOException e) {
+            throw new CanNotInitEntityManagerException();
+        }
+    }
+
+    /**
+     * Refresh the entityManagers
+     * 
+     */
+    public static void refreshEntityManagers() {
+        NHVEntityManager.clear();
+        HVEntityManager.clear();
+
+    }
+
+    public static void setHVEntityManager(EntityManager hVEntityManager) {
+        HVEntityManager = hVEntityManager;
+    }
+
+    public static void setNHVEntityManager(EntityManager nHVEntityManager) {
+        NHVEntityManager = nHVEntityManager;
+    }
+
+}

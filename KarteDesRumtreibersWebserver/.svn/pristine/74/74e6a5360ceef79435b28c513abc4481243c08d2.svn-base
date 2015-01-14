@@ -1,0 +1,17 @@
+package hibernateEntitySets.interfaces;
+
+import java.util.List;
+
+import xml.XMLTuple;
+
+/**
+ * Allows to store the object in a xml object
+ * 
+ * @author ZIMM051
+ * 
+ */
+public interface XMLParseAble {
+
+    public List<XMLTuple> getAllValues();
+
+}

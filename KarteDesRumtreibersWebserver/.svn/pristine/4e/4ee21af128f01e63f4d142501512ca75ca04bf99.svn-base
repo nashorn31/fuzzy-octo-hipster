@@ -1,0 +1,124 @@
+package asp.inc.databaseconnection;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+/**
+ * Manage and create the EntityManager for the DB connection
+ * 
+ * @author zimm051
+ * 
+ */
+public class InitEntityManager {
+
+    private static EntityManagerFactory NHVEntityManagerFactory;
+    private static EntityManagerFactory HVEntityManagerFactory;
+
+    private static PropertiesLoad       propertiesLoad;
+
+    private InitEntityManager() {
+    }
+
+    /**
+     * Get the EntityManager for the NHV-DB
+     * 
+     * @return
+     */
+    public static EntityManager getNHVEntityManager() throws CanNotInitEntityManagerFactoryException {
+
+        /*
+         * If the EntityManager is still null or closed (should not happen
+         * because the EntityManager is initialised during the tomcat start)
+         */
+        if (InitEntityManager.NHVEntityManagerFactory == null || !InitEntityManager.NHVEntityManagerFactory.isOpen()) {
+
+            /*
+             * initialize the specific EntityManager by loading the persistence
+             * unit with his name
+             */
+            InitEntityManager.NHVEntityManagerFactory = initEntityManagerFactory(PersistenceNameEnum.PERSISTENCENAMENHV);
+
+        }
+
+        return InitEntityManager.NHVEntityManagerFactory.createEntityManager();
+    }
+
+    /**
+     * Get the EntityManager for the HV-DB
+     * 
+     * @return 
+     */
+    public static EntityManager getHVEntityManager() throws CanNotInitEntityManagerFactoryException {
+        /*
+         * If the EntityManager is still null or closed (should not happen
+         * because the EntityManager is initialised during the tomcat start)
+         */
+        if (InitEntityManager.HVEntityManagerFactory == null || !InitEntityManager.HVEntityManagerFactory.isOpen()) {
+
+            /*
+             * initialize the specific EntityManager by loading the persistence
+             * unit with his name
+             */
+            InitEntityManager.HVEntityManagerFactory = InitEntityManager.initEntityManagerFactory(PersistenceNameEnum.PERSISTENCENAMEHV);
+
+        }
+        return InitEntityManager.HVEntityManagerFactory.createEntityManager();
+    }
+
+    /**
+     * initialize the two EntityManagers
+     */
+    public static void initalEntityManagerFactorys() throws CanNotInitEntityManagerFactoryException {
+
+        // initialize for the research
+        InitEntityManager.NHVEntityManagerFactory = initEntityManagerFactory(PersistenceNameEnum.PERSISTENCENAMENHV);
+
+        // initialize for the update
+        InitEntityManager.HVEntityManagerFactory = initEntityManagerFactory(PersistenceNameEnum.PERSISTENCENAMEHV);
+
+    }
+
+    /**
+     * close the two EntityManagers
+     */
+    public static void closeEntityManager() {
+        // close for the research
+        InitEntityManager.NHVEntityManagerFactory.close();
+        // close for the update
+        InitEntityManager.HVEntityManagerFactory.close();
+
+    }
+
+    /**
+     * initialize an EntityManager
+     * 
+     * @param persistenceName
+     *            the name of the persistence-unit which the EntityManager use
+     * @return the EntityManager
+     */
+    private static EntityManagerFactory initEntityManagerFactory(PersistenceNameEnum persistenceName) throws CanNotInitEntityManagerFactoryException {
+
+        try {
+            if (propertiesLoad == null) {
+                propertiesLoad = new PropertiesLoad(System.getProperty("catalina.base") + "/conf/applications/inc/environment.properties");
+            }
+
+            // return the EntityManagerFactory
+            return Persistence.createEntityManagerFactory(PersistenceName.getPersistenceName(persistenceName),
+                    propertiesLoad.getPersistenceProperties(persistenceName));
+
+        } catch (PropertiesLoadException e) {
+            throw new CanNotInitEntityManagerFactoryException("Can not initialize the EntityManagerFactory", e);
+        }
+    }
+
+    public static void setHVEntityManagerFactory(EntityManagerFactory HVEntityManagerFactory) {
+        InitEntityManager.HVEntityManagerFactory = HVEntityManagerFactory;
+    }
+
+    public static void setNHVEntityManagerFactory(EntityManagerFactory NHVEntityManagerFactory) {
+        InitEntityManager.NHVEntityManagerFactory = NHVEntityManagerFactory;
+    }
+
+}

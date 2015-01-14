@@ -1,0 +1,536 @@
+package gui;
+
+import informations.Debitor;
+import informations.Recipient;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.persistence.EntityManager;
+
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
+
+import resetFlag.ResetFlag;
+import resetFlag.StatusTexts;
+import searchDB.MandantDatabaseLookup;
+import searchDB.SearchForDebitor;
+import searchDB.SearchForRecipient;
+import searchDB.SearchResults;
+import databaseconnection.CanNotInitEntityManagerException;
+import databaseconnection.InitEntityManager;
+
+@ManagedBean
+@ViewScoped
+public class MainPageBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private String            mandantid;
+
+    private String            mandantName;
+
+    private String            debitorNumber;
+
+    private String            recipientID;
+
+    private String            status;
+
+    private String            confirmText;
+
+    private SearchResults     searchResults;
+
+    private Recipient         selectedRecipient;
+
+    private List<Recipient>   recipients;
+
+    private List<Debitor>     debitorSelectedRecipient;
+
+    private boolean           selectAllRecipient;
+
+    private boolean           selectAllDebitor;
+
+    private StatusTexts       statusTexts;
+
+    private String            exceptionText;
+    private boolean           isExceptionBoolean;
+
+    private EntityManager     entityManagerHV;
+
+    private EntityManager     entityManagerNHV;
+
+    @ManagedProperty(value = "#{userSession}")
+    private UserSession       userSession;
+
+    @PostConstruct
+    public void intitMainPageBean() {
+        confirmText = "Bitte erst suchen!";
+        statusTexts = new StatusTexts();
+        isExceptionBoolean = false;
+        try {
+            entityManagerHV = InitEntityManager.getHVEntityManager();
+            entityManagerNHV = InitEntityManager.getNHVEntityManager();
+        } catch (CanNotInitEntityManagerException e) {
+            setExceptionText("Fehler beim initialisieren der Datenbankverbindung. Bitte wenden sie sich an einen Systemadmin");
+            isExceptionBoolean = false;
+        }
+    }
+
+    public String getMandantid() {
+        return mandantid;
+    }
+
+    public void setMandantid(String mandantid) {
+        this.mandantid = mandantid;
+    }
+
+    public String getMandantName() {
+        return mandantName;
+    }
+
+    public void setMandantName(String mandantName) {
+        this.mandantName = mandantName;
+    }
+
+    public String getDebitorNumber() {
+        return debitorNumber;
+    }
+
+    public void setDebitorNumber(String debitorNumber) {
+        this.debitorNumber = debitorNumber;
+    }
+
+    public String getRecipientID() {
+        return recipientID;
+    }
+
+    public void setRecipientID(String recipientID) {
+        this.recipientID = recipientID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getConfirmText() {
+        return confirmText;
+    }
+
+    public void setConfirmText(String confirmText) {
+        this.confirmText = confirmText;
+    }
+
+    public SearchResults getSearchResults() {
+        return searchResults;
+    }
+
+    public void setSearchResults(SearchResults searchResults) {
+        this.searchResults = searchResults;
+    }
+
+    public Recipient getSelectedRecipient() {
+        return selectedRecipient;
+    }
+
+    public void setSelectedRecipient(Recipient selectedRecipient) {
+        this.selectedRecipient = selectedRecipient;
+    }
+
+    public List<Recipient> getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(List<Recipient> recipients) {
+        this.recipients = recipients;
+    }
+
+    public List<Debitor> getDebitorSelectedRecipient() {
+        return debitorSelectedRecipient;
+    }
+
+    public void setDebitorSelectedRecipient(List<Debitor> debitorSelectedRecipient) {
+        this.debitorSelectedRecipient = debitorSelectedRecipient;
+    }
+
+    public boolean isSelectAllRecipient() {
+        return selectAllRecipient;
+    }
+
+    public void setSelectAllRecipient(boolean selectAllRecipient) {
+        this.selectAllRecipient = selectAllRecipient;
+    }
+
+    public boolean isSelectAllDebitor() {
+        return selectAllDebitor;
+    }
+
+    public void setSelectAllDebitor(boolean selectAllDebitor) {
+        this.selectAllDebitor = selectAllDebitor;
+    }
+
+    public MainPageBean() {
+        statusTexts = new StatusTexts();
+    }
+
+    /**
+     * complete MandantID
+     * 
+     * @param query
+     *            start of mandantID
+     * @return List with MandantIDs
+     */
+    public List<String> completeMandantid(String query) {
+        // reset status
+        resetStatus();
+
+        // list of mandantIDs
+        return new MandantDatabaseLookup(entityManagerNHV).completeMandantID(query);
+    }
+
+    /**
+     * complete MandantName
+     * 
+     * @param query
+     *            start of MandantName
+     * @return List with MandantNames
+     */
+    public List<String> completeMandantName(String query) {
+        // reset status
+        resetStatus();
+
+        // list of mandant names
+        return new MandantDatabaseLookup(entityManagerNHV).completeMandantName(query);
+    }
+
+    /**
+     * complete DebitorNumber
+     * 
+     * @param query
+     *            start of DebitorNumber
+     * @return List with DebitorNumbers
+     */
+    public List<String> completeDebitorNumber(String query) {
+        // reset status
+        resetStatus();
+
+        resetTheSearchResults();
+
+        // check mandantID
+        if (CheckValues.checkMandantID(mandantid)) {
+            // list of debitor numbers
+            return new SearchForDebitor(entityManagerHV).completeDebitorNumber(query, mandantid);
+        } else {
+            // set status text
+            status = statusTexts.getStatus(Status.NOMANDANT);
+            return null;
+        }
+    }
+
+    /**
+     * complete RecipientID
+     * 
+     * @param query
+     *            start of RecipientID
+     * @return List with RecipientIDs
+     */
+    public List<String> completeRecipientID(String query) {
+        // reset status
+        resetStatus();
+
+        resetTheSearchResults();
+
+        // check mandantID
+        if (CheckValues.checkMandantID(mandantid)) {
+            // list of recipientIDs
+            return new SearchForRecipient(entityManagerHV).completeRecipientID(query, mandantid);
+        } else {
+            // set status text
+            status = statusTexts.getStatus(Status.NOMANDANT);
+            return null;
+        }
+    }
+
+    /**
+     * assume mandantID to mandant name
+     */
+    public void assumeValueToName() {
+        // reset status
+        resetStatus();
+
+        resetTheSearchResults();
+
+        // check mandantID
+        if (CheckValues.checkMandantID(mandantName)) {
+
+            // get mandantID for mandant name
+            mandantid = new MandantDatabaseLookup(entityManagerNHV).getMandantIDByLoginName(mandantName);
+
+            // reset DebitorNumber and RecipientID
+            resetDebitorNumber();
+            resetRecipientID();
+        } else {
+            // set status text
+            status = statusTexts.getStatus(Status.NOMANDANT);
+        }
+    }
+
+    /**
+     * assume mandant name to mandantID
+     */
+    public void assumeValueToID() {
+        // reset status
+        resetStatus();
+
+        resetTheSearchResults();
+
+        // check mandantID
+        if (CheckValues.checkMandantID(mandantid)) {
+
+            // get mandant name for mandantID
+            mandantName = new MandantDatabaseLookup(entityManagerNHV).getMandantLoginNameByID(mandantid);
+
+            // reset DebitorNumber and RecipientID
+            resetDebitorNumber();
+            resetRecipientID();
+        } else {
+            // set status text
+            status = statusTexts.getStatus(Status.NOMANDANT);
+        }
+    }
+
+    /**
+     * update the displayed debitors depend on the selected recipient
+     */
+    public void switchDebitor() {
+
+        // set the debitors
+        debitorSelectedRecipient = selectedRecipient.getDebitors();
+
+        // update the confirm text
+        confirmText = statusTexts.createConfirmText(searchResults);
+    }
+
+    /**
+     * update the confirm text after an item is selected
+     * 
+     * @param event
+     *            the ajax event which starts the action
+     */
+    public void updateConfirmText(javax.faces.event.AjaxBehaviorEvent event) {
+
+        confirmText = statusTexts.createConfirmText(searchResults);
+
+    }
+
+    /**
+     * select all recipients after the checkbox in the headline is selected
+     * 
+     * @param event
+     *            the ajax event which starts the action
+     */
+    public void selectAllRecipients(javax.faces.event.AjaxBehaviorEvent event) {
+
+        // the source of the the event must be a checkbox
+        SelectBooleanCheckbox checkbox = ((SelectBooleanCheckbox) event.getSource());
+
+        // if the checkbox is selected
+        if (checkbox.isSelected()) {
+            // set all displayed recipients selected = true
+            for (Recipient recipient : searchResults.getRecipients()) {
+                recipient.setSelected(true);
+            }
+        } else {
+            // set all displayed recipients selected = false
+            for (Recipient recipient : searchResults.getRecipients()) {
+                recipient.setSelected(false);
+            }
+        }
+
+        // update the confirm text
+        confirmText = statusTexts.createConfirmText(searchResults);
+    }
+
+    /**
+     * select all recipients after the checkbox in the headline is selected
+     * 
+     * @param event
+     *            the ajax event which starts the action
+     */
+    public void selectAllDebitors(javax.faces.event.AjaxBehaviorEvent event) {
+
+        // the source of the the event must be a checkbox
+        SelectBooleanCheckbox checkbox = ((SelectBooleanCheckbox) event.getSource());
+
+        // if the checkbox is selected
+        if (checkbox.isSelected()) {
+            // set all displayed debitors selected = true
+            for (Debitor debitor : debitorSelectedRecipient) {
+                debitor.setSelected(true);
+            }
+        } else {
+            // set all displayed debitors selected = false
+            for (Debitor debitor : debitorSelectedRecipient) {
+                debitor.setSelected(false);
+            }
+        }
+
+        // update the confirm text
+        confirmText = statusTexts.createConfirmText(searchResults);
+
+    }
+
+    public void search() {
+
+        resetTheSearchResults();
+        InitEntityManager.refreshEntityManagers();
+        // If no mandant is selected
+        if (!CheckValues.checkMandantID(mandantid)) {
+            // set status text
+            status = statusTexts.getStatus(Status.NOMANDANT);
+        }
+        // If a recipient is selected
+        else if (CheckValues.checkRecipient(recipientID)) {
+
+            // searchResults are set
+            SearchForRecipient searchForRecipient = new SearchForRecipient(entityManagerHV);
+            searchResults = searchForRecipient.searchData(mandantid, recipientID);
+        }
+        // If a debitor is selected
+        else if (CheckValues.checkDebitor(debitorNumber)) {
+
+            // searchResults are set
+            SearchForDebitor searchForDebitor = new SearchForDebitor(entityManagerHV);
+            searchResults = searchForDebitor.searchData(mandantid, debitorNumber);
+        }
+        // if neither a recipient nor a debitor is selected
+        else {
+            status = statusTexts.getStatus(Status.NORECIPIENT);
+        }
+
+        // update the values for the GUI after the search
+        updateValuesAfterSearch();
+
+    }
+
+    /**
+     * update the elements after the search
+     */
+    private void updateValuesAfterSearch() {
+
+        // if there are search search results
+        if (searchResults != null) {
+
+            // set bean recipiens and status from the result
+            recipients = searchResults.getRecipients();
+            status = statusTexts.getStatus(Status.SEARCHNUMBER, searchResults);
+
+            // if for search exist recipients
+            if (recipients != null && !recipients.isEmpty()) {
+
+                // select the first recipient
+                selectedRecipient = recipients.get(0);
+
+                // set the debitors for this recipient
+                debitorSelectedRecipient = selectedRecipient.getDebitors();
+            } else {
+                // if there are no recipient for a debitor
+                debitorSelectedRecipient = searchResults.getDebitors();
+            }
+
+            // update the confirm text
+            confirmText = statusTexts.createConfirmText(searchResults);
+        }
+    }
+
+    /**
+     * starts to reset the incassoflag for the selected recipients and debitors
+     */
+    public void resetIncassoFlag() {
+        if (CheckValues.checkForReset(searchResults)) {
+            new ResetFlag(entityManagerHV).resetFlag(searchResults.getSelectedRecipients(), searchResults.getSelectedDebitors());
+            search();
+        }
+    }
+
+    /**
+     * reset status text
+     */
+    public void resetStatus() {
+        status = statusTexts.getStatus(Status.EMPTY);
+    }
+
+    /**
+     * reset recipientID
+     */
+    public void resetRecipientID() {
+        recipientID = "";
+    }
+
+    /**
+     * reset debitorNumber
+     */
+    public void resetDebitorNumber() {
+        debitorNumber = "";
+    }
+
+    /**
+     * reset values which are used to display the search results
+     */
+    private void resetTheSearchResults() {
+        searchResults = null;
+        recipients = null;
+        selectedRecipient = null;
+        debitorSelectedRecipient = null;
+        selectAllDebitor = selectAllRecipient = false;
+        confirmText = null;
+
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
+    }
+
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public String getExceptionText() {
+        return exceptionText;
+    }
+
+    public void setExceptionText(String exceptionText) {
+        this.exceptionText = exceptionText;
+    }
+
+    public boolean isExceptionBoolean() {
+        return isExceptionBoolean;
+    }
+
+    public void setExceptionBoolean(boolean isExceptionBoolean) {
+        this.isExceptionBoolean = isExceptionBoolean;
+    }
+
+    public EntityManager getEntityManagerHV() {
+        return entityManagerHV;
+    }
+
+    public void setEntityManagerHV(EntityManager entityManagerHV) {
+        this.entityManagerHV = entityManagerHV;
+    }
+
+    public EntityManager getEntityManagerNHV() {
+        return entityManagerNHV;
+    }
+
+    public void setEntityManagerNHV(EntityManager entityManagerNHV) {
+        this.entityManagerNHV = entityManagerNHV;
+    }
+
+}

@@ -1,0 +1,157 @@
+package informations;
+
+import java.io.Serializable;
+
+import hibernateEntitySets.TDebitor_Account;
+
+public class Debitor implements Comparable<Debitor>, Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private String            debitorID;
+    private String            mandantID;
+    private boolean           incasso;
+    private boolean           selected;
+    private String            dunningLevel;
+
+    /**
+     * Default constructor
+     */
+    public Debitor() {
+        selected = false;
+    }
+
+    /**
+     * saves attributes from TDebitor_Account and save them in the object
+     * variables
+     */
+    public Debitor(TDebitor_Account tdebitor) {
+        getAttributesFromTDebitor_Account(tdebitor);
+    }
+
+    public String getDebitorID() {
+        return debitorID;
+    }
+
+    public void setDebitorID(String debitorID) {
+        this.debitorID = debitorID;
+    }
+
+    public String getMandantID() {
+        return mandantID;
+    }
+
+    public void setMandantID(String mandantID) {
+        this.mandantID = mandantID;
+    }
+
+    public boolean isIncasso() {
+        return incasso;
+    }
+
+    public void setIncasso(boolean incasso) {
+        this.incasso = incasso;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getDunningLevel() {
+        return dunningLevel;
+    }
+
+    public void setDunningLevel(String dunningLevel) {
+        this.dunningLevel = dunningLevel;
+    }
+
+    public String getIncassoString() {
+        if (incasso) {
+            return "Ja";
+        } else {
+            return "Nein";
+        }
+    }
+
+    /**
+     * get attributes from TDebitor_Account and save them in the object
+     * variables
+     * 
+     * @param tdebitor
+     *            the TDebitor_Account
+     */
+    public void getAttributesFromTDebitor_Account(TDebitor_Account tdebitor) {
+        debitorID = String.valueOf(tdebitor.getDebitor_Account_ID());
+        mandantID = String.valueOf(tdebitor.getMandant_ID());
+        incasso = tdebitor.getAggregatedData().isIncasso();
+        dunningLevel = String.valueOf(tdebitor.getAggregatedData().getCurrent_dunning_level());
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((debitorID == null) ? 0 : debitorID.hashCode());
+        result = prime * result + (incasso ? 1231 : 1237);
+        result = prime * result + ((mandantID == null) ? 0 : mandantID.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Debitor)) {
+            return false;
+        }
+        Debitor other = (Debitor) obj;
+        if (debitorID == null) {
+            if (other.debitorID != null) {
+                return false;
+            }
+        } else if (!debitorID.equals(other.debitorID)) {
+            return false;
+        }
+        if (incasso != other.incasso) {
+            return false;
+        }
+        if (mandantID == null) {
+            if (other.mandantID != null) {
+                return false;
+            }
+        } else if (!mandantID.equals(other.mandantID)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns a simple string representation of the object
+     * 
+     * @return debitorID + mandantID + incasso
+     */
+    public String toSimpleString() {
+        return "<br/>Debitornumber: " + debitorID + " Mandant: " + mandantID + " Incasso: " + getIncassoString();
+    }
+
+    @Override
+    public int compareTo(Debitor debitor) {
+
+        if (InformationHelper.isInt(debitorID) && InformationHelper.isInt(debitor.getDebitorID())) {
+            int debitorIDIntThisObject = Integer.parseInt(debitorID);
+            int debitorIDIntOtherObject = Integer.parseInt(debitor.getDebitorID());
+
+            return debitorIDIntThisObject - debitorIDIntOtherObject;
+        } else {
+            return debitorID.compareTo(debitor.getDebitorID());
+        }
+    }
+
+}

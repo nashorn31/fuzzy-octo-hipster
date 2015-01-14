@@ -1,0 +1,94 @@
+package changelog;
+
+import gui.UserHelper;
+import hibernateentitysets.DataLogDataChanges;
+import hibernateentitysets.TAggregatedData;
+
+import java.util.Date;
+
+import javax.persistence.EntityManager;
+
+/**
+ * Manage the logging for the Tool 
+ * 
+ * @author ZIMM051
+ * 
+ */
+public class ChangeLog {
+
+    private DataLogDataChanges dataLog;
+    private EntityManager      entityManagerHV;
+
+    public ChangeLog(EntityManager entityManagerHV) {
+
+        this.entityManagerHV = entityManagerHV;
+    }
+
+    // write the changes to the DB
+    public void log() {
+
+        entityManagerHV.merge(dataLog);
+
+    }
+
+    public void setAggregatedDataLogBasic(TAggregatedData aggregatedData) {
+
+        dataLog = new DataLogDataChanges();
+
+        // nodeID for the table TAGGREGATED_DATA
+        dataLog.setDcNodeID(20600);
+
+        // PK from the table
+        dataLog.setDcRecordID(aggregatedData.getAggregatedDataID());
+
+        // operation (1=insert; 2=update; 3=delete)
+        dataLog.setDcDvType((short) 2);
+
+        dataLog.setDcReason(null);
+
+        // name of the application
+        dataLog.setDcApplicationName("INC");
+
+        dataLog.setDcLabel(null);
+
+        // date
+        dataLog.setDcDateInserted(new Date());
+
+        // ?
+        dataLog.setDcForeignID(0);
+
+        if (UserHelper.getLoggedUser() != null) {
+            // user ID
+            dataLog.setDcUsIDInserted(UserHelper.getLoggedUser().getUserId());
+
+            // memberId
+            dataLog.setDcCuID(UserHelper.getLoggedUser().getMemberId());
+        }
+    }
+
+    public void setOldValue(TAggregatedData aggregatedData) {
+
+        dataLog.setDcOldValue(createXMLString(aggregatedData));
+
+    }
+
+    public void setNewValue(TAggregatedData aggregatedData) {
+
+        dataLog.setDcNewValue(createXMLString(aggregatedData));
+
+    }
+
+    public String createXMLString(TAggregatedData aggregatedData) {
+
+        // create an xml
+        XMLForChangeLog xml = new XMLForChangeLog();
+
+        // get a xml display of the Aggredated_Data
+        return xml.createLoggingXMLString(aggregatedData);
+
+    }
+
+    public DataLogDataChanges getDataLog() {
+        return dataLog;
+    }
+}

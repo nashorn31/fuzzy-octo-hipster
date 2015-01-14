@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu id="INC" label="INC" link="index.jsf" defaultPageLink="true">
+	
+	<securityGroup name="INC.Access">
+	    <principal classId="74101" rightId="1" />
+    </securityGroup>
+	
+ 	<menu id="Bearbeiten" label="Inkassoflag bearbeiten" link="index.jsf" orderIndex="1">
+	</menu>	
+
+
+</menu>
+

@@ -1,0 +1,170 @@
+package resetFlagTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import hibernateEntitySets.TAggregated_Data;
+import informations.Debitor;
+import informations.Recipient;
+import informationsTest.DebitorTest;
+import informationsTest.RecipientTest;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import resetFlag.ResetFlag;
+import databaseconnection.InitEntityManager;
+import databaseconnectionTest.InitTestConnection;
+
+public class ResetFlagTest {
+
+    private ArrayList<Recipient> recipients;
+    private ArrayList<Debitor>   debitors;
+
+    @BeforeClass
+    public static void init() {
+
+        InitTestConnection.initAll();
+    }
+
+    @Before
+    public void createRecipientAndDebitorList() {
+        recipients = new ArrayList<Recipient>();
+        debitors = new ArrayList<Debitor>();
+
+        RecipientTest recipientTest = new RecipientTest();
+        DebitorTest debitorTest = new DebitorTest();
+
+        recipients.add(recipientTest.getAnRecipient());
+        Recipient recipient2 = recipientTest.getAnRecipient();
+        recipient2.setRecipientID("100");
+        recipients.add(recipient2);
+
+        debitors.add(debitorTest.getAnDebitor());
+        Debitor debitor2 = debitorTest.getAnDebitor();
+        debitor2.setDebitorID("222");
+        debitors.add(debitor2);
+
+    }
+
+    @Test
+    public void createAggregatedDataIDListTestNoHasIncasso() {
+
+        ResetFlag resetFlag = new ResetFlag();
+        ArrayList<String> aggregatedDataIDList = resetFlag.createAggregatedDataIDList(recipients, debitors);
+
+        assertThat(aggregatedDataIDList.size(), equalTo(0));
+
+    }
+
+    @Test
+    public void createAggregatedDataIDListBothHasIncasso() {
+
+        ResetFlag resetFlag = new ResetFlag();
+
+        recipients.get(0).setIncasso(true);
+        recipients.get(1).setIncasso(true);
+        debitors.get(0).setIncasso(true);
+        debitors.get(1).setIncasso(true);
+
+        ArrayList<String> aggregatedDataIDList = resetFlag.createAggregatedDataIDList(recipients, debitors);
+
+        assertThat(aggregatedDataIDList.get(0), equalTo("10"));
+        assertThat(aggregatedDataIDList.get(1), equalTo("100"));
+        assertThat(aggregatedDataIDList.get(2), equalTo("10"));
+        assertThat(aggregatedDataIDList.get(3), equalTo("222"));
+
+    }
+
+    @Test
+    public void createAggregatedDataIDListRecipientHasIncasso() {
+
+        ResetFlag resetFlag = new ResetFlag();
+
+        recipients.get(0).setIncasso(true);
+        recipients.get(1).setIncasso(true);
+
+        ArrayList<String> aggregatedDataIDList = resetFlag.createAggregatedDataIDList(recipients, debitors);
+
+        assertThat(aggregatedDataIDList.get(0), equalTo("10"));
+        assertThat(aggregatedDataIDList.get(1), equalTo("100"));
+    }
+
+    @Test
+    public void createAggregatedDataIDListDebitorHasIncasso() {
+
+        ResetFlag resetFlag = new ResetFlag();
+        ;
+
+        debitors.get(0).setIncasso(true);
+        debitors.get(1).setIncasso(true);
+
+        ArrayList<String> aggregatedDataIDList = resetFlag.createAggregatedDataIDList(recipients, debitors);
+
+        assertThat(aggregatedDataIDList.get(0), equalTo("10"));
+        assertThat(aggregatedDataIDList.get(1), equalTo("222"));
+    }
+
+    @Test
+    public void createAggregatedDataListTest() {
+
+        ArrayList<String> aggregatedDataIDList = new ArrayList<String>();
+
+        aggregatedDataIDList.add("111");
+
+        ResetFlag resetFlag = new ResetFlag();
+
+        TAggregated_Data aggregatedData = resetFlag.createAggregatedDataList(aggregatedDataIDList).get(0);
+
+        assertThat(aggregatedData.getCurrent_dunning_level(), equalTo(Short.parseShort("0")));
+        assertThat(aggregatedData.getAggregated_Data_ID(), equalTo(111));
+        assertThat(aggregatedData.getSafe_order_payment_info_id(), equalTo(129));
+        assertThat(aggregatedData.getUnsafe_order_payment_info_id(), equalTo(130));
+        assertThat(aggregatedData.getCurrent_saldo(), equalTo(BigDecimal.valueOf(0L, 2)));
+        assertThat(aggregatedData.getMax_saldo_ever(), equalTo(BigDecimal.valueOf(0L, 2)));
+        assertThat(aggregatedData.getSales_volume(), equalTo(BigDecimal.valueOf(0L, 2)));
+        assertThat(aggregatedData.getTotal_return_debit_note_count(), equalTo(Short.parseShort("0")));
+        assertThat(aggregatedData.getMax_transactional_saldo_diff(), equalTo(BigDecimal.valueOf(0L, 2)));
+        assertThat(aggregatedData.isHas_used_installement_payment(), equalTo(false));
+        assertThat(aggregatedData.isIncasso(), equalTo(true));
+        assertThat(aggregatedData.getChargeback_count(), equalTo(Short.parseShort("0")));
+        assertThat(aggregatedData.getDelivery_customer_saldo(), equalTo(BigDecimal.valueOf(0L, 2)));
+        //2011-08-03 09:58:35.223 in long
+        assertThat(aggregatedData.getCreation_date().getTime(), equalTo(1312358315223L));
+        //2011-08-03 09:58:35.223 in long
+        assertThat(aggregatedData.getModification_date().getTime(), equalTo(1312358315223L));
+        assertThat(aggregatedData.getTotal_return_value(), equalTo(BigDecimal.valueOf(0L, 2)));
+        assertThat(aggregatedData.getTotal_order_value(), equalTo(BigDecimal.valueOf(0L, 2)));
+
+    }
+
+    @Test
+    public void changeDatsetsAndCreateLogDataSetsTest() {
+
+        ResetFlag resetFlag = new ResetFlag();
+
+        List<TAggregated_Data> aggregatedDataList = InitTestConnection.getHVTestEntityManager()
+                .createQuery("From TAggregated_Data WHERE AGGREGATED_DATA_ID = 113 or  AGGREGATED_DATA_ID = 114", TAggregated_Data.class).getResultList();
+
+        assertThat(aggregatedDataList.get(0).isIncasso(), equalTo(true));
+        assertThat(aggregatedDataList.get(1).isIncasso(), equalTo(true));
+
+        resetFlag.changeAndLogDataSets(aggregatedDataList);
+
+        aggregatedDataList = InitEntityManager.getNHVEntityManager()
+                .createQuery("From TAggregated_Data WHERE AGGREGATED_DATA_ID = 113 or  AGGREGATED_DATA_ID = 114", TAggregated_Data.class).getResultList();
+
+        //check the changes
+        assertThat(aggregatedDataList.get(0).isIncasso(), equalTo(false));
+        assertThat(aggregatedDataList.get(1).isIncasso(), equalTo(false));
+        assertThat(aggregatedDataList.get(0).getModification_date().after(new Date((new Date().getTime() - 0000L))), equalTo(false));
+        assertThat(aggregatedDataList.get(0).getModification_date().after(new Date((new Date().getTime() - 1000L))), equalTo(true));
+        assertThat(aggregatedDataList.get(1).getModification_date().after(new Date((new Date().getTime() - 1000L))), equalTo(true));
+    }
+
+}

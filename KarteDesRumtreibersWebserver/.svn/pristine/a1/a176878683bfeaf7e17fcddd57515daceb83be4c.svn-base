@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="ASP_CAT_WebApp" version="2.5">
+	<display-name>JavaServerFaces</display-name>
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Development</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>glass-x</param-value>
+	</context-param>
+
+	<!-- =========== Configuration log4j2 =========== -->
+	<context-param>
+		<param-name>log4jConfiguration</param-name>
+		<param-value>file:///${catalina.base}/conf/applications/inc/log4j2.xml</param-value>
+	</context-param>
+	<filter>
+		<filter-name>URLResourceFilter</filter-name>
+		<filter-class>appl.cof.jsf.commons.URLResourceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>URLResourceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>SSOFilter</filter-name>
+		<filter-class>iqa.portal.tomcat.filter.SSOFilter</filter-class>
+		<init-param>
+			<param-name>redirect-login-path</param-name>
+			<param-value>/portal/index.jsp</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SSOFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>AuditFilter</filter-name>
+		<filter-class>iqa.portal.facelets.security.JAASFilterWrapper</filter-class>
+		<init-param>
+			<param-name>filter-class</param-name>
+			<param-value>appl.audit.filter.AuditFilter</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuditFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/faces/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<display-name>ES</display-name>
+		<servlet-name>EnvironmentServlet</servlet-name>
+		<servlet-class>appl.cof.jsf.commons.EnvironmentServlet</servlet-class>
+		<init-param>
+			<param-name>FactoryConfig</param-name>
+			<param-value>/FactoryConfig.txt</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>MenuRegistrationServlet</servlet-name>
+		<servlet-class>iqa.portal.tomcat.servlet.MenuRegistrationServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<listener>
+		<listener-class>asp.inc.listeners.StartListener</listener-class>
+	</listener>
+</web-app>

@@ -1,0 +1,87 @@
+package hibernateentitysets;
+
+import hibernateentitysets.interfaces.AutoComplete;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+/**
+ * EntitySet for the table TDebitor_Account
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "Magellan", name = "TDebitor_Account")
+public class TDebitorAccount implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "debitor_Account_ID")
+    private int               debitorAccountID;
+
+    @Column(name = "mandant_ID")
+    private int               mandantID;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debitor_Account_ID")
+    private List<TOrder>      order;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debitor_Account_ID")
+    private TAggregatedData   aggregatedData;
+
+    public int getDebitorAccountID() {
+        return debitorAccountID;
+    }
+
+    public void setDebitorAccountID(int debitorAccountID) {
+        this.debitorAccountID = debitorAccountID;
+    }
+
+    public int getMandantID() {
+        return mandantID;
+    }
+
+    public void setMandantID(int mandantID) {
+        this.mandantID = mandantID;
+    }
+
+    public List<TOrder> getOrder() {
+        return order;
+    }
+
+    public void setOrder(List<TOrder> order) {
+        this.order = order;
+    }
+
+    public TAggregatedData getAggregatedData() {
+        return aggregatedData;
+    }
+
+    public void setAggregatedData(TAggregatedData aggregatedData) {
+        this.aggregatedData = aggregatedData;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "debitorAccountID";
+    }
+
+    @Override
+    public String autocompleteValue() {
+        return String.valueOf(debitorAccountID);
+    }
+
+}

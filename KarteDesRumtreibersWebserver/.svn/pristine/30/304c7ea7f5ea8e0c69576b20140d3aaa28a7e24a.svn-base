@@ -1,0 +1,36 @@
+package databaseconnectionTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import hibernateEntitySets.PMS_Members;
+import hibernateEntitySets.TAggregated_Data;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class TestConnection {
+
+    @BeforeClass
+    public static void resetDB() {
+        InitTestConnection.setDBvaluesToStart();
+    }
+
+    @Test
+    public void testResearchTestEntityManagerConnection() {
+        EntityManager em = InitTestConnection.getNHVTestEntityManager();
+        List<PMS_Members> pmsMembers = em.createQuery("From PMS_Members", PMS_Members.class).getResultList();
+        assertThat(pmsMembers.size(), equalTo(6));
+    }
+
+    @Test
+    public void testUpdateTestEntityManagerConnection() {
+        EntityManager em = InitTestConnection.getHVTestEntityManager();
+        List<TAggregated_Data> agg = em.createQuery("From TAggregated_Data", TAggregated_Data.class).getResultList();
+        assertThat(agg.size(), equalTo(14));
+    }
+
+}

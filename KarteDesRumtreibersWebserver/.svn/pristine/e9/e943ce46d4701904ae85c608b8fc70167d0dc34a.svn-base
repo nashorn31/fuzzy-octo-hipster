@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+
+	<persistence-unit name="NHV" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<class>hibernateEntitySets.PMS_Members</class>
+		<class>hibernateEntitySets.TMandant</class>
+		<class>hibernateEntitySets.TDebitor_Account</class>
+		<class>hibernateEntitySets.TRecipient_Account</class>
+		<class>hibernateEntitySets.TOrder</class>
+		<class>hibernateEntitySets.TAggregated_Data</class>
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="javax.persistence.jdbc.driver"
+				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<!-- if this is true, hibernate will print (to stdout) the SQL it executes -->
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.default_schema" value="dbo" />
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="HV" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<class>hibernateEntitySets.TAggregated_Data</class>
+		<class>hibernateEntitySets.TDebitor_Account</class>
+		<class>hibernateEntitySets.TOrder</class>
+		<class>hibernateEntitySets.TRecipient_Account</class>
+
+		<class>hibernateEntitySets.DataLog_DataChanges</class>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="javax.persistence.jdbc.driver"
+				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<!-- if this is true, hibernate will print (to stdout) the SQL it executes -->
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.default_schema" value="dbo" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

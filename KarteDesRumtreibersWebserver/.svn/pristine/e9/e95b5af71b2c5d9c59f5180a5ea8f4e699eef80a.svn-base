@@ -1,0 +1,11 @@
+package asp.inc.databaseconnection;
+
+/**
+ * possible persistence-units
+ * @author ZIMM051
+ *
+ */
+public enum PersistenceNameEnum {
+
+    PERSISTENCENAMENHV, PERSISTENCENAMEHV
+}

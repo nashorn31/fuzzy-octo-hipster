@@ -1,0 +1,71 @@
+package asp.inc.hibernateentitysets;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import asp.inc.hibernateentitysets.interfaces.AutoComplete;
+
+/**
+ * EntitySet for the PMS_Members here is the mapping from PMS_Member_ID to the
+ * real name of the mandant
+ * 
+ * @author zimm051
+ * 
+ */
+@Entity
+@Table(catalog = "pms", name = "Members")
+public class PMSMembers implements Serializable, AutoComplete {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "me_ID")
+    private int               meID;
+
+    @Column(name = "me_login_name")
+    private String            meLoginName;
+
+    @Column(name = "me_name")
+    private String            meName;
+
+    public int getMeID() {
+        return meID;
+    }
+
+    public void setMeID(int meID) {
+        this.meID = meID;
+    }
+
+    public String getMeLoginName() {
+        return meLoginName;
+    }
+
+    public void setMeLoginName(String meLoginName) {
+        this.meLoginName = meLoginName;
+    }
+
+    public String getMeName() {
+        return meName;
+    }
+
+    public void setMeName(String meName) {
+        this.meName = meName;
+    }
+
+    @Override
+    public String autocompleteColumn() {
+
+        return "meName";
+    }
+
+    @Override
+    public String autocompleteValue() {
+
+        return meName;
+    }
+
+}

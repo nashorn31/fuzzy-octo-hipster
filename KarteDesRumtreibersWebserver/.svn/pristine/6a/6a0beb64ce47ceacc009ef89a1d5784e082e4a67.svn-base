@@ -1,0 +1,134 @@
+package informations;
+
+import hibernateEntitySets.TDebitor_Account;
+
+public class Debitor implements Comparable<Debitor> {
+
+    private String  debitorID;
+    private String  mandantID;
+    private boolean incasso;
+    private boolean selected;
+    private String  dunningLevel;
+
+    /**
+     * Default constructor
+     */
+    public Debitor() {
+        selected = false;
+    }
+
+    /**
+     * saves attributes from TDebitor_Account and save them in the object
+     * variables
+     */
+    public Debitor(TDebitor_Account tdebitor) {
+        getAttributesFromTDebitor_Account(tdebitor);
+    }
+
+    public String getDebitorID() {
+        return debitorID;
+    }
+
+    public void setDebitorID(String debitorID) {
+        this.debitorID = debitorID;
+    }
+
+    public String getMandantID() {
+        return mandantID;
+    }
+
+    public void setMandantID(String mandantID) {
+        this.mandantID = mandantID;
+    }
+
+    public boolean isIncasso() {
+        return incasso;
+    }
+
+    public void setIncasso(boolean incasso) {
+        this.incasso = incasso;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getDunningLevel() {
+        return dunningLevel;
+    }
+
+    public void setDunningLevel(String dunningLevel) {
+        this.dunningLevel = dunningLevel;
+    }
+
+    public String getIncassoString() {
+        if (incasso) {
+            return "Ja";
+        } else {
+            return "Nein";
+        }
+    }
+
+    /**
+     * get attributes from TDebitor_Account and save them in the object
+     * variables
+     * 
+     * @param tdebitor
+     *            the TDebitor_Account
+     */
+    public void getAttributesFromTDebitor_Account(TDebitor_Account tdebitor) {
+        debitorID = String.valueOf(tdebitor.getDebitor_Account_ID());
+        mandantID = String.valueOf(tdebitor.getMandant_ID());
+        incasso = tdebitor.getAggregatedData().isIncasso();
+        dunningLevel = String.valueOf(tdebitor.getAggregatedData().getCurrent_dunning_level());
+    }
+
+    public boolean equals(Object otherObject) {
+
+        // standard compare
+        if (otherObject == null) {
+            return false;
+        } else if (!(otherObject instanceof Debitor)) {
+            return false;
+        }
+
+        // cast to debitor
+        Debitor otherDebitor = (Debitor) otherObject;
+
+        // compare the attributes of the two objects
+        if (otherDebitor.getDebitorID().equals(this.debitorID) && otherDebitor.getMandantID().equals(this.mandantID)
+                && otherDebitor.isIncasso() == this.incasso) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns a simple string representation of the object
+     * 
+     * @return debitorID + mandantID + incasso
+     */
+    public String toSimpleString() {
+        return "<br/>Debitornumber: " + debitorID + " Mandant: " + mandantID + " Incasso: " + getIncassoString();
+    }
+
+    @Override
+    public int compareTo(Debitor debitor) {
+
+        try {
+            int debitorIDIntThisObject = Integer.parseInt(debitorID);
+            int debitorIDIntOtherObject = Integer.parseInt(debitor.getDebitorID());
+
+            return debitorIDIntThisObject - debitorIDIntOtherObject;
+        } catch (NumberFormatException e) {
+
+        }
+        return debitorID.compareTo(debitor.getDebitorID());
+    }
+
+}

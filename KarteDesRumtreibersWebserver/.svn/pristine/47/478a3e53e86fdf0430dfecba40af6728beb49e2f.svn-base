@@ -1,0 +1,92 @@
+package searchDB;
+
+import hibernateEntitySets.interfaces.AutoComplete;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+
+import databaseconnection.InitEntityManager;
+
+/**
+ * Create a TypedQuery and add the results to a string list (in two methods so
+ * the TypedQuery could be modified)
+ * 
+ * @author zimm051
+ * 
+ */
+public class AutoCompleteValues {
+
+    EntityManager em;
+
+    /**
+     * create a TypedQuery for the auto complete
+     * 
+     * @param searchTerm
+     *            start of the value to auto complete
+     * @param searchColumn
+     *            column name
+     * @param class1
+     *            the class from the entity set
+     * @param additionSQLTerm
+     *            term which is added at the end of the created SQL term
+     * 
+     * @return The TypedQuery for the auto complete
+     */
+    public <T> TypedQuery<T> getSearchQuery(String searchTerm, String searchColumn, Class<T> class1, String additionSQLTerm) {
+
+        // Initializes EntityManager
+        initManager();
+
+        // Create Query
+        TypedQuery<T> searchQuery = em.createQuery("FROM " + class1.getName() + " WHERE " + searchColumn + " like '" + searchTerm + "%'" + additionSQLTerm,
+                class1);
+
+        return searchQuery;
+
+    }
+
+    /**
+     * Execute the TypedQuery for the auto complete and create a list
+     * 
+     * @param searchQuery
+     *            query to execute
+     * @return a list with the results as a list
+     */
+    public <T> ArrayList<String> getListForSearchQuery(Query searchQuery) {
+
+        // get results from the searchQuery
+        List<T> r = searchQuery.getResultList();
+
+        // create list for the String list of the results
+        ArrayList<String> resultList = new ArrayList<String>();
+
+        // for every result
+        for (T results : r) {
+
+            // cast the results element to a AutoComplete
+            AutoComplete resultFromSearch = (AutoComplete) results;
+
+            // get the auto complete value which is specified in the class
+            String DebitorString = resultFromSearch.autocompleteValue();
+
+            // add the auto complete value to the resultList
+            resultList.add(DebitorString);
+        }
+
+        // add a default value to the result list if it is empty
+        if (resultList.isEmpty()) {
+            resultList.add("Bitte einen gültigen Wert eintragen.");
+        }
+
+        return resultList;
+    }
+
+    private void initManager() {
+        if (em == null) em = InitEntityManager.getNHVEntityManager();
+    }
+
+}
