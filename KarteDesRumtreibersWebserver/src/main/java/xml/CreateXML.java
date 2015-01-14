@@ -22,8 +22,6 @@ public class CreateXML {
 			Document doc = docBuilder.newDocument();
 			Element rootElement = doc.createElement("root");
 			doc.appendChild(rootElement);
-			
-			doc.setXmlVersion("1.0");
 		
 
 			return rootElement;
