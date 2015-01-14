@@ -17,7 +17,7 @@ import xml.XMLParseable;
 
 
 @Entity
-@Table(catalog = "WLAN", name = "RoomEquipement")
+@Table(catalog = "WLAN", name = "roomEquipement")
 public class RoomEquipment  implements XMLParseable{
 
 	@Id

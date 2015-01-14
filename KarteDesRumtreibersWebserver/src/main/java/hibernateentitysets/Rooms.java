@@ -38,7 +38,7 @@ public class Rooms implements XMLParseable {
 	private String floor;
 
 	@Column(name = "roomnumber")
-	private int roomnumber;
+	private String roomnumber;
 
 	@Column(name = "personNumber")
 	private int personNumber;
@@ -107,11 +107,11 @@ public class Rooms implements XMLParseable {
 		this.floor = floor;
 	}
 
-	public int getRoomnumber() {
+	public String getRoomnumber() {
 		return roomnumber;
 	}
 
-	public void setRoomnumber(int roomnumber) {
+	public void setRoomnumber(String roomnumber) {
 		this.roomnumber = roomnumber;
 	}
 
@@ -160,22 +160,51 @@ public class Rooms implements XMLParseable {
 		Element room = doc.createElement("room");
 		rootElement.appendChild(room);
 
-		// roomID elements
+		// roomID element
 		Element roomID = doc.createElement("roomID");
 		roomID.appendChild(doc.createTextNode(String.valueOf(this.roomID)));
 		room.appendChild(roomID);
 
-		// PartOfBuilding
-		Element partOfBuilding = doc.createElement("partOfBuilding");
-		partOfBuilding
-				.appendChild(doc.createTextNode(String.valueOf(this.wing)));
-		room.appendChild(partOfBuilding);
+		// roomName element
+		Element roomName = doc.createElement("name");
+		roomName.appendChild(doc.createTextNode(this.name));
+		room.appendChild(roomName);
+
+		// wing element
+		Element wing = doc.createElement("wing");
+		wing.appendChild(doc.createTextNode(this.wing));
+		room.appendChild(wing);
+
+		// floor elements
+		Element floor = doc.createElement("floor");
+		floor.appendChild(doc.createTextNode(this.floor));
+		room.appendChild(floor);
+
+		// floor elements
+		Element roomnumber = doc.createElement("roomnumber");
+		roomnumber.appendChild(doc.createTextNode(this.roomnumber));
+		room.appendChild(roomnumber);
 
 		// PersonNumber
 		Element personNumber = doc.createElement("personNumber");
 		personNumber.appendChild(doc.createTextNode(String
 				.valueOf(this.personNumber)));
 		room.appendChild(personNumber);
+
+		// Door position X
+		Element doorXPos = doc.createElement("doorXPos");
+		doorXPos.appendChild(doc.createTextNode(String.valueOf(this.doorXPos)));
+		room.appendChild(doorXPos);
+
+		// Door position Y
+		Element doorYPos = doc.createElement("doorYPos");
+		doorYPos.appendChild(doc.createTextNode(String.valueOf(this.doorYPos)));
+		room.appendChild(doorYPos);
+
+		// Door position Z
+		Element doorZPos = doc.createElement("doorZPos");
+		doorZPos.appendChild(doc.createTextNode(String.valueOf(this.doorZPos)));
+		room.appendChild(doorZPos);
 
 		// Equipment Elements
 		Element roomEquitements = doc.createElement("RoomEquitements");

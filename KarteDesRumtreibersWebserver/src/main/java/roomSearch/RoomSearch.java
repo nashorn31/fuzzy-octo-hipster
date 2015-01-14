@@ -12,12 +12,12 @@ public class RoomSearch {
 
 		TypedQuery<Rooms> searchQuery = InitEntityManager.getEntityManager()
 				.createQuery(
-						"FROM Rooms WHERE roomName like '" + roomName + "%'",
+						"FROM Rooms WHERE roomnumber like '" + roomName + "%'",
 						Rooms.class);
 
 		// set max results for the search
-		searchQuery.setMaxResults(1);
-
+		searchQuery.setMaxResults(5);
+		
 		return searchQuery.getResultList().get(0);
 
 		// Set<RoomEquipment> roomEQ = new TreeSet<RoomEquipment>();

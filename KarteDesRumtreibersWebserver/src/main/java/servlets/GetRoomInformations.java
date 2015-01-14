@@ -42,7 +42,7 @@ public class GetRoomInformations extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		Rooms room = RoomSearch.getRoomByName(request.getParameter("roomID"));
+		Rooms room = RoomSearch.getRoomByName(request.getParameter("RoomID"));
 
 		TransformerFactory transformerFactory = TransformerFactory
 				.newInstance();
