@@ -1,16 +1,16 @@
-<%@ page import="src/main/java/ticketSystem/Ticket.java" %>
+
 <!DOCTYPE html>
 <html>
 <%
 	//Objekt holen
 	//sortieren
-	//
+	
 	
 
 	int anzahl= 4;
-	Ticket[] test;
+	//Ticket[] test;
 	for(int i=0; i<anzahl; i++){
-		 test[i]= new Ticket();
+		// test[i]= new Ticket();
 	}
 
 	String[] test = new String[anzahl];
@@ -48,7 +48,7 @@
 					</li>
 					<li class="ticketStatus"> Status:	Ticket unbearbeitet
 						<div class="statusUnBearbeitet status">
-						<div>
+						</div>
 					</li>
 					<li class="ticketBody">Text:		In Raum 234 ist ein stuhl kaputt <br>
 											gesendet von jeremy ries 
@@ -70,7 +70,7 @@
 					</li>
 					<li class="ticketStatus"> Status:	Ticket bearbeitet
 						<div class="statusBearbeitet status">
-						<div>
+						</div>
 					</li>
 					<li class="ticketBody">Text:		In Raum 234 ist ein stuhl kaputt <br>
 					Text:		In Raum 234 ist ein stuhl kaputt <br>
