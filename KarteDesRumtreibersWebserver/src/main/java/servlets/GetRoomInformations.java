@@ -26,7 +26,7 @@ import xml.CreateXML;
 /**
  * Servlet implementation class GetRoomInformations
  */
-@WebServlet("/GetRoomInformations")
+@WebServlet("/RoomInformations")
 public class GetRoomInformations extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
