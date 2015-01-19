@@ -29,7 +29,7 @@ body{
 	background-image:url(background/mochaGrunge.png);
 }
 #headNavigation{
-	background-color:rgba(233,244,244,0.2);
+	background-color:rgba(233,244,244,0.5);
 	width:100%;
 	margin:0px auto;
 	text-align:left;
