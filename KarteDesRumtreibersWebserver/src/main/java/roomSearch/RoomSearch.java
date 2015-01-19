@@ -1,5 +1,7 @@
 package roomSearch;
 
+import java.util.List;
+
 import hibernateentitysets.Rooms;
 
 import javax.persistence.TypedQuery;
@@ -8,24 +10,25 @@ import databaseconnection.InitEntityManager;
 
 public class RoomSearch {
 
-	public static Rooms getRoomByName(String roomName) {
+	public static List<Rooms> getRoomByName(String roomName) {
 
 		TypedQuery<Rooms> searchQuery = InitEntityManager.getEntityManager()
 				.createQuery(
 						"FROM Rooms WHERE roomnumber like '" + roomName + "%'",
 						Rooms.class);
 
-		// set max results for the search
-		searchQuery.setMaxResults(5);
-		
-		return searchQuery.getResultList().get(0);
+		return searchQuery.getResultList();
 
-		// Set<RoomEquipment> roomEQ = new TreeSet<RoomEquipment>();
-		//
-		// roomEQ.add(new RoomEquipment(1, "Beamer", 1));
-		// roomEQ.add(new RoomEquipment(1, "Stifte", 5));
-		//
-		// return new Rooms(100, "a", 26, roomEQ);
+	}
+
+	public static List<Rooms> getRoomByName(String roomName, String wing) {
+
+		TypedQuery<Rooms> searchQuery = InitEntityManager.getEntityManager()
+				.createQuery(
+						"FROM Rooms WHERE roomnumber like '" + roomName
+								+ "%' AND wing = '" + wing + "'", Rooms.class);
+
+		return searchQuery.getResultList();
 
 	}
 }

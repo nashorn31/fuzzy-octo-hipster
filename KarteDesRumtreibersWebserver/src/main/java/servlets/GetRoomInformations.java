@@ -3,6 +3,8 @@ package servlets;
 import hibernateentitysets.Rooms;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,7 +44,16 @@ public class GetRoomInformations extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		Rooms room = RoomSearch.getRoomByName(request.getParameter("RoomID"));
+		String searchTerm = request.getParameter("RoomID");
+		List<Rooms> rooms;
+
+		if (Pattern.matches("[0-9]+", searchTerm)) {
+			rooms = RoomSearch.getRoomByName(searchTerm);
+		} else {
+			rooms = RoomSearch.getRoomByName(
+					searchTerm.substring(1, searchTerm.length() - 1),
+					searchTerm.substring(0, 1));
+		}
 
 		TransformerFactory transformerFactory = TransformerFactory
 				.newInstance();
@@ -53,7 +64,14 @@ public class GetRoomInformations extends HttpServlet {
 
 			Document doc = rootElement.getOwnerDocument();
 
-			DOMSource source = new DOMSource(room.toXML(doc, rootElement));
+			// Equipment Elements
+			Element roomsRoot = doc.createElement("rooms");
+			rootElement.appendChild(roomsRoot);
+
+			for (Rooms room : rooms)
+				room.toXML(doc, roomsRoot);
+
+			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(response.getWriter());
 
 			transformer.transform(source, result);
@@ -70,7 +88,6 @@ public class GetRoomInformations extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.getParameter("roomID");
 
 		response.setStatus(403);
 	}
