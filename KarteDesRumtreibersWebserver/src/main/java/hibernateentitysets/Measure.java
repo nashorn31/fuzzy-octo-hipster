@@ -74,7 +74,7 @@ public class Measure implements XMLParseable {
 				.valueOf(this.measurePointsId)));
 		messure.appendChild(meassurePointId);
 
-		return null;
+		return doc;
 	}
 
 }
