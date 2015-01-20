@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class PostDefect
  */
 @WebServlet("/PostDefect")
-public class PostDefect extends HttpServlet {
+public class DefectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public PostDefect() {
+	public DefectServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

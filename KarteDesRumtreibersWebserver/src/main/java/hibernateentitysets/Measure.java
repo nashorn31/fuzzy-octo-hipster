@@ -1,6 +1,7 @@
 package hibernateentitysets;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.w3c.dom.Document;
@@ -35,6 +37,9 @@ public class Measure implements XMLParseable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "measurePointsId", nullable = false)
 	private MeasurePoint measurePoint;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "measure")
+	private Set<MeasureAvailibleAccessPoint> measureAccessPoint;
 
 	public int getId() {
 		return id;

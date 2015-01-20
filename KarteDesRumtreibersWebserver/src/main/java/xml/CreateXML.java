@@ -12,11 +12,10 @@ public class CreateXML {
 	public static Element createXMLDocument() {
 		try {
 
+			// builds base for xml
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory
 					.newInstance();
-			DocumentBuilder docBuilder;
-
-			docBuilder = docFactory.newDocumentBuilder();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 			// root elements
 			Document doc = docBuilder.newDocument();

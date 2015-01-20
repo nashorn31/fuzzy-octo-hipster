@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -27,13 +26,13 @@ import xml.CreateXML;
  * Servlet implementation class GetRoomInformations
  */
 @WebServlet("/RoomInformations")
-public class GetRoomInformations extends HttpServlet {
+public class RoomInformationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Default constructor.
 	 */
-	public GetRoomInformations() {
+	public RoomInformationServlet() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -44,37 +43,45 @@ public class GetRoomInformations extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		// Gets URL Parameter from request
 		String searchTerm = request.getParameter("RoomID");
+
 		List<Rooms> rooms;
 
+		// if the room only contains numbers it is the room number
 		if (Pattern.matches("[0-9]+", searchTerm)) {
 			rooms = RoomSearch.getRoomByName(searchTerm);
-		} else {
+		}
+		// if the room doesn't only contains number the first char is
+		// interpreted as the wing
+		else {
+
 			rooms = RoomSearch.getRoomByName(
 					searchTerm.substring(1, searchTerm.length() - 1),
 					searchTerm.substring(0, 1));
 		}
 
-		TransformerFactory transformerFactory = TransformerFactory
-				.newInstance();
 		try {
-			Transformer transformer = transformerFactory.newTransformer();
 
+			// Create xml document and root element
 			Element rootElement = CreateXML.createXMLDocument();
-
 			Document doc = rootElement.getOwnerDocument();
 
-			// Equipment Elements
+			//
 			Element roomsRoot = doc.createElement("rooms");
 			rootElement.appendChild(roomsRoot);
 
+			// call the xml parser method 
 			for (Rooms room : rooms)
 				room.toXML(doc, roomsRoot);
 
+			//Get writer and document source
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(response.getWriter());
 
-			transformer.transform(source, result);
+			//Transform the document and write it to the servlet output
+			TransformerFactory.newInstance().newTransformer()
+					.transform(source, result);
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
