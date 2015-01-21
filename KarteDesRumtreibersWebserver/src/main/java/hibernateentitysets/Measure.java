@@ -28,18 +28,18 @@ public class Measure implements XMLParseable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "measurePointsId")
+	@Column(name = "measurePointsId", insertable = false, updatable = false)
 	private int measurePointsId;
 
 	@Column(name = "time")
 	private Date time;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "measurePointsId", nullable = false)
 	private MeasurePoint measurePoint;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "measure")
-	private Set<MeasureAvailibleAccessPoint> measureAccessPoint;
+	private Set<MeasureRecivedAccessPoint> measureAccessPoint;
 
 	public int getId() {
 		return id;
@@ -57,7 +57,6 @@ public class Measure implements XMLParseable {
 		this.time = time;
 	}
 
-	@Override
 	public Document toXML(Document doc, Element rootElement) {
 
 		Element messure = doc.createElement("Messure");
@@ -68,11 +67,18 @@ public class Measure implements XMLParseable {
 		messureID.appendChild(doc.createTextNode(String.valueOf(this.id)));
 		messure.appendChild(messureID);
 
-		// element
 		Element meassurePointId = doc.createElement("meassurePointsId");
 		meassurePointId.appendChild(doc.createTextNode(String
 				.valueOf(this.measurePointsId)));
 		messure.appendChild(meassurePointId);
+
+		Element time = doc.createElement("time");
+		time.appendChild(doc.createTextNode(String.valueOf(this.time)));
+		messure.appendChild(time);
+
+		for (MeasureRecivedAccessPoint measureRecivedAccessPoint : measureAccessPoint) {
+			measureRecivedAccessPoint.toXML(doc, rootElement);
+		}
 
 		return doc;
 	}
