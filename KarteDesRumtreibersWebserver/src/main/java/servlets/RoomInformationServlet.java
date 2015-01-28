@@ -4,7 +4,6 @@ import hibernateentitysets.Rooms;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,23 +42,16 @@ public class RoomInformationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// Gets URL Parameter from request
-		String searchTerm = request.getParameter("RoomID");
+		String roomName = request.getParameter("roomName");
+		String roomType = request.getParameter("roomType");
+		String wing = request.getParameter("wing");
+		String floor = request.getParameter("floor");
+		String roomNumber = request.getParameter("roomNumber");
+		String personCapacity = request.getParameter("personCapacity");
+		String beameRequired = request.getParameter("beameRequired");
 
-		List<Rooms> rooms;
-
-		// if the room only contains numbers it is the room number
-		if (Pattern.matches("[0-9]+", searchTerm)) {
-			rooms = RoomSearch.getRoomByName(searchTerm);
-		}
-		// if the room doesn't only contains number the first char is
-		// interpreted as the wing
-		else {
-
-			rooms = RoomSearch.getRoomByName(
-					searchTerm.substring(1, searchTerm.length() - 1),
-					searchTerm.substring(0, 1));
-		}
+		List<Rooms> rooms = RoomSearch.getRoomByName(roomName, roomType, wing,
+				floor, roomNumber, personCapacity, beameRequired);
 
 		try {
 
@@ -71,15 +63,15 @@ public class RoomInformationServlet extends HttpServlet {
 			Element roomsRoot = doc.createElement("rooms");
 			rootElement.appendChild(roomsRoot);
 
-			// call the xml parser method 
+			// call the xml parser method
 			for (Rooms room : rooms)
 				room.toXML(doc, roomsRoot);
 
-			//Get writer and document source
+			// Get writer and document source
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(response.getWriter());
 
-			//Transform the document and write it to the servlet output
+			// Transform the document and write it to the servlet output
 			TransformerFactory.newInstance().newTransformer()
 					.transform(source, result);
 		} catch (TransformerException e) {
