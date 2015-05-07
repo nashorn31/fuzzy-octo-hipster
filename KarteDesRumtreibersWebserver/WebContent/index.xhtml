@@ -6,38 +6,63 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	
+
 <h:head>
 	<title>Ticket-System</title>
 </h:head>
 <h:body>
 
-<h1 class="title ui-widget-header ui-corner-all">Ticketsystem</h1>
+	<h1 class="title ui-widget-header ui-corner-all">Ticketsystem</h1>
+
+
 
 	<h:form>
+		<p:panel id="panel" header="Filter" style="margin-bottom:10px;">
+
+			<h:outputLabel id="LabelStatusFilter" value="Status: " />
+			<p:selectOneMenu id="SelectStatusFilter"
+				value="#{ticketBasicView.statusFilter}">
+				<f:selectItems id="SelectStatusFilterItems"
+					value="#{ticketBasicView.statiAll}" />
+			</p:selectOneMenu>
+
+			<h:outputLabel id="LabelTicketFilter" value="Ticket Nummer: " />
+			<p:inputText id="inputTicketNumber"
+				value="#{ticketBasicView.ticketID}" />
+
+			<h:outputLabel id="LabelRoomFilter" value="Raum Nummer: " />
+			<p:inputText id="inputRoomNumber"
+				value="#{ticketBasicView.roomNumber}" />
+
+			<p:commandButton value="Filtern"
+				actionListener="#{ticketBasicView.onFilterChangedStatus}"
+				update="dataTable"></p:commandButton>
+		</p:panel>
+	</h:form>
+
+	<h:form id="dataTable">
 
 		<p:dataTable var="deficiencies"
 			value="#{ticketBasicView.deficiencies}">
 
-			<p:column headerText="Ticket ID">
+			<p:column headerText="Ticket Nummer" width="5%">
 				<h:outputText value="#{deficiencies.id}" />
 			</p:column>
 
-			<p:column headerText="Raum Nummer">
+			<p:column headerText="Raum Nummer" width="7%">
 				<h:outputText value="#{deficiencies.roomID}" />
 			</p:column>
 
-			<p:column headerText="Beschreibung">
+			<p:column headerText="Beschreibung" width="60%">
 				<h:outputText value="#{deficiencies.description}" />
 			</p:column>
 
-			<p:column headerText="Gemeldet von">
+			<p:column headerText="Gemeldet von" width="15%">
 				<h:outputText value="#{deficiencies.reportingUser}" />
 			</p:column>
 
-			<p:column headerText="Status">
-				<p:selectOneMenu id="status" value="#{deficiencies.status}"
-					style="width:150px">
+			<p:column headerText="Status" width="10%">
+				<p:selectOneMenu id="status" value="#{deficiencies.status}">
 					<f:selectItems value="#{ticketBasicView.stati}" />
 				</p:selectOneMenu>
 				<p:commandButton value="Speichern"

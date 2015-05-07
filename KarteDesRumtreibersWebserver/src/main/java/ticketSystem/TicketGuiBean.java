@@ -4,8 +4,8 @@ import hibernateentitysets.Deficiencies;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -23,6 +23,33 @@ public class TicketGuiBean implements Serializable {
 
 	private List<Deficiencies> deficiencies;
 
+	private String statusFilter;
+	private String ticketID;
+	private String roomNumber;
+
+	public String getTicketID() {
+		return ticketID;
+	}
+
+	public void setTicketID(String ticketID) {
+		this.ticketID = ticketID;
+	}
+
+	public String getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
+	}
+
+	public void onFilterChangedStatus() {
+
+		setDeficiencies(service.getAllTickets(statusFilter, ticketID,
+				roomNumber));
+
+	}
+
 	@ManagedProperty("#{ticketService}")
 	private ValuesForTicket service;
 
@@ -36,7 +63,7 @@ public class TicketGuiBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		setDeficiencies(service.getAllTickets());
+		setDeficiencies(service.getAllTickets(null, null, null));
 	}
 
 	public List<Deficiencies> getDeficiencies() {
@@ -53,8 +80,6 @@ public class TicketGuiBean implements Serializable {
 	}
 
 	public void changeStatus(Deficiencies deficiencies) {
-		System.out.println(deficiencies.getId() + " "
-				+ deficiencies.getStatus());
 		EntityManager em = InitEntityManager.getEntityManager();
 		em.getTransaction().begin();
 		em.merge(deficiencies);
@@ -62,11 +87,37 @@ public class TicketGuiBean implements Serializable {
 
 	}
 
+	/**
+	 * Liste Stati für Anzeige des Status
+	 */
 	public Map<String, String> getStati() {
-		Map<String, String> stati = new HashMap<String, String>();
-		stati.put("OPEN", "OPEN");
-		stati.put("IN WORK", "IN WORK");
-		stati.put("CLOSED", "CLOSED");
+		Map<String, String> stati = new TreeMap<String, String>();
+		stati.put("Offen", "OPEN");
+		stati.put("In Arbeit", "IN WORK");
+		stati.put("Geschlossen", "CLOSED");
 		return stati;
 	}
+
+	/**
+	 * Liste Stati für Filter
+	 */
+	public Map<String, String> getStatiAll() {
+		Map<String, String> stati = new TreeMap<String, String>();
+		stati.put("Alle", "ALL");
+		stati.put("Offen", "OPEN");
+		stati.put("In Arbeit", "IN WORK");
+		stati.put("Geschlossen", "CLOSED");
+
+		return stati;
+	}
+
+	public String getStatusFilter() {
+		return statusFilter;
+	}
+
+	public void setStatusFilter(String statusFilter) {
+		this.statusFilter = statusFilter;
+
+	}
+
 }
