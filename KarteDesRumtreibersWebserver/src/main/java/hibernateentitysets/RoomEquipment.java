@@ -15,10 +15,9 @@ import org.w3c.dom.Element;
 
 import xml.XMLParseable;
 
-
 @Entity
 @Table(catalog = "WLAN", name = "roomEquipement")
-public class RoomEquipment  implements XMLParseable{
+public class RoomEquipment implements XMLParseable {
 
 	@Id
 	@Column(name = "id")
@@ -30,21 +29,10 @@ public class RoomEquipment  implements XMLParseable{
 
 	@Column(name = "Amount")
 	private double amount;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RoomID", nullable = false)
 	private Rooms room;
-
-	public RoomEquipment() {
-
-	}
-
-	public RoomEquipment(int id, String equipement, double amount) {
-		this.id = id;
-		this.equipement = equipement;
-		this.amount = amount;
-
-	}
 
 	public int getId() {
 		return id;

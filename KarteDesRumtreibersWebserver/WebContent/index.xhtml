@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Ticket-System</title>
+</h:head>
+<h:body>
+	<h1>Hello World PrimeFaces</h1>
+
+	<h:form>
+
+		<p:dataTable var="deficiencies"
+			value="#{ticketBasicView.deficiencies}">
+
+			<p:column headerText="Ticket ID">
+				<h:outputText value="#{deficiencies.id}" />
+			</p:column>
+
+			<p:column headerText="Raum Nummer">
+				<h:outputText value="#{deficiencies.roomID}" />
+			</p:column>
+
+			<p:column headerText="Beschreibung">
+				<h:outputText value="#{deficiencies.description}" />
+			</p:column>
+
+			<p:column headerText="Gemeldet von">
+				<h:outputText value="#{deficiencies.reportingUser}" />
+			</p:column>
+
+			<p:column headerText="Status">
+				<p:selectOneMenu id="status" value="#{deficiencies.status}"
+					style="width:150px">
+					<f:selectItems value="#{ticketBasicView.stati}" />
+				</p:selectOneMenu>
+				<p:commandButton value="Speichern"
+					actionListener="#{ticketBasicView.changeStatus(deficiencies)}"></p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+</h:body>
+</html>

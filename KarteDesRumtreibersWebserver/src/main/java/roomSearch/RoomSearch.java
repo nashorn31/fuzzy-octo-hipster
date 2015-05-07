@@ -39,7 +39,7 @@ public class RoomSearch {
 		TypedQuery<Rooms> searchQuery = InitEntityManager.getEntityManager()
 				.createQuery("FROM Rooms " + whereClause, Rooms.class);
 
-		searchQuery.setMaxResults(10);
+		//searchQuery.setMaxResults(10);
 
 		return searchQuery.getResultList();
 

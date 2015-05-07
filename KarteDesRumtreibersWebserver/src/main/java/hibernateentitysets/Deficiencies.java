@@ -2,34 +2,43 @@ package hibernateentitysets;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import xml.XMLParseable;
 
 @Entity
 @Table(catalog = "WLAN", name = "deficiencies")
-public class Deficiencies {
+public class Deficiencies implements XMLParseable{
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "roomID")
-	private int roomID;
-
-	@Column(name = "responsibleUserID")
-	private int responsibleUserID;
-
 	@Column(name = "description")
 	private String description;
 
 	@Column(name = "status")
-	private int status;
+	private String status;
 
-	@Column(name = "reporterUserID")
-	private int reporterUserID;
+	@Column(name = "reportingUser")
+	private String reportingUser;
+
+	@Column(name = "category")
+	private String category;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "RoomID", nullable = false)
+	private Rooms room;
 
 	public int getId() {
 		return id;
@@ -37,22 +46,6 @@ public class Deficiencies {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getRoomID() {
-		return roomID;
-	}
-
-	public void setRoomID(int roomID) {
-		this.roomID = roomID;
-	}
-
-	public int getResponsibleUserID() {
-		return responsibleUserID;
-	}
-
-	public void setResponsibleUserID(int responsibleUserID) {
-		this.responsibleUserID = responsibleUserID;
 	}
 
 	public String getDescription() {
@@ -63,20 +56,58 @@ public class Deficiencies {
 		this.description = description;
 	}
 
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public int getReporterUserID() {
-		return reporterUserID;
+	public String getReportingUser() {
+		return reportingUser;
 	}
 
-	public void setReporterUserID(int reporterUserID) {
-		this.reporterUserID = reporterUserID;
+	public void setReportingUser(String reportingUser) {
+		this.reportingUser = reportingUser;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public int getRoomID(){
+		return this.room.getRoomID();
+	}
+	
+	public void setRoomID(int roomID){
+		this.room.setRoomID(roomID);
+	}
+	
+	public Document toXML(Document doc, Element rootElement) {
+		Element deficiencie = doc.createElement("Deficiencie");
+		rootElement.appendChild(deficiencie);
+
+		Element eqID = doc.createElement("DeficiencieID");
+		eqID.appendChild(doc.createTextNode(String.valueOf(this.id)));
+		deficiencie.appendChild(eqID);
+
+		Element description = doc.createElement("description");
+		description.appendChild(doc.createTextNode(this.description));
+		deficiencie.appendChild(description);
+
+		Element category = doc.createElement("category");
+		category.appendChild(doc.createTextNode(this.category));
+		deficiencie.appendChild(category);
+		
+		Element status = doc.createElement("status");
+		status.appendChild(doc.createTextNode(this.status));
+		deficiencie.appendChild(status);
+
+		return doc;
+	}
 }

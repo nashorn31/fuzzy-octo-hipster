@@ -55,17 +55,8 @@ public class Rooms implements XMLParseable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
 	private Set<RoomEquipment> roomEquipments;
 
-	public Rooms() {
-	}
-
-	public Rooms(int roomID, String partOfBuilding, int personNumber,
-			Set<RoomEquipment> roomEquipments) {
-
-		this.roomID = roomID;
-		this.wing = partOfBuilding;
-		this.personNumber = personNumber;
-		this.roomEquipments = roomEquipments;
-	}
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
+	private Set<Deficiencies> roomDeficiencies;
 
 	public int getRoomID() {
 		return roomID;
@@ -207,11 +198,19 @@ public class Rooms implements XMLParseable {
 		room.appendChild(doorZPos);
 
 		// Equipment Elements
-		Element roomEquitements = doc.createElement("RoomEquitements");
+		Element roomEquitements = doc.createElement("RoomEquipments");
 		room.appendChild(roomEquitements);
 
 		for (RoomEquipment re : roomEquipments) {
 			re.toXML(doc, roomEquitements);
+		}
+
+		// Deficiencies Elements
+		Element deficiencies = doc.createElement("Deficiencies");
+		room.appendChild(deficiencies);
+		for (Deficiencies de : roomDeficiencies) {
+			System.out.println("Hallos");
+			de.toXML(doc, deficiencies);
 		}
 
 		return doc;
