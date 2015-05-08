@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import databaseconnection.InitEntityManager;
+import eMail.SendEmail;
 
 public class AddDeficienciesToRoom {
 
@@ -31,20 +32,24 @@ public class AddDeficienciesToRoom {
 			return false;
 		} else {
 
-			Deficiencies deficiencies = new Deficiencies();
-			deficiencies.setCategory(category);
-			deficiencies.setDescription(description);
-			deficiencies.setReportingUser(reportingUser);
-			deficiencies.setStatus("OPEN");
+			Deficiencies deficiency = new Deficiencies();
+			deficiency.setCategory(category);
+			deficiency.setDescription(description);
+			deficiency.setReportingUser(reportingUser);
+			deficiency.setStatus("OPEN");
 			// deficiencies.setDate(new Date());
-			deficiencies.setRoom(rooms.get(0));
+			deficiency.setRoom(rooms.get(0));
 
 			EntityManager em = InitEntityManager.getEntityManager();
 
 			em.getTransaction().begin();
-			em.persist(deficiencies);
+			em.persist(deficiency);
 			em.getTransaction().commit();
 
+			
+			//Mail to Pikenhan
+			SendEmail.sendDeficiencyMail(deficiency);
+			
 		}
 
 		return true;

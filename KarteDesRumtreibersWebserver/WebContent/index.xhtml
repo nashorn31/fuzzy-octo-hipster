@@ -14,7 +14,7 @@
 <h:body>
 
 	<h1 class="title ui-widget-header ui-corner-all">Ticketsystem</h1>
-	
+
 
 
 
@@ -83,16 +83,18 @@
 				<h:outputText value="#{deficiencies.room.roomnumber}" />
 			</p:column>
 
-			<p:column headerText="Beschreibung" width="60%"
-				sortBy="#{deficiencies.description}">
-				<h:outputText value="#{deficiencies.description}" />
-			</p:column>
-			
 			<p:column headerText="Kategorie" width="15%"
 				sortBy="#{deficiencies.category}">
 				<h:outputText value="#{deficiencies.category}" />
 			</p:column>
-			
+
+			<p:column headerText="Beschreibung" width="60%"
+				sortBy="#{deficiencies.description}">
+				<h:outputText value="#{deficiencies.description}" />
+			</p:column>
+
+
+
 			<!-- <p:column headerText="Datum" width="10%"
 				sortBy="#{deficiencies.date}">
 				<h:outputText value="#{deficiencies.date}" />
@@ -117,8 +119,8 @@
 		<p:commandButton style="float:right;" value="Alle Speichern"
 			actionListener="#{ticketBasicView.changeAllStatus()}" />'
 	</h:form>
-	
-	<p:commandButton value="Logout" actionListener="#{loginBean.logout}"/>	
+
+	<p:commandButton value="Logout" actionListener="#{loginBean.logout}" />
 
 </h:body>
 </html>
