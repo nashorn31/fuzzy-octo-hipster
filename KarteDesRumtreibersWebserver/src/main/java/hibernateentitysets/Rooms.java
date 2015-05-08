@@ -215,7 +215,6 @@ public class Rooms implements XMLParseable, Serializable {
 		Element deficiencies = doc.createElement("Deficiencies");
 		room.appendChild(deficiencies);
 		for (Deficiencies de : roomDeficiencies) {
-			System.out.println("Hallos");
 			de.toXML(doc, deficiencies);
 		}
 

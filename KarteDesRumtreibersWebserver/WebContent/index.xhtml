@@ -14,6 +14,7 @@
 <h:body>
 
 	<h1 class="title ui-widget-header ui-corner-all">Ticketsystem</h1>
+	
 
 
 
@@ -21,33 +22,47 @@
 		<p:panel id="panel" header="Filter" style="margin-bottom:10px;">
 
 			<h:panelGrid columns="6" cellpadding="5">
-				<h:outputLabel id="LabelStatusFilter" value="Status: " />
-				<h:outputLabel id="LabelTicketFilter" value=" Ticket Nummer: " />
-				<h:outputLabel id="LabelRoomFilter" value=" Raum Nummer: " />
-				<h:outputLabel id="LabelDateStartFilter" value=" Datum Von: " />
-				<h:outputLabel id="LabelDateEndFilter" value=" Bis: " />
-				<h:outputLabel />
 
-				<p:selectOneMenu id="SelectStatusFilter"
-					value="#{ticketBasicView.statusFilter}">
-					<f:selectItems id="SelectStatusFilterItems"
-						value="#{ticketBasicView.statiAll}" />
-				</p:selectOneMenu>
-				<p:inputText id="inputTicketNumber"
-					value="#{ticketBasicView.ticketID}" />
+				<h:panelGrid columns="1">
+					<h:outputLabel id="LabelStatusFilter" value="Status: " />
+					<p:selectOneMenu id="SelectStatusFilter"
+						value="#{ticketBasicView.statusFilter}">
+						<f:selectItems id="SelectStatusFilterItems"
+							value="#{ticketBasicView.statiAll}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
 
-				<p:inputText id="inputRoomNumber"
-					value="#{ticketBasicView.roomNumber}" />
+				<h:panelGrid columns="1">
+					<h:outputLabel id="LabelTicketFilter" value=" Ticket Nummer: " />
+					<p:inputText id="inputTicketNumber"
+						value="#{ticketBasicView.ticketID}" />
+				</h:panelGrid>
 
-				<p:calendar id="calendarStart" value="#{ticketBasicView.startDate}"
-					locale="de" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+				<h:panelGrid columns="1">
+					<h:outputLabel id="LabelRoomFilter" value=" Raum Nummer: " />
+					<p:inputText id="inputRoomNumber"
+						value="#{ticketBasicView.roomNumber}" />
+				</h:panelGrid>
 
-				<p:calendar id="calendarEnd" value="#{ticketBasicView.endDate}"
-					locale="de" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+				<h:panelGrid columns="1">
+					<h:outputLabel id="LabelDateStartFilter" value=" Datum Von: " />
+					<p:calendar id="calendarStart" value="#{ticketBasicView.startDate}"
+						locale="de" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+				</h:panelGrid>
 
-				<p:commandButton value="Filtern"
-					actionListener="#{ticketBasicView.onFilterChangedStatus}"
-					update="dataTable"></p:commandButton>
+				<h:panelGrid columns="1">
+					<h:outputLabel id="LabelDateEndFilter" value=" Bis: " />
+					<p:calendar id="calendarEnd" value="#{ticketBasicView.endDate}"
+						locale="de" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<h:outputLabel />
+					<p:commandButton value="Filtern"
+						actionListener="#{ticketBasicView.onFilterChangedStatus}"
+						update="dataTable"></p:commandButton>
+				</h:panelGrid>
+
 			</h:panelGrid>
 		</p:panel>
 
@@ -58,23 +73,38 @@
 		<p:dataTable var="deficiencies"
 			value="#{ticketBasicView.deficiencies}">
 
-			<p:column headerText="Ticket Nummer" width="5%" sortBy="#{deficiencies.id}">
+			<p:column headerText="Ticket Nummer" width="5%"
+				sortBy="#{deficiencies.id}">
 				<h:outputText value="#{deficiencies.id}" />
 			</p:column>
 
-			<p:column headerText="Raum Nummer" width="7%" sortBy="#{deficiencies.roomID}" >
-				<h:outputText value="#{deficiencies.roomID}" />
+			<p:column headerText="Raum Nummer" width="7%"
+				sortBy="#{deficiencies.roomID}">
+				<h:outputText value="#{deficiencies.room.roomnumber}" />
 			</p:column>
 
-			<p:column headerText="Beschreibung" width="60%" sortBy="#{deficiencies.description}">
+			<p:column headerText="Beschreibung" width="60%"
+				sortBy="#{deficiencies.description}">
 				<h:outputText value="#{deficiencies.description}" />
 			</p:column>
-
-			<p:column headerText="Gemeldet von" width="15%" sortBy="#{deficiencies.reportingUser}">
+			
+			<p:column headerText="Kategorie" width="15%"
+				sortBy="#{deficiencies.category}">
+				<h:outputText value="#{deficiencies.category}" />
+			</p:column>
+			
+			<!-- <p:column headerText="Datum" width="10%"
+				sortBy="#{deficiencies.date}">
+				<h:outputText value="#{deficiencies.date}" />
+			</p:column>
+ -->
+			<p:column headerText="Gemeldet von" width="15%"
+				sortBy="#{deficiencies.reportingUser}">
 				<h:outputText value="#{deficiencies.reportingUser}" />
 			</p:column>
 
-			<p:column headerText="Status" width="10%" sortBy="#{deficiencies.status}">
+			<p:column headerText="Status" width="10%"
+				sortBy="#{deficiencies.status}">
 				<p:selectOneMenu id="status" value="#{deficiencies.status}">
 					<f:selectItems value="#{ticketBasicView.stati}" />
 				</p:selectOneMenu>
@@ -83,8 +113,12 @@
 			</p:column>
 
 		</p:dataTable>
-
+		<br />
+		<p:commandButton style="float:right;" value="Alle Speichern"
+			actionListener="#{ticketBasicView.changeAllStatus()}" />'
 	</h:form>
+	
+	<p:commandButton value="Logout" actionListener="#{loginBean.logout}"/>	
 
 </h:body>
 </html>

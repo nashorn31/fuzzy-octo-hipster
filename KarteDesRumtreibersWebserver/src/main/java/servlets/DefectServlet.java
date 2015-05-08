@@ -8,10 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import room.AddDeficienciesToRoom;
+
 /**
  * Servlet implementation class PostDefect
  */
-@WebServlet("/PostDefect")
+@WebServlet("/PostDeficiencies")
 public class DefectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +31,6 @@ public class DefectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -38,11 +39,14 @@ public class DefectServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String defectXML = request.getParameter("defectXML");
+		String category = request.getParameter("category");
+		String description = request.getParameter("description");
+		String reportingUser = request.getParameter("reportingUser");
+		String roomNumber = request.getParameter("roomNumber");
 
-		
-		
-		
+		AddDeficienciesToRoom.addDeficiency(category, description,
+				reportingUser, roomNumber);
+
 	}
 
 }

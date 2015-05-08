@@ -91,6 +91,17 @@ public class TicketGuiBean implements Serializable {
 
 	}
 
+	public void changeAllStatus() {
+		EntityManager em = InitEntityManager.getEntityManager();
+
+		for (Deficiencies d : deficiencies) {
+			em.getTransaction().begin();
+			em.merge(d);
+			em.getTransaction().commit();
+		}
+
+	}
+
 	/**
 	 * Liste Stati für Anzeige des Status
 	 */

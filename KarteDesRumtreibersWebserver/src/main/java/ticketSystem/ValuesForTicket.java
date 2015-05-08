@@ -1,6 +1,7 @@
 package ticketSystem;
 
 import hibernateentitysets.Deficiencies;
+import hibernateentitysets.Rooms;
 
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.persistence.TypedQuery;
 
+import room.RoomSearch;
 import databaseconnection.InitEntityManager;
 
 @ManagedBean(name = "ticketService")
@@ -30,8 +32,13 @@ public class ValuesForTicket {
 
 		if (roomNumber != null && !roomNumber.equals("")) {
 
-			where = where + " AND RoomID= '" + roomNumber + "'";
-
+			List<Rooms> rooms = RoomSearch.getRoomByName(null, null, null, null, roomNumber, null, null);
+			
+			if(!rooms.isEmpty()){
+				where = where + " AND RoomID= '" + rooms.get(0).getRoomID() + "'";
+			}else{
+				where = where + " AND 1=2";
+			}
 		}
 
 		if (startDate != null) {

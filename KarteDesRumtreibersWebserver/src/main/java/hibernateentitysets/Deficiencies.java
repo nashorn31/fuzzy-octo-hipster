@@ -1,6 +1,7 @@
 package hibernateentitysets;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ import xml.XMLParseable;
 
 @Entity
 @Table(catalog = "WLAN", name = "deficiencies")
-public class Deficiencies implements XMLParseable, Serializable{
+public class Deficiencies implements XMLParseable, Serializable {
 
 	/**
 	 * default serializable Id
@@ -43,9 +44,20 @@ public class Deficiencies implements XMLParseable, Serializable{
 	@Column(name = "category")
 	private String category;
 
+	// @Column(name = "date")
+	// private Date date;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RoomID", nullable = false)
 	private Rooms room;
+
+	public Rooms getRoom() {
+		return room;
+	}
+
+	public void setRoom(Rooms room) {
+		this.room = room;
+	}
 
 	public int getId() {
 		return id;
@@ -87,14 +99,6 @@ public class Deficiencies implements XMLParseable, Serializable{
 		this.category = category;
 	}
 
-	public int getRoomID(){
-		return this.room.getRoomID();
-	}
-	
-	public void setRoomID(int roomID){
-		this.room.setRoomID(roomID);
-	}
-	
 	public Document toXML(Document doc, Element rootElement) {
 		Element deficiencie = doc.createElement("Deficiencie");
 		rootElement.appendChild(deficiencie);
@@ -110,11 +114,19 @@ public class Deficiencies implements XMLParseable, Serializable{
 		Element category = doc.createElement("category");
 		category.appendChild(doc.createTextNode(this.category));
 		deficiencie.appendChild(category);
-		
+
 		Element status = doc.createElement("status");
 		status.appendChild(doc.createTextNode(this.status));
 		deficiencie.appendChild(status);
 
 		return doc;
 	}
+
+	// public Date getDate() {
+	// return date;
+	// }
+	//
+	// public void setDate(Date date) {
+	// this.date = date;
+	// }
 }

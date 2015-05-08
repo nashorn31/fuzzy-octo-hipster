@@ -1,4 +1,4 @@
-package roomSearch;
+package room;
 
 import java.util.List;
 
