@@ -9,6 +9,7 @@
 
 <h:head>
 	<title>Ticket-System</title>
+	<script src="Javascript/primeFacesLocales.js"></script>
 </h:head>
 <h:body>
 
@@ -19,25 +20,37 @@
 	<h:form>
 		<p:panel id="panel" header="Filter" style="margin-bottom:10px;">
 
-			<h:outputLabel id="LabelStatusFilter" value="Status: " />
-			<p:selectOneMenu id="SelectStatusFilter"
-				value="#{ticketBasicView.statusFilter}">
-				<f:selectItems id="SelectStatusFilterItems"
-					value="#{ticketBasicView.statiAll}" />
-			</p:selectOneMenu>
+			<h:panelGrid columns="6" cellpadding="5">
+				<h:outputLabel id="LabelStatusFilter" value="Status: " />
+				<h:outputLabel id="LabelTicketFilter" value=" Ticket Nummer: " />
+				<h:outputLabel id="LabelRoomFilter" value=" Raum Nummer: " />
+				<h:outputLabel id="LabelDateStartFilter" value=" Datum Von: " />
+				<h:outputLabel id="LabelDateEndFilter" value=" Bis: " />
+				<h:outputLabel />
 
-			<h:outputLabel id="LabelTicketFilter" value="Ticket Nummer: " />
-			<p:inputText id="inputTicketNumber"
-				value="#{ticketBasicView.ticketID}" />
+				<p:selectOneMenu id="SelectStatusFilter"
+					value="#{ticketBasicView.statusFilter}">
+					<f:selectItems id="SelectStatusFilterItems"
+						value="#{ticketBasicView.statiAll}" />
+				</p:selectOneMenu>
+				<p:inputText id="inputTicketNumber"
+					value="#{ticketBasicView.ticketID}" />
 
-			<h:outputLabel id="LabelRoomFilter" value="Raum Nummer: " />
-			<p:inputText id="inputRoomNumber"
-				value="#{ticketBasicView.roomNumber}" />
+				<p:inputText id="inputRoomNumber"
+					value="#{ticketBasicView.roomNumber}" />
 
-			<p:commandButton value="Filtern"
-				actionListener="#{ticketBasicView.onFilterChangedStatus}"
-				update="dataTable"></p:commandButton>
+				<p:calendar id="calendarStart" value="#{ticketBasicView.startDate}"
+					locale="de" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+
+				<p:calendar id="calendarEnd" value="#{ticketBasicView.endDate}"
+					locale="de" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+
+				<p:commandButton value="Filtern"
+					actionListener="#{ticketBasicView.onFilterChangedStatus}"
+					update="dataTable"></p:commandButton>
+			</h:panelGrid>
 		</p:panel>
+
 	</h:form>
 
 	<h:form id="dataTable">
@@ -45,23 +58,23 @@
 		<p:dataTable var="deficiencies"
 			value="#{ticketBasicView.deficiencies}">
 
-			<p:column headerText="Ticket Nummer" width="5%">
+			<p:column headerText="Ticket Nummer" width="5%" sortBy="#{deficiencies.id}">
 				<h:outputText value="#{deficiencies.id}" />
 			</p:column>
 
-			<p:column headerText="Raum Nummer" width="7%">
+			<p:column headerText="Raum Nummer" width="7%" sortBy="#{deficiencies.roomID}" >
 				<h:outputText value="#{deficiencies.roomID}" />
 			</p:column>
 
-			<p:column headerText="Beschreibung" width="60%">
+			<p:column headerText="Beschreibung" width="60%" sortBy="#{deficiencies.description}">
 				<h:outputText value="#{deficiencies.description}" />
 			</p:column>
 
-			<p:column headerText="Gemeldet von" width="15%">
+			<p:column headerText="Gemeldet von" width="15%" sortBy="#{deficiencies.reportingUser}">
 				<h:outputText value="#{deficiencies.reportingUser}" />
 			</p:column>
 
-			<p:column headerText="Status" width="10%">
+			<p:column headerText="Status" width="10%" sortBy="#{deficiencies.status}">
 				<p:selectOneMenu id="status" value="#{deficiencies.status}">
 					<f:selectItems value="#{ticketBasicView.stati}" />
 				</p:selectOneMenu>

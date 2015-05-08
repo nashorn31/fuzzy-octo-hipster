@@ -1,5 +1,6 @@
 package hibernateentitysets;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,8 +19,13 @@ import xml.XMLParseable;
 
 @Entity
 @Table(catalog = "WLAN", name = "measurePoints")
-public class MeasurePoint implements XMLParseable {
-
+public class MeasurePoint implements XMLParseable, Serializable {
+	
+	/**
+	 * default serializable Id
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

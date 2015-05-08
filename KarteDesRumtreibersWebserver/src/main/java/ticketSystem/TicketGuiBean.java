@@ -3,6 +3,7 @@ package ticketSystem;
 import hibernateentitysets.Deficiencies;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -27,6 +28,9 @@ public class TicketGuiBean implements Serializable {
 	private String ticketID;
 	private String roomNumber;
 
+	private Date startDate;
+	private Date endDate;
+
 	public String getTicketID() {
 		return ticketID;
 	}
@@ -46,7 +50,7 @@ public class TicketGuiBean implements Serializable {
 	public void onFilterChangedStatus() {
 
 		setDeficiencies(service.getAllTickets(statusFilter, ticketID,
-				roomNumber));
+				roomNumber, startDate, endDate));
 
 	}
 
@@ -63,7 +67,7 @@ public class TicketGuiBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		setDeficiencies(service.getAllTickets(null, null, null));
+		setDeficiencies(service.getAllTickets(null, null, null, null, null));
 	}
 
 	public List<Deficiencies> getDeficiencies() {
@@ -118,6 +122,22 @@ public class TicketGuiBean implements Serializable {
 	public void setStatusFilter(String statusFilter) {
 		this.statusFilter = statusFilter;
 
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 }

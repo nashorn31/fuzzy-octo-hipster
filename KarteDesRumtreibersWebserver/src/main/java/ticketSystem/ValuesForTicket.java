@@ -2,6 +2,7 @@ package ticketSystem;
 
 import hibernateentitysets.Deficiencies;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ApplicationScoped;
@@ -15,7 +16,7 @@ import databaseconnection.InitEntityManager;
 public class ValuesForTicket {
 
 	public List<Deficiencies> getAllTickets(String status, String ticketID,
-			String roomNumber) {
+			String roomNumber, Date startDate, Date endDate) {
 
 		String where = "Where 1=1";
 
@@ -33,11 +34,19 @@ public class ValuesForTicket {
 
 		}
 
+		if (startDate != null) {
+			// TODO Filter erstellen wenn DB da ist
+		}
+
+		if (endDate != null) {
+			// TODO Filter erstellen wenn DB da ist
+		}
+
 		TypedQuery<Deficiencies> searchQuery = InitEntityManager
 				.getEntityManager().createQuery("FROM Deficiencies " + where,
 						Deficiencies.class);
 
-		searchQuery.setMaxResults(10);
+		searchQuery.setMaxResults(500);
 
 		return searchQuery.getResultList();
 

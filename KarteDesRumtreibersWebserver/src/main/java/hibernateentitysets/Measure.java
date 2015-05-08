@@ -1,5 +1,6 @@
 package hibernateentitysets;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,7 +22,12 @@ import xml.XMLParseable;
 
 @Entity
 @Table(name = "Meassures")
-public class Measure implements XMLParseable {
+public class Measure implements XMLParseable, Serializable {
+
+	/**
+	 * default serializable Id
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "id")

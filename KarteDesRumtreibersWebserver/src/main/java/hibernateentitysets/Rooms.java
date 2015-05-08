@@ -1,5 +1,6 @@
 package hibernateentitysets;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,7 +19,12 @@ import xml.XMLParseable;
 
 @Entity
 @Table(catalog = "WLAN", name = "rooms")
-public class Rooms implements XMLParseable {
+public class Rooms implements XMLParseable, Serializable {
+
+	/**
+	 * default serializable Id
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "id")
