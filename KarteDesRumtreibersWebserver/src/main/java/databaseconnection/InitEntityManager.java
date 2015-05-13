@@ -1,9 +1,5 @@
 package databaseconnection;
 
-import hibernateentitysets.Rooms;
-
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -35,14 +31,14 @@ public class InitEntityManager {
 			/*
 			 * initialize the EntityManager by loading the persistence
 			 */
-			InitEntityManager.initalEntityManagerFactorys();
+			InitEntityManager.initalEntityManagerFactory();
 		}
 
 		return InitEntityManager.entityManagerFactory.createEntityManager();
 	}
 
 	/**
-	 * close the two EntityManagers
+	 * close the EntityManager
 	 */
 	public static void closeEntityManager() {
 		// close for the research
@@ -50,10 +46,9 @@ public class InitEntityManager {
 
 	}
 
-	public static void initalEntityManagerFactorys() {
+	public static void initalEntityManagerFactory() {
 		InitEntityManager.entityManagerFactory = Persistence
 				.createEntityManagerFactory("Database");
-
 
 	}
 

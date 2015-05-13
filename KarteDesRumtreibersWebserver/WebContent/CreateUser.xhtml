@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>login</title>
+</h:head>
+<h:body>
+	<h:form id="createUserForm">
+		<p:panel header="Neuen Benutzer erstellen" style="width: 360px;">
+
+			<h:panelGrid id="loginPanel" columns="2">
+
+				<h:outputText value="Username" />
+
+				<p:inputText id="username" value="#{createUserBean.username}"></p:inputText>
+
+				<h:outputText value="Passwort" />
+
+				<p:inputText id="password" value="#{createUserBean.password}"></p:inputText>
+
+				<p:commandButton action="#{createUserBean.createUser}"
+					value="Erstellen" update="createUserForm" ajax="true"></p:commandButton>
+
+			</h:panelGrid>
+
+		</p:panel>
+
+	</h:form>
+
+</h:body>
+
+</html>

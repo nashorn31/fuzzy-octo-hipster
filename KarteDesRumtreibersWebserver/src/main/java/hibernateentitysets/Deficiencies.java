@@ -114,10 +114,10 @@ public class Deficiencies implements XMLParseable, Serializable {
 	}
 
 	public Document toXML(Document doc, Element rootElement) {
-		Element deficiencie = doc.createElement("Deficiencie");
+		Element deficiencie = doc.createElement("Deficiency");
 		rootElement.appendChild(deficiencie);
 
-		Element eqID = doc.createElement("DeficiencieID");
+		Element eqID = doc.createElement("DeficiencyID");
 		eqID.appendChild(doc.createTextNode(String.valueOf(this.id)));
 		deficiencie.appendChild(eqID);
 

@@ -10,6 +10,7 @@
 		<class>hibernateentitysets.Rooms</class>
 		<class>hibernateentitysets.RoomEquipment</class>
 		<class>hibernateentitysets.Deficiencies</class>
+		<class>hibernateentitysets.UserDAO</class>
 
 		<properties>
 			<property name="hibernate.connection.url" value="jdbc:mysql://app.dhbw-karlsruhe.de:3306/WLAN" />
