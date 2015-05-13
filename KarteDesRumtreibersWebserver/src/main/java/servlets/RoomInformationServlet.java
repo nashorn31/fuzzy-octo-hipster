@@ -48,10 +48,17 @@ public class RoomInformationServlet extends HttpServlet {
 		String floor = request.getParameter("floor");
 		String roomNumber = request.getParameter("roomNumber");
 		String personCapacity = request.getParameter("personCapacity");
-		String beameRequired = request.getParameter("beameRequired");
+		String beamerRequired = request.getParameter("beamerRequired");
+		String projectorRepuired = request.getParameter("projectorRepuired");
+		String tafelRepuired = request.getParameter("tafelRepuired");
+		String flipboardRepuired = request.getParameter("flipboardRepuired");
+		String visualizerRepuired = request.getParameter("visualizerRepuired");
+		String whiteboardRepuired = request.getParameter("whiteboardRepuired");
 
-		List<Rooms> rooms = RoomSearch.getRoomByName(roomName, roomType, wing,
-				floor, roomNumber, personCapacity, beameRequired);
+		List<Rooms> rooms = RoomSearch.getRoomsWithAttributes(roomName,
+				roomType, wing, floor, roomNumber, personCapacity,
+				beamerRequired, projectorRepuired, tafelRepuired,
+				flipboardRepuired, visualizerRepuired, whiteboardRepuired);
 
 		try {
 

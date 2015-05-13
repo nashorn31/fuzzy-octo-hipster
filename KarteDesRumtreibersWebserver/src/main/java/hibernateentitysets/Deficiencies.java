@@ -44,8 +44,8 @@ public class Deficiencies implements XMLParseable, Serializable {
 	@Column(name = "category")
 	private String category;
 
-	// @Column(name = "date")
-	// private Date date;
+	@Column(name = "createDate", nullable=false)
+	private Date date;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RoomID", nullable = false)
@@ -99,6 +99,14 @@ public class Deficiencies implements XMLParseable, Serializable {
 		this.category = category;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public Document toXML(Document doc, Element rootElement) {
 		Element deficiencie = doc.createElement("Deficiencie");
 		rootElement.appendChild(deficiencie);
@@ -121,12 +129,4 @@ public class Deficiencies implements XMLParseable, Serializable {
 
 		return doc;
 	}
-
-	// public Date getDate() {
-	// return date;
-	// }
-	//
-	// public void setDate(Date date) {
-	// this.date = date;
-	// }
 }

@@ -24,8 +24,8 @@ public class AddDeficienciesToRoom {
 	public static boolean addDeficiency(String category, String description,
 			String reportingUser, String roomNumber) {
 
-		List<Rooms> rooms = RoomSearch.getRoomByName(null, null, null, null,
-				roomNumber, null, null);
+		List<Rooms> rooms = RoomSearch.getRoomsWithAttributes(null, null, null,
+				null, roomNumber, null, null, null, null, null, null, null);
 
 		if (rooms.isEmpty()) {
 
@@ -37,7 +37,7 @@ public class AddDeficienciesToRoom {
 			deficiency.setDescription(description);
 			deficiency.setReportingUser(reportingUser);
 			deficiency.setStatus("OPEN");
-			// deficiencies.setDate(new Date());
+			deficiency.setDate(new Date());
 			deficiency.setRoom(rooms.get(0));
 
 			EntityManager em = InitEntityManager.getEntityManager();
@@ -46,10 +46,9 @@ public class AddDeficienciesToRoom {
 			em.persist(deficiency);
 			em.getTransaction().commit();
 
-			
-			//Mail to Pikenhan
+			// Mail to Pikenhan
 			SendEmail.sendDeficiencyMail(deficiency);
-			
+
 		}
 
 		return true;

@@ -15,9 +15,6 @@
 
 	<h1 class="title ui-widget-header ui-corner-all">Ticketsystem</h1>
 
-
-
-
 	<h:form>
 		<p:panel id="panel" header="Filter" style="margin-bottom:10px;">
 
@@ -93,13 +90,11 @@
 				<h:outputText value="#{deficiencies.description}" />
 			</p:column>
 
-
-
-			<!-- <p:column headerText="Datum" width="10%"
+			<p:column headerText="Datum" width="10%"
 				sortBy="#{deficiencies.date}">
 				<h:outputText value="#{deficiencies.date}" />
 			</p:column>
- -->
+
 			<p:column headerText="Gemeldet von" width="15%"
 				sortBy="#{deficiencies.reportingUser}">
 				<h:outputText value="#{deficiencies.reportingUser}" />

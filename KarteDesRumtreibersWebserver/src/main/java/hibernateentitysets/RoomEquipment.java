@@ -65,6 +65,14 @@ public class RoomEquipment implements XMLParseable, Serializable {
 		this.amount = amount;
 	}
 
+	public Rooms getRoom() {
+		return room;
+	}
+
+	public void setRoom(Rooms room) {
+		this.room = room;
+	}
+
 	public Document toXML(Document doc, Element rootElement) {
 
 		Element roomEquitement = doc.createElement("RoomEquitement");

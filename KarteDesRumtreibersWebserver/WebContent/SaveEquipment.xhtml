@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Räume Speichern</title>
+	<script src="Javascript/primeFacesLocales.js"></script>
+</h:head>
+<h:body>
+
+	<h1 class="title ui-widget-header ui-corner-all">Ausrüstung speichern</h1>
+	<h:form>
+		<h:panelGrid id="output" >
+			<h:outputText value="#{saveEquipmentBean.message}" />
+		</h:panelGrid>
+		
+		<h:outputText value="Raumname (ohne Buchstabe):" />
+
+		<p:inputText id="roomName" value="#{saveEquipmentBean.roomName}"></p:inputText>
+
+		<h:outputText value="Ausrüstung" />
+
+		<p:inputText id="equipment" value="#{saveEquipmentBean.equipement}"></p:inputText>
+
+		<h:outputText value="Anzahl" />
+
+		<p:inputText id="anzahl" value="#{saveEquipmentBean.amount}"></p:inputText>
+
+		<p:commandButton actionListener="#{saveEquipmentBean.saveEquipment}"
+			update="output" value="Speichern" styleClass="ui-priority-primary"></p:commandButton>
+
+	</h:form>
+</h:body>
+</html>

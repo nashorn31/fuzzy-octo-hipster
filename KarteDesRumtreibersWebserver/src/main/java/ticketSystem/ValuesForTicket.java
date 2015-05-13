@@ -3,6 +3,7 @@ package ticketSystem;
 import hibernateentitysets.Deficiencies;
 import hibernateentitysets.Rooms;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -32,21 +33,30 @@ public class ValuesForTicket {
 
 		if (roomNumber != null && !roomNumber.equals("")) {
 
-			List<Rooms> rooms = RoomSearch.getRoomByName(null, null, null, null, roomNumber, null, null);
-			
-			if(!rooms.isEmpty()){
-				where = where + " AND RoomID= '" + rooms.get(0).getRoomID() + "'";
-			}else{
+			List<Rooms> rooms = RoomSearch.getRoomsWithAttributes(null, null,
+					null, null, roomNumber, null, null, null, null, null, null,
+					null);
+
+			if (!rooms.isEmpty()) {
+				where = where + " AND RoomID= '" + rooms.get(0).getRoomID()
+						+ "'";
+			} else {
 				where = where + " AND 1=2";
 			}
 		}
 
 		if (startDate != null) {
-			// TODO Filter erstellen wenn DB da ist
+			SimpleDateFormat dateformat = new SimpleDateFormat();
+			dateformat.applyPattern("yyyy-MM-dd");
+			where = where + " AND createDate >= '"
+					+ dateformat.format(startDate) + "'";
 		}
 
 		if (endDate != null) {
-			// TODO Filter erstellen wenn DB da ist
+			SimpleDateFormat dateformat = new SimpleDateFormat();
+			dateformat.applyPattern("yyyy-MM-dd");
+			where = where + " AND createDate <= '" + dateformat.format(endDate)
+					+ "'";
 		}
 
 		TypedQuery<Deficiencies> searchQuery = InitEntityManager
