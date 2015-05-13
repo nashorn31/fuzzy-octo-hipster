@@ -32,7 +32,7 @@ public class RoomSearch {
 		if (floor != null && !floor.equals("-1")) {
 			whereClause = whereClause + " AND floor =" + floor;
 		}
-		if (roomNumber != null && !roomName.equals("null")) {
+		if (roomNumber != null && !roomNumber.equals("null")) {
 			whereClause = whereClause + " AND roomNumber ='" + roomNumber + "'";
 		}
 		if (personCapacity != null && !personCapacity.equals("-1")) {

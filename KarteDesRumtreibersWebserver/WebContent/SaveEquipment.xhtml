@@ -13,19 +13,24 @@
 </h:head>
 <h:body>
 
-	<h1 class="title ui-widget-header ui-corner-all">Ausrüstung speichern</h1>
+	<h1 class="title ui-widget-header ui-corner-all">Ausrüstung
+		speichern</h1>
 	<h:form>
-		<h:panelGrid id="output" >
+		<h:panelGrid id="output">
 			<h:outputText value="#{saveEquipmentBean.message}" />
 		</h:panelGrid>
-		
+
 		<h:outputText value="Raumname (ohne Buchstabe):" />
 
 		<p:inputText id="roomName" value="#{saveEquipmentBean.roomName}"></p:inputText>
 
 		<h:outputText value="Ausrüstung" />
 
-		<p:inputText id="equipment" value="#{saveEquipmentBean.equipement}"></p:inputText>
+		<p:selectOneMenu id="equipment"
+			value="#{saveEquipmentBean.equipement}" editable="fold">
+			<f:selectItems value="#{saveEquipmentBean.possibleEquipement}" />
+		</p:selectOneMenu>
+
 
 		<h:outputText value="Anzahl" />
 

@@ -18,7 +18,7 @@
 	<h:form>
 		<p:panel id="panel" header="Filter" style="margin-bottom:10px;">
 
-			<h:panelGrid columns="6" cellpadding="5">
+			<h:panelGrid columns="3" cellpadding="5">
 
 				<h:panelGrid columns="1">
 					<h:outputLabel id="LabelStatusFilter" value="Status: " />
@@ -92,12 +92,18 @@
 
 			<p:column headerText="Datum" width="10%"
 				sortBy="#{deficiencies.date}">
-				<h:outputText value="#{deficiencies.date}" />
+				<h:outputText value="#{deficiencies.dateString}" />
 			</p:column>
 
 			<p:column headerText="Gemeldet von" width="15%"
 				sortBy="#{deficiencies.reportingUser}">
-				<h:outputText value="#{deficiencies.reportingUser}" />
+
+				<h:outputLink value="mailto:#{deficiencies.reportingUser}">
+					<f:param name="subject"
+						value="Nachfrage bezüglich Ticket: #{deficiencies.id}" />
+					<h:outputText value="#{deficiencies.reportingUser}" />
+				</h:outputLink>
+
 			</p:column>
 
 			<p:column headerText="Status" width="10%"

@@ -31,19 +31,6 @@ public class DefectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
-		String category = request.getParameter("category");
-		String description = request.getParameter("description");
-		String reportingUser = request.getParameter("reportingUser");
-		String roomNumber = request.getParameter("roomNumber");
-
-		if (AddDeficienciesToRoom.addDeficiency(category, description,
-				reportingUser, roomNumber)) {
-			response.setStatus(200);
-		}else{
-			response.setStatus(801);
-		}
-
 	}
 
 	/**
@@ -57,8 +44,18 @@ public class DefectServlet extends HttpServlet {
 		String reportingUser = request.getParameter("reportingUser");
 		String roomNumber = request.getParameter("roomNumber");
 
-		AddDeficienciesToRoom.addDeficiency(category, description,
-				reportingUser, roomNumber);
+		if (category != null && description != null && reportingUser != null
+				&& roomNumber != null) {
+
+			if (AddDeficienciesToRoom.addDeficiency(category, description,
+					reportingUser, roomNumber)) {
+				response.setStatus(200);
+			} else {
+				response.setStatus(801);
+			}
+		} else {
+			response.setStatus(802);
+		}
 
 	}
 

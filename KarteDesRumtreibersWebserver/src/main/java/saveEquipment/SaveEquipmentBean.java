@@ -1,17 +1,20 @@
 package saveEquipment;
 
-import java.util.List;
-
 import hibernateentitysets.RoomEquipment;
 import hibernateentitysets.Rooms;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.persistence.EntityManager;
 
-import databaseconnection.InitEntityManager;
 import room.RoomSearch;
+import databaseconnection.InitEntityManager;
 
 @ManagedBean(name = "saveEquipmentBean")
 @ViewScoped
@@ -23,7 +26,24 @@ public class SaveEquipmentBean {
 
 	private double amount;
 
-	private String message = " ";
+	private String message;
+
+	private Map<String, String> possibleEquipement;
+
+	@PostConstruct
+	public void init() {
+		setPossibleEquipement(new HashMap<String, String>());
+		message = "";
+		amount = 1.0;
+
+		possibleEquipement.put("Beamer", "Beamer");
+		possibleEquipement.put("Tafel", "Tafel");
+		possibleEquipement.put("Flipboard", "Flipboard");
+		possibleEquipement.put("Visualizer", "Visualizer");
+		possibleEquipement.put("Whiteboard", "Whiteboard");
+		possibleEquipement.put("Projektor", "Projektor");
+
+	}
 
 	public void saveEquipment(ActionEvent actionEvent) {
 
@@ -80,6 +100,14 @@ public class SaveEquipmentBean {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Map<String, String> getPossibleEquipement() {
+		return possibleEquipement;
+	}
+
+	public void setPossibleEquipement(Map<String, String> possibleEquipement) {
+		this.possibleEquipement = possibleEquipement;
 	}
 
 }

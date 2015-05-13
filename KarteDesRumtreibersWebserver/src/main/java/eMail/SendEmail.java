@@ -18,8 +18,6 @@ public class SendEmail {
 			String transmitterPW = ProjectPropertie
 					.getProperty("mailPasswordTransmitter");
 
-			System.out.println(transmitter + transmitterPW);
-
 			Session mailSession = MailUtila.getGMailSession(transmitter,
 					transmitterPW);
 

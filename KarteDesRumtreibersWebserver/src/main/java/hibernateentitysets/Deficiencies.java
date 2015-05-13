@@ -1,6 +1,7 @@
 package hibernateentitysets;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -44,7 +45,7 @@ public class Deficiencies implements XMLParseable, Serializable {
 	@Column(name = "category")
 	private String category;
 
-	@Column(name = "createDate", nullable=false)
+	@Column(name = "createDate", nullable = false)
 	private Date date;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -105,6 +106,11 @@ public class Deficiencies implements XMLParseable, Serializable {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getDateString() {
+		SimpleDateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy");
+		return dateformat.format(getDate());
 	}
 
 	public Document toXML(Document doc, Element rootElement) {
