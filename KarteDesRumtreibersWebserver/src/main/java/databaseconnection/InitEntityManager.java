@@ -7,8 +7,7 @@ import javax.persistence.Persistence;
 /**
  * Manage and create the EntityManager for the DB connection
  * 
- * @author zimm051
- * 
+ * @author Johannes
  */
 public class InitEntityManager {
 
@@ -31,7 +30,7 @@ public class InitEntityManager {
 			/*
 			 * initialize the EntityManager by loading the persistence
 			 */
-			InitEntityManager.initalEntityManagerFactory();
+			InitEntityManager.createEntityManagerFactory();
 		}
 
 		return InitEntityManager.entityManagerFactory.createEntityManager();
@@ -46,7 +45,11 @@ public class InitEntityManager {
 
 	}
 
-	public static void initalEntityManagerFactory() {
+	/**
+	 * create the EntityManagerFactory with the configuration from the
+	 * persistence.xml
+	 */
+	public static void createEntityManagerFactory() {
 		InitEntityManager.entityManagerFactory = Persistence
 				.createEntityManagerFactory("Database");
 

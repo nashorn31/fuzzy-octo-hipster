@@ -19,6 +19,11 @@ import org.w3c.dom.Element;
 
 import xml.XMLParseable;
 
+/**
+ * Data Access Object to access the database table "deficiencies"
+ * @author Johannes
+ *
+ */
 @Entity
 @Table(catalog = "WLAN", name = "deficiencies")
 public class Deficiencies implements XMLParseable, Serializable {
@@ -108,6 +113,11 @@ public class Deficiencies implements XMLParseable, Serializable {
 		this.date = date;
 	}
 
+	
+	/**
+	 * Format the data of a specific format
+	 * @return the date in the format: dd.MM.yyyy
+	 */
 	public String getDateString() {
 		SimpleDateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy");
 		return dateformat.format(getDate());

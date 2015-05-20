@@ -21,7 +21,7 @@ public class RoomSearch {
 		String whereClause = "WHERE 1=1";
 
 		if (roomName != null && !roomName.equals("null")) {
-			whereClause = whereClause + " AND roomName ='" + roomName + "%'";
+			whereClause = whereClause + " AND name like'" + roomName + "%'";
 		}
 		if (roomType != null && !roomType.equals("null")) {
 			whereClause = whereClause + " AND roomType ='" + roomType + "'";

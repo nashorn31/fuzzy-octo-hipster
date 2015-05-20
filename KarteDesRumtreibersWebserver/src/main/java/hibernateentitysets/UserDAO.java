@@ -19,7 +19,12 @@ import javax.persistence.TypedQuery;
 
 import login.RandomString;
 import databaseconnection.InitEntityManager;
-
+/**
+ * Data Access Object to access the database table "UserDAO"
+ * 
+ * @author Johannes
+ *
+ */
 @Entity
 @Table(catalog = "WLAN", name = "UserDAO")
 public class UserDAO implements Serializable {

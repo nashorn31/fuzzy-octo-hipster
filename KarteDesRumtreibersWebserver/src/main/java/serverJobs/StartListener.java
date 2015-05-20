@@ -28,7 +28,7 @@ public class StartListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 
-		InitEntityManager.initalEntityManagerFactory();
+		InitEntityManager.createEntityManagerFactory();
 	}
 
 }

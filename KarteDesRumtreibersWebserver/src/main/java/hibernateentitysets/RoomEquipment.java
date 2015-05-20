@@ -17,6 +17,12 @@ import org.w3c.dom.Element;
 
 import xml.XMLParseable;
 
+/**
+ * Data Access Object to access the database table "roomEquipement"
+ * 
+ * @author Johannes
+ *
+ */
 @Entity
 @Table(catalog = "WLAN", name = "roomEquipement")
 public class RoomEquipment implements XMLParseable, Serializable {

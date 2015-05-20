@@ -17,6 +17,12 @@ import org.w3c.dom.Element;
 
 import xml.XMLParseable;
 
+/**
+ * Data Access Object to access the database table "rooms"
+ * 
+ * @author Johannes
+ *
+ */
 @Entity
 @Table(catalog = "WLAN", name = "rooms")
 public class Rooms implements XMLParseable, Serializable {
@@ -217,6 +223,11 @@ public class Rooms implements XMLParseable, Serializable {
 		for (Deficiencies de : roomDeficiencies) {
 			de.toXML(doc, deficiencies);
 		}
+
+		// RoomType
+		Element type = doc.createElement("type");
+		type.appendChild(doc.createTextNode(String.valueOf(this.type)));
+		room.appendChild(type);
 
 		return doc;
 

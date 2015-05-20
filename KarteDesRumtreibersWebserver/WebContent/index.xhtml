@@ -70,12 +70,11 @@
 		<p:dataTable var="deficiencies"
 			value="#{ticketBasicView.deficiencies}">
 
-			<p:column headerText="Ticket Nummer" width="5%"
-				sortBy="#{deficiencies.id}">
+			<p:column headerText="Ticket" width="5%" sortBy="#{deficiencies.id}">
 				<h:outputText value="#{deficiencies.id}" />
 			</p:column>
 
-			<p:column headerText="Raum Nummer" width="7%"
+			<p:column headerText="Raum" width="7%"
 				sortBy="#{deficiencies.roomID}">
 				<h:outputText value="#{deficiencies.room.roomnumber}" />
 			</p:column>
@@ -118,9 +117,8 @@
 		</p:dataTable>
 		<br />
 		<p:commandButton style="float:right;" value="Alle Speichern"
-			actionListener="#{ticketBasicView.changeAllStatus()}" />'
+			actionListener="#{ticketBasicView.changeAllStatus()}" />
 	</h:form>
-
 	<p:commandButton value="Logout" actionListener="#{loginBean.logout}" />
 
 </h:body>
