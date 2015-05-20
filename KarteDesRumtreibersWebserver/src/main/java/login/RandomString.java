@@ -2,6 +2,11 @@ package login;
 
 import java.util.Random;
 
+/**
+ * Class to create a random String with specific length
+ * @author Johannes
+ *
+ */
 public class RandomString {
 	private static final char[] symbols;
 
