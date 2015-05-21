@@ -21,7 +21,7 @@ public class ProjectPropertie {
 
 	/**
 	 * Load the properties from the location
-	 * "./src/main/resources/properties.properties"
+	 * "webapps/DHBW-MapServer/WEB-INF/classes/properties.properties"
 	 * 
 	 * @throws IOException
 	 *             If the file couln't be found or loaded
@@ -29,7 +29,9 @@ public class ProjectPropertie {
 	private static void loadProperties() throws IOException {
 
 		File propertiesFile = new File(
-				"./src/main/resources/properties.properties");
+				"webapps/DHBW-MapServer/WEB-INF/classes/properties.properties");
+
+		System.out.println(propertiesFile.getAbsolutePath());
 		ProjectPropertie.properties = new Properties();
 
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
