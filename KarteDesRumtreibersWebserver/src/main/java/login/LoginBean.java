@@ -11,12 +11,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+/**
+*
+* @author User 
+*/
 @ManagedBean(name = "loginBean")
 @SessionScoped
-/**
- *
- * @author User
- */
 public class LoginBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -59,7 +59,6 @@ public class LoginBean implements Serializable {
 			try {
 				FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
