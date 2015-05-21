@@ -14,11 +14,18 @@ import eMail.SendEmail;
 public class AddDeficienciesToRoom {
 
 	/**
+	 * try to write a deficiency to the database and write an email to the in
+	 * the properties configured email address
 	 * 
 	 * @param category
+	 *            category of the deficiency
 	 * @param description
+	 *            description of the deficiency
 	 * @param reportingUser
+	 *            user who reported the deficiency
 	 * @param roomNumber
+	 *            room number where the deficiency is reported (not the room
+	 *            ID!)
 	 * @return Return true, if the deficiency is added successfully
 	 */
 	public static boolean addDeficiency(String category, String description,
@@ -46,7 +53,6 @@ public class AddDeficienciesToRoom {
 			em.persist(deficiency);
 			em.getTransaction().commit();
 
-			// Mail to Pikenhan
 			SendEmail.sendDeficiencyMail(deficiency);
 
 		}
